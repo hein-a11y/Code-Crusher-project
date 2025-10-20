@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GG store | お問い合わせ</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif; 
+            /* 非常に暗い背景色 (ゲーミングテーマ) */
+            background-color: #0d0d0d; 
+            min-height: 100vh;
+        }
+        /* カードの影を暗い背景に合わせた subtle なグローに変更 */
+        .card-shadow {
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3), 0 0 5px rgba(0, 255, 255, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .member-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.15); /* ホバー時に青いグロー */
+        }
+        /* 入力フィールドのフォーカススタイルをシアンに変更 */
+        .input-focus:focus {
+            border-color: #22d3ee; /* cyan-400 */
+            box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.3); /* cyan-400 のグロー */
+            outline: none;
+            background-color: #1a1a1a;
+        }
+    </style>
+</head>
+<!-- bodyの背景色を適用 -->
+<body class="bg-gray-900 p-4 sm:p-8">
+
+    <div class="max-w-5xl mx-auto">
+        
+        <!-- ヘッダー -->
+        <header class="mb-12 text-center">
+            <h1 class="text-5xl font-extrabold text-cyan-400 tracking-tight mb-2 flex items-center justify-center">
+                <!-- メッセージアイコン (SVG) - 色をシアンに変更 -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mr-4 text-cyan-500 hidden sm:block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                    <polyline points="22,6 12,13 2,6"></polyline>
+                </svg>
+                GG store | お問い合わせ
+            </h1>
+            <!-- テキストの色を明るいグレーに変更 -->
+            <p class="text-xl text-gray-400">プロジェクトに関するご連絡やご質問はこちらへ</p>
+        </header>
+
+        <!-- コンタクト情報とフォームのグリッドレイアウト -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+            
+            <!-- チームメンバー連絡先 (左側/サイドバー) -->
+            <div class="lg:col-span-1 space-y-8">
+                <!-- カードの背景を濃いグレーに変更 -->
+                <div class="card-shadow bg-gray-800 p-6 rounded-2xl border border-gray-700 transition duration-300 hover:border-cyan-500">
+                    <!-- 見出しの色を白に変更 -->
+                    <h2 class="text-2xl font-bold text-white mb-6 flex items-center">
+                        <!-- ユーザーグループアイコン (SVG) - 色をシアンに変更 -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3 text-cyan-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                        チームメンバー連絡先
+                    </h2>
+                    
+                    <div id="member-list" class="space-y-4">
+                        <!-- メンバーカードの背景色とホバー効果を調整 -->
+                        <!-- メンバーカード 1: カウンシトゥリン(リン) - リーダー/UI/UX -->
+                        <div class="member-card p-4 bg-gray-700/50 rounded-xl flex items-center card-shadow hover:bg-gray-700 cursor-pointer">
+                            <img src="https://placehold.co/50x50/06B6D4/ffffff?text=L" onerror="this.onerror=null; this.src='https://placehold.co/50x50/06B6D4/ffffff?text=L';" alt="リンのアバター" class="rounded-full mr-4 w-12 h-12 object-cover border-2 border-cyan-400">
+                            <div>
+                                <p class="font-semibold text-cyan-400">カウンシトゥリン (リン) - <span class="text-sm font-bold text-pink-500">リーダー</span></p>
+                                <p class="text-xs text-gray-400">担当: UI/UX DESIGN, PHP, SQL</p>
+                                <a href="mailto:lin.leader@ggstore.com" class="text-sm text-cyan-400 hover:text-cyan-300 underline truncate block">lin.leader@ggstore.com</a>
+                            </div>
+                        </div>
+                        
+                        <!-- メンバーカード 2: 谷口 直将 -->
+                        <div class="member-card p-4 bg-gray-700/50 rounded-xl flex items-center card-shadow hover:bg-gray-700 cursor-pointer">
+                            <img src="https://placehold.co/50x50/10B981/ffffff?text=T" onerror="this.onerror=null; this.src='https://placehold.co/50x50/10B981/ffffff?text=T';" alt="谷口のアバター" class="rounded-full mr-4 w-12 h-12 object-cover border-2 border-green-500">
+                            <div>
+                                <p class="font-semibold text-cyan-400">谷口 直将</p>
+                                <p class="text-xs text-gray-400">担当: フロントエンド (JS), PHP, SQL</p>
+                                <a href="mailto:taniguchi.n@ggstore.com" class="text-sm text-cyan-400 hover:text-cyan-300 underline truncate block">taniguchi.n@ggstore.com</a>
+                            </div>
+                        </div>
+                        
+                        <!-- メンバーカード 3: 上田 漣 -->
+                        <div class="member-card p-4 bg-gray-700/50 rounded-xl flex items-center card-shadow hover:bg-gray-700 cursor-pointer">
+                            <img src="https://placehold.co/50x50/F59E0B/ffffff?text=U" onerror="this.onerror=null; this.src='https://placehold.co/50x50/F59E0B/ffffff?text=U';" alt="上田のアバター" class="rounded-full mr-4 w-12 h-12 object-cover border-2 border-yellow-500">
+                            <div>
+                                <p class="font-semibold text-cyan-400">上田 漣</p>
+                                <p class="text-xs text-gray-400">担当: データベース設計, 基本機能, PHP</p>
+                                <a href="mailto:ueda.r@ggstore.com" class="text-sm text-cyan-400 hover:text-cyan-300 underline truncate block">ueda.r@ggstore.com</a>
+                            </div>
+                        </div>
+
+                        <!-- メンバーカード 4: ヘインデットキャイング -->
+                        <div class="member-card p-4 bg-gray-700/50 rounded-xl flex items-center card-shadow hover:bg-gray-700 cursor-pointer">
+                            <img src="https://placehold.co/50x50/EF4444/ffffff?text=H" onerror="this.onerror=null; this.src='https://placehold.co/50x50/EF4444/ffffff?text=H';" alt="ヘインのアバター" class="rounded-full mr-4 w-12 h-12 object-cover border-2 border-red-500">
+                            <div>
+                                <p class="font-semibold text-cyan-400">ヘインデットキャイング (ヘイン)</p>
+                                <p class="text-xs text-gray-400">担当: Python (サーバー), PHP, SQL</p>
+                                <a href="mailto:hein.d@ggstore.com" class="text-sm text-cyan-400 hover:text-cyan-300 underline block">hein.d@ggstore.com</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- お問い合わせフォーム (右側/メインコンテンツ) -->
+            <div class="lg:col-span-2">
+                <!-- カードの背景とボーダーカラーを調整 -->
+                <div class="card-shadow bg-gray-800 p-8 rounded-2xl border-t-4 border-cyan-500 transition duration-300">
+                    <h2 class="text-3xl font-bold text-white mb-6">メッセージを送信</h2>
+                    
+                    <form id="contact-form" onsubmit="handleFormSubmit(event)">
+                        
+                        <!-- 名前 -->
+                        <div class="mb-5">
+                            <!-- ラベルの色を明るいグレーに変更 -->
+                            <label for="name" class="block text-sm font-semibold text-gray-300 flex items-center mb-1">
+                                <!-- ユーザーアイコン (SVG) - 色をシアンに変更 -->
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 text-cyan-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                                お名前
+                            </label>
+                            <!-- 入力フィールドの背景、ボーダー、文字色を調整 (input-focusも参照) -->
+                            <input type="text" id="name" required class="mt-1 block w-full rounded-xl border-gray-700 shadow-sm p-3 border input-focus bg-gray-900 text-white" placeholder="例: 山田 太郎">
+                        </div>
+
+                        <!-- メールアドレス -->
+                        <div class="mb-5">
+                            <label for="email" class="block text-sm font-semibold text-gray-300 flex items-center mb-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 text-cyan-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                                メールアドレス
+                            </label>
+                            <input type="email" id="email" required class="mt-1 block w-full rounded-xl border-gray-700 shadow-sm p-3 border input-focus bg-gray-900 text-white" placeholder="例: your.email@example.com">
+                        </div>
+
+                        <!-- 件名 -->
+                        <div class="mb-5">
+                            <label for="subject" class="block text-sm font-semibold text-gray-300 flex items-center mb-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 text-cyan-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 10l4.5-4.5M19 10l-4.5-4.5M4 10h7M4 14h7"></path><path d="M4 18h7"></path></svg>
+                                件名
+                            </label>
+                            <input type="text" id="subject" required class="mt-1 block w-full rounded-xl border-gray-700 shadow-sm p-3 border input-focus bg-gray-900 text-white" placeholder="例: 開発に関する質問">
+                        </div>
+
+                        <!-- メッセージ本文 -->
+                        <div class="mb-8">
+                            <label for="message" class="block text-sm font-semibold text-gray-300 flex items-center mb-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 text-cyan-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                                メッセージ本文
+                            </label>
+                            <textarea id="message" rows="6" required class="mt-1 block w-full rounded-xl border-gray-700 shadow-sm p-3 border input-focus bg-gray-900 text-white" placeholder="具体的な内容をご記入ください"></textarea>
+                        </div>
+                        
+                        <!-- ボタンの色とフォーカススタイルをシアンに変更 -->
+                        <button id="submit-button" type="submit" class="w-full py-3 px-4 rounded-xl shadow-xl text-lg font-semibold text-black bg-cyan-400 hover:bg-cyan-300 focus:outline-none focus:ring-4 focus:ring-offset-2 focus:ring-cyan-500 focus:ring-offset-gray-900 transition duration-300 ease-in-out transform hover:scale-[1.01]">
+                            メッセージを送信
+                        </button>
+
+                        <div id="status-message" class="mt-6 text-center text-sm text-gray-400"></div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // フォーム送信処理のシミュレーション
+        function handleFormSubmit(event) {
+            event.preventDefault();
+            const form = document.getElementById('contact-form');
+            const submitButton = document.getElementById('submit-button');
+            const statusMessage = document.getElementById('status-message');
+
+            const name = document.getElementById('name').value;
+
+            // 送信中の状態
+            submitButton.disabled = true;
+            // ローディングスピナーを追加
+            submitButton.innerHTML = '<span class="flex items-center justify-center"><svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-black" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>送信中...</span>';
+            statusMessage.textContent = 'メッセージをサーバーに送信しています...';
+            statusMessage.classList.remove('text-gray-400'); // 一時的にテキスト色を解除
+            statusMessage.classList.add('text-cyan-400'); // 送信中はアクセントカラーに
+
+            // 擬似的な遅延 (2秒間)
+            setTimeout(() => {
+                // 送信完了の状態
+                submitButton.disabled = false;
+                submitButton.textContent = 'メッセージを送信';
+                
+                // フォーム入力値のリセット
+                form.reset();
+                
+                // 成功メッセージのスタイルをダークテーマに合わせたグリーン/シアン系に変更
+                statusMessage.innerHTML = `
+                    <div class="bg-teal-900/50 border border-teal-500 text-teal-400 px-4 py-3 rounded-xl relative flex items-center card-shadow" role="alert">
+                        <!-- チェックアイコン (SVG) -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3 text-teal-500 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                        <div>
+                            <strong class="font-bold">送信完了!</strong>
+                            <span class="block sm:inline"> ${name}様、メッセージを確かに受け付けました。担当チームメンバーから折り返しご連絡いたします。</span>
+                        </div>
+                    </div>
+                `;
+                
+                // 成功メッセージを5秒後に非表示にする
+                setTimeout(() => {
+                    statusMessage.textContent = '';
+                    statusMessage.classList.remove('text-cyan-400');
+                    statusMessage.classList.add('text-gray-400');
+                }, 5000);
+
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
