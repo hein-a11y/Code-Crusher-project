@@ -27,8 +27,14 @@
             color: var(--primary-color);
                 text-shadow: 0 0 5px var(--primary-color);    
             
-            text-decoration: none;
+            
+        }
 
+        div{
+            a{
+               text-decoration: none;
+            color: #00bfff; 
+            }
         }
 
         header {
@@ -39,6 +45,7 @@
             align-items: center;
             border-bottom: 1px solid #333;
             margin-bottom: 6%;
+            
         }
 
         .container {
@@ -48,6 +55,23 @@
             padding: 20px;
         }
         
+        li{
+            a{
+               text-decoration: none;
+            color: #ffffff; 
+            }
+        }
+
+        nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            gap: 1.5rem;
+            
+
+        }
+
         /* --- ヘッダー --- */
         header h1 {
             text-align: center;
@@ -148,6 +172,16 @@
     <header>
         <div class="logo"><a href = "index.html">GG  STORE</a></div>
         
+        <nav>
+            <ul>
+                <li><a href="index.html">HOME</a></li>
+                <li><a href="game-page.html">GAMES</a></li>
+                <li><a href="GADGETS.html">GADGETS</a></li>
+                <li><a href="review.html">REVIEWS</a></li>
+                <li><a href="contact.html">CONTACT</a></li>
+            </ul>
+        </nav>
+
         <div class="header-actions">
             <input type="search" placeholder="Search..." class="search-bar">
             <span>🛒</span> <span>👤</span> </div>
