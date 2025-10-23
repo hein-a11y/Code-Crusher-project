@@ -93,15 +93,6 @@
     </style>
 </head>
 <body>
-
-    <header>
-        <div class="logo"><a href = "index.html">GG  STORE</a></div>
-        
-        <div class="header-actions">
-            <input type="search" placeholder="Search..." class="search-bar">
-            <span>🛒</span> <span>👤</span> </div>
-    </header>
-
         <main>
             <div class="product-grid">
 
