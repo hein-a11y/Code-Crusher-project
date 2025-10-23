@@ -1,3 +1,4 @@
+<?php require '../header/header-1.php'; ?>
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -5,64 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GADGET STORE - 商品一覧</title>
     <style>
-        :root {
-            --primary-color: #00bfff; /* Neon blue accent */
-            --background-color: #121212; /* Deep black */
-            --surface-color: #1e1e1e;   /* Slightly lighter for cards/headers */
-            --text-color: #e0e0e0;      /* Light grey for readability */
-            --text-secondary-color: #a0a0a0; /* Dimmer text */
-        }
-        /* --- 全体のスタイル --- */
-        body {
-            background-color: #121212; /* 真っ黒より少し柔らかいダークグレー */
-            color: #ffffff; /* 基本の文字色を白に */
-            font-family: 'Helvetica Neue', Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-
-        .logo {
-            font-size: 1.8rem;
-            font-weight: bold;
-            
-            a{
-            color: var(--primary-color);
-                text-shadow: 0 0 5px var(--primary-color);    
-            text-decoration: none;
-            }
-        }
-
-        header {
-            background-color: var(--surface-color);
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #333;
-            margin-bottom: 6%;
-        }
-
         .container {
             width: 90%;
             max-width: 1600px; /* 横5列表示のため、最大幅を少し広げます */
             margin: 20px auto;
             padding: 20px;
-        }
-        
-        /* --- ヘッダー --- */
-        header h1 {
-            text-align: center;
-            font-size: 2.5em;
-            color: #ffffff;
-            margin-bottom: 30px;
-            letter-spacing: 2px;
-        }
-
-        .header-actions {
-            tab-size: 0cap;
-            text-align: right;
-            align-items: center;
-            gap: 1.5rem;
         }
 
         /* --- 商品一覧エリア --- */

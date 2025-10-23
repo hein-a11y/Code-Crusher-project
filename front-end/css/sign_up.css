@@ -1,22 +1,3 @@
-:root {
-    --primary-color: #00bfff; /* Neon blue accent */
-    --background-color: #121212; /* Deep black */
-    --surface-color: #1e1e1e;   /* Slightly lighter for cards/headers */
-    --text-color: #e0e0e0;      /* Light grey for readability */
-    --text-secondary-color: #a0a0a0; /* Dimmer text */
-}
-/* --- 1. 基本スタイルとリセット --- */
-body {
-    /* 日本語環境で読みやすいフォント設定 */
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Hiragino Sans", "Yu Gothic", YuGothic, "Hiragino Kaku Gothic ProN", Meiryo, "Helvetica Neue", Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #121212; /* ページ全体の背景色 */
-    color: #ffffff; /* 基本の文字色 */
-    font-size: 14px;
-    line-height: 1.6;
-}
-
 /* IE対策と標準化のため */
 * {
     box-sizing: border-box;
@@ -26,8 +7,11 @@ a {
     color: #00bfff; /* リンク色 */
     text-decoration: none;
 }
+.help-icon a:hover {
+    text-decoration: underline;
+}
 
-a:hover {
+.sidebar-section a:hover {
     text-decoration: underline;
 }
 
@@ -37,45 +21,6 @@ a:hover {
     margin: 20px auto; /* 中央寄せ */
     background-color: #333;
     border: 1px solid #ddd;
-}
-
-/* --- 3. ヘッダー (簡易版) --- */
-.header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 20px;
-    border-bottom: 1px solid #ddd;
-    background-color: #f9f9f9;
-}
-
-.header h1 {
-    margin: 0;
-    font-size: 28px;
-    font-weight: 700;
-}
-
-.header h1 a {
-    color: #00cfff; /* ブランドカラーをイメージした赤 */
-    text-decoration: none;
-    font-family: Arial, sans-serif; /* ロゴ風のフォント */
-}
-
-.header-nav ul {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    display: flex;
-}
-
-.header-nav li {
-    margin-left: 20px;
-}
-
-.header-nav a {
-    font-size: 13px;
-    color: #333;
-    font-weight: 500;
 }
 
 /* --- 4. メインコンテンツ (2カラムレイアウト) --- */

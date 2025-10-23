@@ -23,26 +23,6 @@
             color: white;
             min-height: 100vh;
         }
-
-        .logo {
-            font-size: 1.8rem;
-            font-weight: bold;
-            
-            a{
-            color: var(--primary-color);
-                text-shadow: 0 0 5px var(--primary-color);    
-            
-            text-decoration: none;
-            }
-        }
-
-        .header-actions {
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-        }
-
-        
         /* Custom scrollbar for better visual integration */
         .carousel-track {
             scroll-behavior: smooth;
@@ -78,7 +58,6 @@
 
         <!-- Header (Simple Navigation) -->
         <header class="mb-12 flex justify-between items-center text-sm font-semibold text-gray-400">
-            <div class="logo"><a href = "index.html">GG  STORE</a></div>
             <div class="flex space-x-6">
                 <a href="#" class="hover:text-white transition duration-200">ストア</a>
                 <a href="#" class="hover:text-white transition duration-200">コミュニティ</a>
@@ -89,10 +68,6 @@
                 <span class="text-xs">|</span>
                 <a href="#" class="hover:text-white transition duration-200">ログイン</a>
             </div>
-
-            <div class="header-actions">
-            <input type="search" placeholder="Search..." class="search-bar">
-            <span>🛒</span> <span>👤</span> </div>
         </header>
         <!-- End Header -->
 

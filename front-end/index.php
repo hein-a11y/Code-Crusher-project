@@ -1,3 +1,4 @@
+<?php require '../header/header-1.php'; ?>
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -23,56 +24,6 @@
             margin: 0;
             line-height: 1.6;
             overflow-x: hidden; /* Prevent horizontal scroll from slider adjustments */
-        }
-
-        /* Header & Navigation */
-        header {
-            background-color: var(--surface-color);
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #333;
-        }
-
-        .logo {
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: var(--primary-color);
-            text-shadow: 0 0 5px var(--primary-color);
-        }
-
-        nav ul {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            gap: 1.5rem;
-        }
-
-        nav a {
-            color: var(--text-color);
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-
-        nav a:hover {
-            color: var(--primary-color);
-        }
-
-        .header-actions {
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-        }
-
-        .search-bar {
-            background-color: #333;
-            border: 1px solid #555;
-            color: var(--text-color);
-            padding: 0.5rem;
-            border-radius: 5px;
         }
 
         /* Main Content Area */
@@ -297,23 +248,6 @@
     </style>
 </head>
 <body>
-
-    <header>
-        <div class="logo">GG STORE</div>
-        <nav>
-            <ul>
-                <li><a href="#">HOME</a></li>
-                <li><a href="game-page.html">GAMES</a></li>
-                <li><a href="GADGETS.html">GADGETS</a></li>
-                <li><a href="review.html">REVIEWS</a></li>
-                <li><a href="contact.html">CONTACT</a></li>
-            </ul>
-        </nav>
-        <div class="header-actions">
-            <input type="search" placeholder="Search..." class="search-bar">
-            <span>🛒</span> <span>👤</span> </div>
-    </header>
-
     <main>
         <div class="main-game-slider">
             <div class="game-details-container">

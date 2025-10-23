@@ -1,27 +1,17 @@
-<?php require '../header.php'; ?>
+<?php require '../header/header-1.php'; ?>
 <!DOCTYPE html>
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./css/user_info.css">
-    <script src="./js/user_info.js"></script>
+    <link rel="stylesheet" href="./css/sign_up.css">
+    <script src="./js/sign_up_address.js" defer></script>
+    <script src="./js/sign_up.js" defer></script>
     <title>新規会員登録</title>
 </head>
 <body>
 
     <div class="registration-container">
-
-        <header class="header">
-            <h1><a href="#">g.u.</a></h1>
-            <nav class="header-nav">
-                <ul>
-                    <li><a href="#">会員登録</a></li>
-                    <li><a href="#">ログイン</a></li>
-                    <li><a href="#">カート</a></li>
-                </ul>
-            </nav>
-        </header>
 
         <main class="main-content">
 
@@ -62,20 +52,15 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="zip_code">郵便番号 <span class="required-badge">必須</span></label>
-                            <input type="text" id="zip_code" name="zip_code" required placeholder="例) 1234567">
+                            <label for="postal-code">郵便番号</label>
+                            <input type="text" id="postal-code" class="postal-code" placeholder="例: 1000001" maxlength="7">
+                            <div id="error-message" class="message"></div>
                             <small>ハイフンなしで入力してください</small>
                         </div>
                         
                         <div class="form-group">
                             <label for="prefecture">都道府県 <span class="required-badge">必須</span></label>
-                            <select id="prefecture" name="prefecture" required>
-                                <option value="">選択してください</option>
-                                <option value="hokkaido">北海道</option>
-                                <option value="tokyo">東京都</option>
-                                <option value="osaka">大阪府</option>
-                                <option value="fukuoka">福岡県</option>
-                                </select>
+                                <input type="text" id="prefecture" name="prefecture" required placeholder="例) 〇〇県">
                         </div>
 
                         <div class="form-group">

@@ -169,4 +169,3 @@ function populateExpiryDropdowns() {
         yearSelect.appendChild(option);
     }
 }
-// (A) (ここまで追記)
