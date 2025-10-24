@@ -1,0 +1,399 @@
+/* IE対策と標準化のため */
+* {
+    box-sizing: border-box;
+}
+
+a {
+    color: #00bfff; /* リンク色 */
+    text-decoration: none;
+}
+.help-icon a:hover {
+    text-decoration: underline;
+}
+
+.sidebar-section a:hover {
+    text-decoration: underline;
+}
+
+/* --- 2. 全体のレイアウトコンテナ --- */
+.registration-container {
+    max-width: 1000px; /* フォームの最大幅 */
+    margin: 20px auto; /* 中央寄せ */
+    background-color: #333;
+    border: 1px solid #ddd;
+}
+
+/* --- 4. メインコンテンツ (2カラムレイアウト) --- */
+.main-content {
+    display: flex;
+    padding: 25px;
+}
+
+/* --- 5. フォームセクション (左側) --- */
+.form-section {
+    flex: 3; /* サイドバーに対して3:1の幅比率 */
+    padding-right: 30px;
+}
+
+.form-section h2 {
+    font-size: 20px;
+    font-weight: 700;
+    border-bottom: 2px solid #333;
+    padding-bottom: 8px;
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+
+/* フォーム上部の注意事項ボックス */
+.form-notes {
+    background-color: #333; /* 注意を引く薄い黄色 */
+    border: 1px solid #ccc;
+    padding: 10px 15px;
+    margin-bottom: 25px;
+    border-radius: 4px;
+}
+
+.form-notes ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.form-notes li {
+    font-size: 12px;
+    margin-bottom: 5px;
+}
+
+/* --- 6. フォームのセクショニング (fieldset) --- */
+.form-fieldset {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 25px;
+    padding: 20px;
+}
+
+.fieldset-legend {
+    font-size: 16px;
+    font-weight: 700; /* 太字 */
+    padding: 0 10px; /* 枠線との隙間 */
+    margin-left: 10px; /* 左側の余白 */
+}
+
+.fieldset-description {
+    font-size: 13px;
+    color: #ffffff;
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+
+/* --- 7. 各フォーム項目 (form-group) --- */
+.form-group {
+    margin-bottom: 18px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 700; /* ラベルを太字に */
+    margin-bottom: 6px;
+}
+
+/* 必須バッジのスタイル */
+.required-badge {
+    background-color: #d9534f; /* 目立つ赤色 */
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 3px;
+    margin-left: 8px;
+    vertical-align: middle;
+}
+
+/* --- 8. 入力欄のスタイル --- */
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="password"],
+select {
+    width: 100%;
+    padding: 9px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    /* 入力欄のfocus（選択時）スタイル */
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="tel"]:focus,
+input[type="password"]:focus,
+select:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 3px rgba(0,123,255,0.25);
+    outline: none;
+}
+
+/* バリデーションエラー時のスタイル (JSで制御) */
+input.input-error,
+select.input-error {
+    border-color: #d9534f;
+    background-color: #fbeae9;
+}
+
+.form-group small {
+    font-size: 12px;
+    color: #00bfff;
+    margin-top: 4px;
+    display: block;
+}
+
+/* インラインの入力欄 (例: 姓・名) */
+.form-group-inline {
+    display: flex;
+    gap: 10px; /* 項目間の隙間 */
+}
+
+.form-group-inline input,
+.form-group-inline select {
+    flex: 1; /* 均等に幅を分割 */
+}
+
+/* 生年月日のセレクトボックス */
+.date-select select {
+    width: auto;
+    flex: 1;
+}
+
+/* ラジオボタンのグループ */
+.form-group-radio {
+    display: flex;
+    gap: 20px; /* 各ボタンの間隔 */
+    align-items: center;
+    padding-top: 5px;
+}
+
+.form-group-radio label {
+    font-weight: normal; /* ラベルの太字を解除 */
+    margin-bottom: 0;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.form-group-radio input[type="radio"] {
+    margin-right: 5px;
+}
+
+/* チェックボックスのグループ */
+.form-group-checkbox {
+    margin-bottom: 10px;
+}
+
+.form-group-checkbox label {
+    font-weight: normal;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.form-group-checkbox input[type="checkbox"] {
+    margin-right: 8px;
+    width: 16px; /* 見やすいサイズに調整 */
+    height: 16px;
+}
+
+/* 規約のテキストボックス */
+.terms-box {
+    height: 120px;
+    overflow-y: scroll; /* スクロール可能に */
+    border: 1px solid #ccc;
+    background-color: #333;
+    padding: 10px;
+    margin-bottom: 10px;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+/* 規約同意のチェックボックス */
+.agreement label {
+    font-weight: 700; /* 同意は重要なので太字 */
+    color: #ffffff;
+}
+/* バリデーションエラー時のスタイル (JSで制御) */
+.agreement label.input-error {
+    color: #d9534f;
+}
+
+/* --- 9. 送信ボタン --- */
+.form-submit-button {
+    text-align: center;
+    margin-top: 25px;
+}
+
+.form-submit-button button {
+    background-color: #333; /* 画像に合わせた黒いボタン */
+    color: #ffffff;
+    border: none;
+    padding: 14px 50px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.form-submit-button button:hover {
+    background-color: #555; /* ホバー時に少し明るく */
+}
+
+/* --- 10. サイドバー (右側) --- */
+.sidebar-section {
+    flex: 1; /* フォームに対して1:3の幅比率 */
+    border-left: 1px solid #eee;
+    padding-left: 25px;
+}
+
+.sidebar-widget {
+    margin-bottom: 30px;
+}
+
+.sidebar-widget h3 {
+    font-size: 14px;
+    font-weight: 700;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 5px;
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.sidebar-widget ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.sidebar-widget li {
+    margin-bottom: 8px;
+}
+
+.sidebar-widget li a {
+    font-size: 13px;
+}
+
+/* --- 11. フッター (簡易版) --- */
+.footer {
+    border-top: 1px solid #ddd;
+    background-color: #333;
+    color: #fff;
+    padding: 25px;
+    text-align: center;
+}
+
+.footer-nav ul {
+    margin: 0 0 15px 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    gap: 20px; /* リンク間の隙間 */
+}
+
+.footer-nav a {
+    color: #fff;
+    font-size: 12px;
+}
+
+.copyright {
+    font-size: 11px;
+    color: #aaa;
+    margin: 0;
+}
+
+/* --- 11.5. 決済フォームスタイル (追記) --- */
+.payment-card-logos {
+    display: flex;
+    flex-wrap: wrap; /* ロゴが多い場合に折り返す */
+    gap: 8px; /* ロゴ間の隙間 */
+    margin-top: 10px;
+}
+
+.card-logo {
+    /* 画像の代わりにテキストで簡易的に表現 */
+    display: inline-block;
+    padding: 4px 8px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    background-color: #f9f9f9;
+    font-size: 12px;
+    font-weight: 500;
+    color: #555;
+    line-height: 1;
+}
+
+/* 有効期限のセレクトボックスの幅を調整 */
+.expiry-date-select select {
+    flex: 2; /* 年と月の入力欄の幅比率 */
+    width: auto;
+}
+.expiry-date-select span {
+    flex: 0;
+    padding: 0 5px;
+    white-space: nowrap; /* 「月」「年」が改行されないように */
+    display: flex;
+    align-items: center;
+}
+
+/* セキュリティコードのヘルプリンク */
+.security-code-help {
+    margin-top: 8px;
+}
+.security-code-help a {
+    font-size: 13px;
+    color: #00bfff; /* リンク色 */
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+}
+.security-code-help a:hover {
+    text-decoration: underline;
+}
+.security-code-help .help-icon {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 1.5px solid #00bfff;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 15px; /* アイコン内の ? の位置調整 */
+    font-weight: 700;
+    font-size: 11px;
+    margin-right: 5px;
+    color: #00bfff;
+}
+
+/* --- 12. レスポンシブ対応 (簡易) --- */
+@media (max-width: 768px) {
+    .main-content {
+        flex-direction: column; /* 縦積みにする */
+    }
+
+    .form-section {
+        padding-right: 0;
+        order: 1; /* フォームを先に表示 */
+    }
+
+    .sidebar-section {
+        order: 2; /* サイドバーを後に表示 */
+        border-left: none;
+        padding-left: 0;
+        border-top: 1px solid #eee; /* 区切り線 */
+        margin-top: 30px;
+        padding-top: 20px;
+    }
+
+    /* 姓・名などを縦積みにする */
+    .form-group-inline {
+        flex-direction: column;
+        gap: 15px;
+    }
+}
