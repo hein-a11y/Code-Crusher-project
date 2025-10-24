@@ -5,92 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GADGET STORE - 商品一覧</title>
-    <style>
-        .container {
-            width: 90%;
-            max-width: 1600px; /* 横5列表示のため、最大幅を少し広げます */
-            margin: 20px auto;
-            padding: 20px;
-        }
+    
+    <link rel="stylesheet" href="./css/gadgets.css">
 
-        /* --- 商品一覧エリア --- */
-        .product-grid {
-            display: grid;
-            /* 画面幅に応じて列数を自動調整し、PCでは5列になりやすいように調整 */
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 25px; /* 商品間の余白 */
-        }
-
-        /* --- 各商品カードのデザイン --- */
-        .product-card {
-            background-color: #1e1e1e;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .product-card:hover {
-            transform: translateY(-10px); /* ホバー時に少し浮き上がる演出 */
-            box-shadow: 0 8px 25px rgba(52, 152, 219, 0.4); /* 青い影 */
-        }
-
-        .product-card img {
-            width: 100%;
-            height: 180px; /* 高さを少し調整 */
-            object-fit: cover; /* 画像の比率を保ったままトリミング */
-            display: block;
-        }
-
-        .product-info {
-            padding: 20px;
-        }
-
-        .product-brand {
-            font-size: 0.9em;
-            color: #bbbbbb; /* ブランド名は少し控えめな色に */
-            margin: 0;
-        }
-
-        /* ★タイトル名: 白 */
-        .product-title {
-            font-size: 1.1em; /* フォントサイズを少し調整 */
-            font-weight: bold;
-            color: #ffffff;
-            margin: 5px 0 15px 0;
-            height: 40px; /* 高さを固定してレイアウトの崩れを防ぐ */
-        }
-        
-        /* ★価格: 青 */
-        .product-price {
-            font-size: 1.4em; /* フォントサイズを少し調整 */
-            font-weight: bold;
-            color: #3498db; /* 青色 */
-            margin-bottom: 10px;
-        }
-
-        .price-tax {
-            font-size: 0.7em;
-            color: #cccccc;
-        }
-        
-        /* ★機能面: 青 */
-        .product-features {
-            list-style: none;
-            padding: 0;
-            margin: 15px 0 0 0;
-            color: #3498db; /* 青色 */
-            font-size: 0.85em; /* フォントサイズを少し調整 */
-        }
-
-        .product-features li {
-            margin-bottom: 5px;
-        }
-        .product-features li::before {
-            content: '✓ '; /* チェックマーク */
-            color: #2ecc71; /* 緑色 */
-        }
-    </style>
 </head>
 <body>
     <div class="container"> <main>
@@ -213,14 +130,14 @@
                 <div class="product-card"><img src="https://via.placeholder.com/400x250/333333/FFFFFF?text=Controller+3" alt="商品画像"><div class="product-info"><p class="product-brand">Brand E</p><h2 class="product-title">モバイルゲーミングコントローラー</h2><p class="product-price">¥12,500 <span class="price-tax">(税込)</span></p><ul class="product-features"><li>スマホ対応</li><li>低遅延接続</li></ul></div></div>
 
                 <div class="product-card"><img src="https://via.placeholder.com/400x250/333333/FFFFFF?text=Keyboard+7" alt="商品画像"><div class="product-info"><p class="product-brand">Brand A</p><h2 class="product-title">分割エルゴノミクスキーボード</h2><p class="product-price">¥28,000 <span class="price-tax">(税込)</span></p><ul class="product-features"><li>手首の負担軽減</li><li>カスタマイズ可能</li></ul></div></div>
-                <div class="product-card"><img src="https://via.placeholder.com/400x250/333333/FFFFFF?text=Mouse+7" alt="商品画像"><div class="product-info"><p class="product-brand">Brand B</p><h2 class="product-title">トラックボール搭載マウス</h2><p class="product-price">¥7,900 <span class="price-tax">(税込)</span></p><ul class="product-features"><li>省スペース操作</li><li>高精度ボール</li></ul></div></div>
+                <div class="product-card"><img src="https://via.placeholder.com/400x250/333333/FFFFFF?text=Mouse+7" alt="商品画像"><div class="product-info"><p class="product-brand">Brand B</p><h2 class="product-title">トラックボール搭載マウス</h2><p class="product-price">¥7,900 <span class_price-tax">(税込)</span></p><ul class="product-features"><li>省スペース操作</li><li>高精度ボール</li></ul></div></div>
                 <div class="product-card"><img src="https://via.placeholder.com/400x250/333333/FFFFFF?text=Headset+4" alt="商品画像"><div class="product-info"><p class="product-brand">Brand C</p><h2 class="product-title">オープンエアー型ヘッドセット</h2><p class="product-price">¥16,500 <span class="price-tax">(税込)</span></p><ul class="product-features"><li>自然な音場</li><li>長時間でも快適</li></ul></div></div>
                 <div class="product-card"><img src="https://via.placeholder.com/400x250/333333/FFFFFF?text=Monitor+4" alt="商品画像"><div class="product-info"><p class="product-brand">Brand D</p><h2 class="product-title">ウルトラワイド湾曲モニター</h2><p class="product-price">¥110,000 <span class="price-tax">(税込)</span></p><ul class="product-features"><li>圧倒的没入感</li><li>34インチ UWQHD</li></ul></div></div>
                 <div class="product-card"><img src="https://via.placeholder.com/400x250/333333/FFFFFF?text=Chair+2" alt="商品画像"><div class="product-info"><p class="product-brand">Brand I</p><h2 class="product-title">ファブリック素材ゲーミングチェア</h2><p class="product-price">¥38,500 <span class="price-tax">(税込)</span></p><ul class="product-features"><li>通気性良好</li><li>落ち着いたデザイン</li></ul></div></div>
 
                 <div class="product-card"><img src="https://via.placeholder.com/400x250/333333/FFFFFF?text=Keyboard+8" alt="商品画像"><div class="product-info"><p class="product-brand">Brand A</p><h2 class="product-title">カスタムキーキャップ対応モデル</h2><p class="product-price">¥15,500 <span class="price-tax">(税込)</span></p><ul class="product-features"><li>CHERRY MX互換</li><li>高耐久PBTキー</li></ul></div></div>
                 <div class="product-card"><img src="https://via.placeholder.com/400x250/333333/FFFFFF?text=Mouse+8" alt="商品画像"><div class="product-info"><p class="product-brand">Brand B</p><h2 class="product-title">静音ゲーミングマウス</h2><p class="product-price">¥6,800 <span class="price-tax">(税込)</span></p><ul class="product-features"><li>クリック音を低減</li><li>夜間プレイに最適</li></ul></div></div>
-                <div class="product-card"><img src="https://via.placeholder.com/400x250/333333/FFFFFF?text=Mic+3" alt="商品画像"><div class="product-info"><p class="product-brand">Brand F</p><h2 class="product-title">マイクアームセットモデル</h2><p class="product-price">¥22,800 <span class="price-tax">(税込)</span></p><ul class="product-features"><li>自由な配置</li><li>ポップガード付属</li></ul></div></div>
+                <div class="product-card"><img src="https://via.placeholder.com/400x250/333333/FFFFFF?text=Mic+3" alt="商品画像"><div class="product-info"><p class="product-brand">Brand F</p><h2 class="product-title">マイクアームセットモデル</h2><p class="product-price">¥22,800 <span class_price-tax">(税込)</span></p><ul class="product-features"><li>自由な配置</li><li>ポップガード付属</li></ul></div></div>
                 <div class="product-card"><img src="https://via.placeholder.com/400x250/333333/FFFFFF?text=Mousepad+3" alt="商品画像"><div class="product-info"><p class="product-brand">Brand G</p><h2 class="product-title">ガラス製ゲーミングマウスパッド</h2><p class="product-price">¥13,000 <span class="price-tax">(税込)</span></p><ul class="product-features"><li>究極の滑り</li><li>高耐久性</li></ul></div></div>
                 <div class="product-card"><img src="https://via.placeholder.com/400x250/333333/FFFFFF?text=Headset+5" alt="商品画像"><div class="product-info"><p class="product-brand">Brand C</p><h2 class="product-title">骨伝導ゲーミングイヤホン</h2><p class="product-price">¥29,800 <span class="price-tax">(税込)</span></p><ul class="product-features"><li>耳を塞がない</li><li>周囲の音も聞こえる</li></ul></div></div>
                 

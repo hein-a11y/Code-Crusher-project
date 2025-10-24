@@ -1,0 +1,551 @@
+/* -------------------
+ * 基本リセットとグローバルスタイル
+ * ------------------- */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+img, svg {
+    display: block;
+    max-width: 100%;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+/* -------------------
+ * ページコンテナ
+ * ------------------- */
+.page-container {
+    max-width: 1152px; /* max-w-7xl */
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 16px; /* px-4 */
+    padding-right: 16px;
+    padding-top: 48px; /* py-12 */
+    padding-bottom: 48px;
+}
+
+/* sm:px-6 */
+@media (min-width: 640px) {
+    .page-container {
+        padding-left: 24px;
+        padding-right: 24px;
+    }
+}
+/* lg:px-8 */
+@media (min-width: 1024px) {
+    .page-container {
+        padding-left: 32px;
+        padding-right: 32px;
+    }
+}
+
+/* -------------------
+ * 汎用ボタン (紫のグローエフェクト)
+ * ------------------- */
+.button-glow-purple {
+    box-shadow: 0 0 15px rgba(168, 85, 247, 0.3);
+}
+
+/* -------------------
+ * ヒーローセクション
+ * ------------------- */
+.hero-section {
+    margin-bottom: 64px; /* mb-16 */
+}
+
+.hero-image-wrapper {
+    position: relative;
+    border-radius: 8px; /* rounded-lg */
+    overflow: hidden;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); /* shadow-2xl */
+}
+
+.hero-image {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+
+.hero-content {
+    position: absolute;
+    bottom: 40px; /* bottom-10 */
+    left: 40px; /* left-10 */
+}
+
+.hero-title {
+    font-size: 30px; /* text-3xl */
+    font-weight: 900; /* font-black */
+    text-transform: uppercase;
+    margin-bottom: 16px; /* mb-4 */
+    text-shadow: 0 4px 6px rgba(0, 0, 0, 0.4); /* カスタム text-shadow-lg 相当 */
+}
+
+/* md:text-5xl */
+@media (min-width: 768px) {
+    .hero-title {
+        font-size: 48px;
+    }
+}
+
+.hero-button {
+    background-color: #7e22ce; /* bg-purple-700 */
+    color: #ffffff;
+    font-weight: 700; /* font-bold */
+    padding: 12px 32px; /* py-3 px-8 */
+    border-radius: 8px; /* rounded-lg */
+    font-size: 18px; /* text-lg */
+    transition: background-color 0.3s ease;
+}
+
+.hero-button:hover {
+    background-color: #6b21a8; /* hover:bg-purple-800 */
+}
+
+.hero-thumbnails {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* grid-cols-2 */
+    gap: 16px; /* gap-4 */
+    margin-top: 24px; /* mt-6 */
+}
+
+/* md:grid-cols-4 */
+@media (min-width: 768px) {
+    .hero-thumbnails {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+.thumbnail-image {
+    border-radius: 8px; /* rounded-lg */
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+}
+
+.thumbnail-image:hover {
+    opacity: 0.8; /* hover:opacity-80 */
+}
+
+/* -------------------
+ * ゲームセクション (スライダー)
+ * ------------------- */
+.games-section {
+    margin-bottom: 64px; /* mb-16 */
+}
+
+.section-title {
+    font-size: 30px; /* text-3xl */
+    font-weight: 700; /* font-bold */
+    text-transform: uppercase;
+    margin-bottom: 32px; /* mb-8 */
+}
+
+.slider-wrapper {
+    position: relative;
+}
+
+/* スライダーコンテナ */
+#our-games-slider {
+    display: flex;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scroll-snap-type: x mandatory; /* snap-x snap-mandatory */
+    gap: 24px; /* gap-6 */
+    padding-bottom: 16px; /* pb-4 */
+    /* スクロールバー非表示 */
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+#our-games-slider::-webkit-scrollbar {
+    display: none; /* Webkit */
+}
+
+/* ゲームカード */
+.game-card {
+    background-color: #1f2937; /* bg-gray-900 */
+    border-radius: 8px; /* rounded-lg */
+    overflow: hidden;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* shadow-lg */
+    width: 50%; /* w-1/2 */
+    flex-shrink: 0;
+    scroll-snap-align: start; /* snap-start */
+}
+
+/* sm:w-1/3 */
+@media (min-width: 640px) {
+    .game-card {
+        width: 33.333333%;
+    }
+}
+/* md:w-1/4 */
+@media (min-width: 768px) {
+    .game-card {
+        width: 25%;
+    }
+}
+/* lg:w-1/5 */
+@media (min-width: 1024px) {
+    .game-card {
+        width: 20%;
+    }
+}
+
+.game-card-image {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+/* group-hover:scale-105 */
+.game-card:hover .game-card-image {
+    transform: scale(1.05);
+}
+
+.game-card-info {
+    padding: 16px; /* p-4 */
+}
+
+.game-card-title {
+    font-weight: 600; /* font-semibold */
+    font-size: 18px; /* text-lg */
+    margin-bottom: 8px; /* mb-2 */
+    /* truncate */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.game-card-button {
+    width: 100%;
+    background-color: #7e22ce; /* bg-purple-700 */
+    color: #ffffff;
+    font-weight: 600; /* font-semibold */
+    padding: 8px 16px; /* py-2 px-4 */
+    border-radius: 8px; /* rounded-lg */
+    font-size: 14px; /* text-sm */
+    transition: background-color 0.3s ease;
+}
+
+.game-card-button:hover {
+    background-color: #6b21a8; /* hover:bg-purple-800 */
+}
+
+/* スライダー操作ボタン */
+.slider-control-prev,
+.slider-control-next {
+    position: absolute;
+    top: 50%;
+    background-color: rgba(31, 41, 55, 0.5); /* bg-gray-800/50 */
+    padding: 12px; /* p-3 */
+    border-radius: 9999px; /* rounded-full */
+    z-index: 10;
+    color: #ffffff;
+    transition: background-color 0.3s ease;
+}
+
+.slider-control-prev:hover,
+.slider-control-next:hover {
+    background-color: rgba(31, 41, 55, 0.9); /* hover:bg-gray-800/90 */
+}
+
+.slider-control-prev {
+    left: 0;
+    transform: translateY(-50%) translateX(-16px); /* -translate-y-1/2 -translate-x-4 */
+}
+
+.slider-control-next {
+    right: 0;
+    transform: translateY(-50%) translateX(16px); /* -translate-y-1/2 translate-x-4 */
+}
+
+.slider-control-prev:disabled,
+.slider-control-next:disabled {
+    opacity: 0; /* disabled:opacity-0 */
+    cursor: not-allowed; /* disabled:cursor-not-allowed */
+}
+
+.slider-control-icon {
+    width: 24px; /* h-6 w-6 */
+    height: 24px;
+    stroke-width: 2;
+}
+
+/* -------------------
+ * バナーセクション (New Games / Catalog)
+ * ------------------- */
+.banner-section {
+    margin-bottom: 64px; /* mb-16 */
+}
+
+.banner-new-games,
+.banner-catalog {
+    position: relative;
+    border-radius: 8px; /* rounded-lg */
+    overflow: hidden;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); /* shadow-2xl */
+    height: 400px;
+    background-color: #1f2937; /* bg-gray-900 */
+}
+
+.banner-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* "All New Games" バナー */
+.banner-content-wrapper-left {
+    position: absolute;
+    inset: 0 0 0 0; /* inset-y-0 left-0 */
+    display: flex;
+    align-items: center;
+}
+
+.banner-content-box-red {
+    background-color: #b91c1c; /* bg-red-700 */
+    padding: 32px; /* p-8 */
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-top-left-radius: 8px; /* rounded-l-lg */
+    border-bottom-left-radius: 8px;
+    width: 35%;
+}
+
+/* md:p-12 */
+@media (min-width: 768px) {
+    .banner-content-box-red {
+        padding: 48px;
+    }
+}
+
+.banner-title {
+    font-size: 36px; /* text-4xl */
+    font-weight: 900; /* font-black */
+    text-transform: uppercase;
+    margin-bottom: 16px; /* mb-4 */
+    color: #ffffff;
+}
+
+.banner-text {
+    font-size: 18px; /* text-lg */
+    margin-bottom: 24px; /* mb-6 */
+    color: #ffffff;
+}
+
+.banner-text-gray {
+    font-size: 18px; /* text-lg */
+    margin-bottom: 24px; /* mb-6 */
+    color: #e5e7eb; /* text-gray-200 */
+}
+
+.banner-button-white {
+    background-color: #ffffff;
+    color: #b91c1c; /* text-red-700 */
+    font-weight: 700; /* font-bold */
+    padding: 12px 32px; /* py-3 px-8 */
+    border-radius: 8px; /* rounded-lg */
+    font-size: 18px; /* text-lg */
+    transition: background-color 0.3s ease;
+    align-self: flex-start; /* self-start */
+}
+
+.banner-button-white:hover {
+    background-color: #e5e7eb; /* hover:bg-gray-200 */
+}
+
+/* "Explore Catalog" バナー */
+.banner-content-wrapper-right {
+    position: absolute;
+    inset: 0 0 0 0; /* inset-y-0 right-0 */
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.banner-content-box-right {
+    padding: 32px; /* p-8 */
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: right;
+    border-top-right-radius: 8px; /* rounded-r-lg */
+    border-bottom-right-radius: 8px;
+    width: 50%;
+}
+
+/* md:p-12 */
+@media (min-width: 768px) {
+    .banner-content-box-right {
+        padding: 48px;
+    }
+}
+
+.banner-button-purple {
+    background-color: #7e22ce; /* bg-purple-700 */
+    color: #ffffff;
+    font-weight: 700; /* font-bold */
+    padding: 12px 32px; /* py-3 px-8 */
+    border-radius: 8px; /* rounded-lg */
+    font-size: 18px; /* text-lg */
+    transition: background-color 0.3s ease;
+    align-self: flex-end; /* self-end */
+}
+
+.banner-button-purple:hover {
+    background-color: #6b21a8; /* hover:bg-purple-800 */
+}
+
+/* -------------------
+ * 下部プロモバナーセクション
+ * ------------------- */
+.bottom-banners-section {
+    display: grid;
+    gap: 64px; /* space-y-16 */
+}
+
+.promo-banner {
+    position: relative;
+    border-radius: 8px; /* rounded-lg */
+    overflow: hidden;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); /* shadow-2xl */
+}
+
+.promo-image {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+
+/* Cyberpunk */
+.promo-content-bottom-left {
+    position: absolute;
+    bottom: 40px; /* bottom-10 */
+    left: 40px; /* left-10 */
+}
+
+.promo-title-cyberpunk {
+    font-size: 48px; /* text-5xl */
+    font-weight: 900; /* font-black */
+    color: #fde047; /* text-yellow-300 */
+    text-transform: uppercase;
+}
+
+.promo-button-yellow {
+    background-color: #facc15; /* bg-yellow-400 */
+    color: #000000;
+    font-weight: 700; /* font-bold */
+    padding: 12px 32px; /* py-3 px-8 */
+    border-radius: 8px; /* rounded-lg */
+    font-size: 18px; /* text-lg */
+    transition: background-color 0.3s ease;
+    margin-top: 16px; /* mt-4 */
+}
+
+.promo-button-yellow:hover {
+    background-color: #eab308; /* hover:bg-yellow-500 */
+}
+
+/* GTA V */
+.promo-content-box-orange {
+    position: absolute;
+    top: 40px; /* top-10 */
+    left: 40px; /* left-10 */
+    background-color: #ea580c; /* bg-orange-600 */
+    padding: 24px; /* p-6 */
+    border-radius: 8px; /* rounded-lg */
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* shadow-lg */
+}
+
+.promo-title-gta {
+    font-size: 36px; /* text-4xl */
+    font-weight: 900; /* font-black */
+    color: #ffffff;
+    text-transform: uppercase;
+}
+
+.promo-button-black {
+    background-color: #000000;
+    color: #ffffff;
+    font-weight: 700; /* font-bold */
+    padding: 12px 32px; /* py-3 px-8 */
+    border-radius: 8px; /* rounded-lg */
+    font-size: 18px; /* text-lg */
+    transition: background-color 0.3s ease;
+    margin-top: 16px; /* mt-4 */
+}
+
+.promo-button-black:hover {
+    background-color: #1f2937; /* hover:bg-gray-800 */
+}
+
+/* Assassin's Creed */
+.promo-content-center-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.4); /* bg-black bg-opacity-40 */
+}
+
+.promo-title-ac {
+    font-size: 60px; /* text-6xl */
+    font-weight: 900; /* font-black */
+    color: #ffffff;
+    opacity: 0.9;
+    text-transform: uppercase;
+}
+
+.promo-button-purple {
+    background-color: #7e22ce; /* bg-purple-700 */
+    color: #ffffff;
+    font-weight: 700; /* font-bold */
+    padding: 12px 32px; /* py-3 px-8 */
+    border-radius: 8px; /* rounded-lg */
+    font-size: 18px; /* text-lg */
+    transition: background-color 0.3s ease;
+    margin-top: 24px; /* mt-6 */
+}
+
+.promo-button-purple:hover {
+    background-color: #6b21a8; /* hover:bg-purple-800 */
+}
+
+/* -------------------
+ * フッター
+ * ------------------- */
+.page-footer {
+    margin-top: 80px; /* mt-20 */
+    padding-top: 40px; /* pt-10 */
+    border-top: 1px solid #374151; /* border-t border-gray-800 */
+    text-align: center;
+    color: #6b7280; /* text-gray-500 */
+}
+
+.footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 24px; /* space-x-6 */
+    margin-top: 16px; /* mt-4 */
+}
+
+.footer-link {
+    transition: color 0.3s ease;
+}
+
+.footer-link:hover {
+    color: #ffffff; /* hover:text-white */
+}

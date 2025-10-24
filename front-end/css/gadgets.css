@@ -1,0 +1,84 @@
+.container {
+    width: 90%;
+    max-width: 1600px; /* 横5列表示のため、最大幅を少し広げます */
+    margin: 20px auto;
+    padding: 20px;
+}
+
+/* --- 商品一覧エリア --- */
+.product-grid {
+    display: grid;
+    /* 画面幅に応じて列数を自動調整し、PCでは5列になりやすいように調整 */
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 25px; /* 商品間の余白 */
+}
+
+/* --- 各商品カードのデザイン --- */
+.product-card {
+    background-color: #1e1e1e;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.product-card:hover {
+    transform: translateY(-10px); /* ホバー時に少し浮き上がる演出 */
+    box-shadow: 0 8px 25px rgba(52, 152, 219, 0.4); /* 青い影 */
+}
+
+.product-card img {
+    width: 100%;
+    height: 180px; /* 高さを少し調整 */
+    object-fit: cover; /* 画像の比率を保ったままトリミング */
+    display: block;
+}
+
+.product-info {
+    padding: 20px;
+}
+
+.product-brand {
+    font-size: 0.9em;
+    color: #bbbbbb; /* ブランド名は少し控えめな色に */
+    margin: 0;
+}
+
+/* ★タイトル名: 白 */
+.product-title {
+    font-size: 1.1em; /* フォントサイズを少し調整 */
+    font-weight: bold;
+    color: #ffffff;
+    margin: 5px 0 15px 0;
+    height: 40px; /* 高さを固定してレイアウトの崩れを防ぐ */
+}
+
+/* ★価格: 青 */
+.product-price {
+    font-size: 1.4em; /* フォントサイズを少し調整 */
+    font-weight: bold;
+    color: #3498db; /* 青色 */
+    margin-bottom: 10px;
+}
+
+.price-tax {
+    font-size: 0.7em;
+    color: #cccccc;
+}
+
+/* ★機能面: 青 */
+.product-features {
+    list-style: none;
+    padding: 0;
+    margin: 15px 0 0 0;
+    color: #3498db; /* 青色 */
+    font-size: 0.85em; /* フォントサイズを少し調整 */
+}
+
+.product-features li {
+    margin-bottom: 5px;
+}
+.product-features li::before {
+    content: '✓ '; /* チェックマーク */
+    color: #2ecc71; /* 緑色 */
+}
