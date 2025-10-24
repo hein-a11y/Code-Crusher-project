@@ -277,7 +277,19 @@
     <!-- メインコンテナ (全体にパディングを追加) -->
     <div class="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
         
-
+        <!-- ヘッダー -->
+        <header class="mb-8 p-4 bg-[#242424] rounded-xl container-shadow">
+            <div class="flex items-center justify-between">
+                <div class="logo">
+                   GG STORE
+                </div>
+                <p class="text-base text-gray-400 font-medium hidden sm:block">
+                    レビュー特典シミュレーション
+                </p>
+            </div>
+            <!-- ユーザーID表示をヘッダーの下部に配置し、控えめにする -->
+            <p id="user-id-display" class="mt-2 text-xs text-gray-500 truncate text-right">ユーザーID: 接続中...</p>
+        </header>
 
         <!-- メッセージコンテナ (カスタムアラート用) -->
         <div id="custom-message-container"></div>

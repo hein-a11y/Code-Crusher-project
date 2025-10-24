@@ -159,7 +159,7 @@
             <nav>
                 <ul>
                     <li><a href="index.php" data-i18n="nav.home"></a></li>
-                    <li><a href="game-page2.php" data-i18n="nav.games"></a></li>
+                    <li><a href="game.php" data-i18n="nav.games"></a></li>
                     <li><a href="gadgets.php" data-i18n="nav.gadgets"></a></li>
                     <li><a href="review.php" data-i18n="nav.reviews"></a></li>
                     <li><a href="help.php" data-i18n="nav.help"></a></li>
