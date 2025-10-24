@@ -5,187 +5,705 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Game Catalog</title>
-    <!-- Import Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Import Inter font -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
     <style>
-        /* Custom styles for a subtle glow on buttons */
-        .btn-purple {
+        /* -------------------
+         * 基本リセットとグローバルスタイル
+         * ------------------- */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        img, svg {
+            display: block;
+            max-width: 100%;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        /* -------------------
+         * ページコンテナ
+         * ------------------- */
+        .page-container {
+            max-width: 1152px; /* max-w-7xl */
+            margin-left: auto;
+            margin-right: auto;
+            padding-left: 16px; /* px-4 */
+            padding-right: 16px;
+            padding-top: 48px; /* py-12 */
+            padding-bottom: 48px;
+        }
+
+        /* sm:px-6 */
+        @media (min-width: 640px) {
+            .page-container {
+                padding-left: 24px;
+                padding-right: 24px;
+            }
+        }
+        /* lg:px-8 */
+        @media (min-width: 1024px) {
+            .page-container {
+                padding-left: 32px;
+                padding-right: 32px;
+            }
+        }
+
+        /* -------------------
+         * 汎用ボタン (紫のグローエフェクト)
+         * ------------------- */
+        .button-glow-purple {
             box-shadow: 0 0 15px rgba(168, 85, 247, 0.3);
         }
-        /* Custom utility to hide scrollbars */
-        .scrollbar-hide::-webkit-scrollbar {
-            display: none;
+
+        /* -------------------
+         * ヒーローセクション
+         * ------------------- */
+        .hero-section {
+            margin-bottom: 64px; /* mb-16 */
         }
-        .scrollbar-hide {
+
+        .hero-image-wrapper {
+            position: relative;
+            border-radius: 8px; /* rounded-lg */
+            overflow: hidden;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); /* shadow-2xl */
+        }
+
+        .hero-image {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+        }
+
+        .hero-content {
+            position: absolute;
+            bottom: 40px; /* bottom-10 */
+            left: 40px; /* left-10 */
+        }
+
+        .hero-title {
+            font-size: 30px; /* text-3xl */
+            font-weight: 900; /* font-black */
+            text-transform: uppercase;
+            margin-bottom: 16px; /* mb-4 */
+            text-shadow: 0 4px 6px rgba(0, 0, 0, 0.4); /* カスタム text-shadow-lg 相当 */
+        }
+        
+        /* md:text-5xl */
+        @media (min-width: 768px) {
+            .hero-title {
+                font-size: 48px;
+            }
+        }
+
+        .hero-button {
+            background-color: #7e22ce; /* bg-purple-700 */
+            color: #ffffff;
+            font-weight: 700; /* font-bold */
+            padding: 12px 32px; /* py-3 px-8 */
+            border-radius: 8px; /* rounded-lg */
+            font-size: 18px; /* text-lg */
+            transition: background-color 0.3s ease;
+        }
+
+        .hero-button:hover {
+            background-color: #6b21a8; /* hover:bg-purple-800 */
+        }
+
+        .hero-thumbnails {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); /* grid-cols-2 */
+            gap: 16px; /* gap-4 */
+            margin-top: 24px; /* mt-6 */
+        }
+
+        /* md:grid-cols-4 */
+        @media (min-width: 768px) {
+            .hero-thumbnails {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        .thumbnail-image {
+            border-radius: 8px; /* rounded-lg */
+            object-fit: cover;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+        }
+
+        .thumbnail-image:hover {
+            opacity: 0.8; /* hover:opacity-80 */
+        }
+
+        /* -------------------
+         * ゲームセクション (スライダー)
+         * ------------------- */
+        .games-section {
+            margin-bottom: 64px; /* mb-16 */
+        }
+
+        .section-title {
+            font-size: 30px; /* text-3xl */
+            font-weight: 700; /* font-bold */
+            text-transform: uppercase;
+            margin-bottom: 32px; /* mb-8 */
+        }
+
+        .slider-wrapper {
+            position: relative;
+        }
+
+        /* スライダーコンテナ */
+        #our-games-slider {
+            display: flex;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            scroll-snap-type: x mandatory; /* snap-x snap-mandatory */
+            gap: 24px; /* gap-6 */
+            padding-bottom: 16px; /* pb-4 */
+            /* スクロールバー非表示 */
             -ms-overflow-style: none;  /* IE and Edge */
             scrollbar-width: none;  /* Firefox */
         }
+        #our-games-slider::-webkit-scrollbar {
+            display: none; /* Webkit */
+        }
+
+        /* ゲームカード */
+        .game-card {
+            background-color: #1f2937; /* bg-gray-900 */
+            border-radius: 8px; /* rounded-lg */
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* shadow-lg */
+            width: 50%; /* w-1/2 */
+            flex-shrink: 0;
+            scroll-snap-align: start; /* snap-start */
+        }
+
+        /* sm:w-1/3 */
+        @media (min-width: 640px) {
+            .game-card {
+                width: 33.333333%;
+            }
+        }
+        /* md:w-1/4 */
+        @media (min-width: 768px) {
+            .game-card {
+                width: 25%;
+            }
+        }
+        /* lg:w-1/5 */
+        @media (min-width: 1024px) {
+            .game-card {
+                width: 20%;
+            }
+        }
+
+        .game-card-image {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        /* group-hover:scale-105 */
+        .game-card:hover .game-card-image {
+            transform: scale(1.05);
+        }
+
+        .game-card-info {
+            padding: 16px; /* p-4 */
+        }
+
+        .game-card-title {
+            font-weight: 600; /* font-semibold */
+            font-size: 18px; /* text-lg */
+            margin-bottom: 8px; /* mb-2 */
+            /* truncate */
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .game-card-button {
+            width: 100%;
+            background-color: #7e22ce; /* bg-purple-700 */
+            color: #ffffff;
+            font-weight: 600; /* font-semibold */
+            padding: 8px 16px; /* py-2 px-4 */
+            border-radius: 8px; /* rounded-lg */
+            font-size: 14px; /* text-sm */
+            transition: background-color 0.3s ease;
+        }
+
+        .game-card-button:hover {
+            background-color: #6b21a8; /* hover:bg-purple-800 */
+        }
+
+        /* スライダー操作ボタン */
+        .slider-control-prev,
+        .slider-control-next {
+            position: absolute;
+            top: 50%;
+            background-color: rgba(31, 41, 55, 0.5); /* bg-gray-800/50 */
+            padding: 12px; /* p-3 */
+            border-radius: 9999px; /* rounded-full */
+            z-index: 10;
+            color: #ffffff;
+            transition: background-color 0.3s ease;
+        }
+        
+        .slider-control-prev:hover,
+        .slider-control-next:hover {
+            background-color: rgba(31, 41, 55, 0.9); /* hover:bg-gray-800/90 */
+        }
+
+        .slider-control-prev {
+            left: 0;
+            transform: translateY(-50%) translateX(-16px); /* -translate-y-1/2 -translate-x-4 */
+        }
+
+        .slider-control-next {
+            right: 0;
+            transform: translateY(-50%) translateX(16px); /* -translate-y-1/2 translate-x-4 */
+        }
+
+        .slider-control-prev:disabled,
+        .slider-control-next:disabled {
+            opacity: 0; /* disabled:opacity-0 */
+            cursor: not-allowed; /* disabled:cursor-not-allowed */
+        }
+
+        .slider-control-icon {
+            width: 24px; /* h-6 w-6 */
+            height: 24px;
+            stroke-width: 2;
+        }
+
+        /* -------------------
+         * バナーセクション (New Games / Catalog)
+         * ------------------- */
+        .banner-section {
+            margin-bottom: 64px; /* mb-16 */
+        }
+
+        .banner-new-games,
+        .banner-catalog {
+            position: relative;
+            border-radius: 8px; /* rounded-lg */
+            overflow: hidden;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); /* shadow-2xl */
+            height: 400px;
+            background-color: #1f2937; /* bg-gray-900 */
+        }
+
+        .banner-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* "All New Games" バナー */
+        .banner-content-wrapper-left {
+            position: absolute;
+            inset: 0 0 0 0; /* inset-y-0 left-0 */
+            display: flex;
+            align-items: center;
+        }
+
+        .banner-content-box-red {
+            background-color: #b91c1c; /* bg-red-700 */
+            padding: 32px; /* p-8 */
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            border-top-left-radius: 8px; /* rounded-l-lg */
+            border-bottom-left-radius: 8px;
+            width: 35%;
+        }
+
+        /* md:p-12 */
+        @media (min-width: 768px) {
+            .banner-content-box-red {
+                padding: 48px;
+            }
+        }
+
+        .banner-title {
+            font-size: 36px; /* text-4xl */
+            font-weight: 900; /* font-black */
+            text-transform: uppercase;
+            margin-bottom: 16px; /* mb-4 */
+            color: #ffffff;
+        }
+
+        .banner-text {
+            font-size: 18px; /* text-lg */
+            margin-bottom: 24px; /* mb-6 */
+            color: #ffffff;
+        }
+        
+        .banner-text-gray {
+            font-size: 18px; /* text-lg */
+            margin-bottom: 24px; /* mb-6 */
+            color: #e5e7eb; /* text-gray-200 */
+        }
+
+        .banner-button-white {
+            background-color: #ffffff;
+            color: #b91c1c; /* text-red-700 */
+            font-weight: 700; /* font-bold */
+            padding: 12px 32px; /* py-3 px-8 */
+            border-radius: 8px; /* rounded-lg */
+            font-size: 18px; /* text-lg */
+            transition: background-color 0.3s ease;
+            align-self: flex-start; /* self-start */
+        }
+
+        .banner-button-white:hover {
+            background-color: #e5e7eb; /* hover:bg-gray-200 */
+        }
+
+        /* "Explore Catalog" バナー */
+        .banner-content-wrapper-right {
+            position: absolute;
+            inset: 0 0 0 0; /* inset-y-0 right-0 */
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+        }
+
+        .banner-content-box-right {
+            padding: 32px; /* p-8 */
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            text-align: right;
+            border-top-right-radius: 8px; /* rounded-r-lg */
+            border-bottom-right-radius: 8px;
+            width: 50%;
+        }
+
+        /* md:p-12 */
+        @media (min-width: 768px) {
+            .banner-content-box-right {
+                padding: 48px;
+            }
+        }
+
+        .banner-button-purple {
+            background-color: #7e22ce; /* bg-purple-700 */
+            color: #ffffff;
+            font-weight: 700; /* font-bold */
+            padding: 12px 32px; /* py-3 px-8 */
+            border-radius: 8px; /* rounded-lg */
+            font-size: 18px; /* text-lg */
+            transition: background-color 0.3s ease;
+            align-self: flex-end; /* self-end */
+        }
+
+        .banner-button-purple:hover {
+            background-color: #6b21a8; /* hover:bg-purple-800 */
+        }
+
+        /* -------------------
+         * 下部プロモバナーセクション
+         * ------------------- */
+        .bottom-banners-section {
+            display: grid;
+            gap: 64px; /* space-y-16 */
+        }
+
+        .promo-banner {
+            position: relative;
+            border-radius: 8px; /* rounded-lg */
+            overflow: hidden;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); /* shadow-2xl */
+        }
+
+        .promo-image {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+        }
+        
+        /* Cyberpunk */
+        .promo-content-bottom-left {
+            position: absolute;
+            bottom: 40px; /* bottom-10 */
+            left: 40px; /* left-10 */
+        }
+
+        .promo-title-cyberpunk {
+            font-size: 48px; /* text-5xl */
+            font-weight: 900; /* font-black */
+            color: #fde047; /* text-yellow-300 */
+            text-transform: uppercase;
+        }
+
+        .promo-button-yellow {
+            background-color: #facc15; /* bg-yellow-400 */
+            color: #000000;
+            font-weight: 700; /* font-bold */
+            padding: 12px 32px; /* py-3 px-8 */
+            border-radius: 8px; /* rounded-lg */
+            font-size: 18px; /* text-lg */
+            transition: background-color 0.3s ease;
+            margin-top: 16px; /* mt-4 */
+        }
+        
+        .promo-button-yellow:hover {
+            background-color: #eab308; /* hover:bg-yellow-500 */
+        }
+
+        /* GTA V */
+        .promo-content-box-orange {
+            position: absolute;
+            top: 40px; /* top-10 */
+            left: 40px; /* left-10 */
+            background-color: #ea580c; /* bg-orange-600 */
+            padding: 24px; /* p-6 */
+            border-radius: 8px; /* rounded-lg */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* shadow-lg */
+        }
+
+        .promo-title-gta {
+            font-size: 36px; /* text-4xl */
+            font-weight: 900; /* font-black */
+            color: #ffffff;
+            text-transform: uppercase;
+        }
+
+        .promo-button-black {
+            background-color: #000000;
+            color: #ffffff;
+            font-weight: 700; /* font-bold */
+            padding: 12px 32px; /* py-3 px-8 */
+            border-radius: 8px; /* rounded-lg */
+            font-size: 18px; /* text-lg */
+            transition: background-color 0.3s ease;
+            margin-top: 16px; /* mt-4 */
+        }
+        
+        .promo-button-black:hover {
+            background-color: #1f2937; /* hover:bg-gray-800 */
+        }
+        
+        /* Assassin's Creed */
+        .promo-content-center-overlay {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background-color: rgba(0, 0, 0, 0.4); /* bg-black bg-opacity-40 */
+        }
+
+        .promo-title-ac {
+            font-size: 60px; /* text-6xl */
+            font-weight: 900; /* font-black */
+            color: #ffffff;
+            opacity: 0.9;
+            text-transform: uppercase;
+        }
+
+        .promo-button-purple {
+            background-color: #7e22ce; /* bg-purple-700 */
+            color: #ffffff;
+            font-weight: 700; /* font-bold */
+            padding: 12px 32px; /* py-3 px-8 */
+            border-radius: 8px; /* rounded-lg */
+            font-size: 18px; /* text-lg */
+            transition: background-color 0.3s ease;
+            margin-top: 24px; /* mt-6 */
+        }
+        
+        .promo-button-purple:hover {
+            background-color: #6b21a8; /* hover:bg-purple-800 */
+        }
+
+        /* -------------------
+         * フッター
+         * ------------------- */
+        .page-footer {
+            margin-top: 80px; /* mt-20 */
+            padding-top: 40px; /* pt-10 */
+            border-top: 1px solid #374151; /* border-t border-gray-800 */
+            text-align: center;
+            color: #6b7280; /* text-gray-500 */
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 24px; /* space-x-6 */
+            margin-top: 16px; /* mt-4 */
+        }
+
+        .footer-link {
+            transition: color 0.3s ease;
+        }
+
+        .footer-link:hover {
+            color: #ffffff; /* hover:text-white */
+        }
+
     </style>
 </head>
-<body class="bg-black text-white">
+<body class="theme-dark">
 
-    <!-- Main container with padding -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="page-container">
 
-        <!-- Hero Section -->
-        <section class="mb-16">
-            <div class="relative rounded-lg overflow-hidden shadow-2xl">
-                <img src="./photos/GOW.jpg" alt="God of War Ragnarok" class="w-full h-auto object-cover">
-                <!-- Overlay content -->
-                <div class="absolute bottom-10 left-10">
-                    <h1 class="text-3xl md:text-5xl font-black uppercase mb-4 text-shadow-lg">God of War</h1>
-                    <button class="bg-purple-700 text-white font-bold py-3 px-8 rounded-lg text-lg hover:bg-purple-800 transition duration-300 btn-purple">
+        <section class="hero-section">
+            <div class="hero-image-wrapper">
+                <img src="./photos/GOW.jpg" alt="God of War Ragnarok" class="hero-image">
+                <div class="hero-content">
+                    <h1 class="hero-title">God of War</h1>
+                    <button class="hero-button button-glow-purple">
                         Learn More
                     </button>
                 </div>
             </div>
-            <!-- Thumbnails -->
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
-                <img src="https://placehold.co/300x200/2a2a2a/f0f0f0?text=Trailer" alt="Thumbnail 1" class="rounded-lg object-cover w-full h-full cursor-pointer hover:opacity-80 transition">
-                <img src="https://placehold.co/300x200/2a2a2a/f0f0f0?text=Gameplay" alt="Thumbnail 2" class="rounded-lg object-cover w-full h-full cursor-pointer hover:opacity-80 transition">
-                <img src="https://placehold.co/300x200/2a2a2a/f0f0f0?text=Details" alt="Thumbnail 3" class="rounded-lg object-cover w-full h-full cursor-pointer hover:opacity-80 transition">
-                <img src="https://placehold.co/300x200/2a2a2a/f0f0f0?text=More" alt="Thumbnail 4" class="rounded-lg object-cover w-full h-full cursor-pointer hover:opacity-80 transition">
+            <div class="hero-thumbnails">
+                <img src="https://placehold.co/300x200/2a2a2a/f0f0f0?text=Trailer" alt="Thumbnail 1" class="thumbnail-image">
+                <img src="https://placehold.co/300x200/2a2a2a/f0f0f0?text=Gameplay" alt="Thumbnail 2" class="thumbnail-image">
+                <img src="https://placehold.co/300x200/2a2a2a/f0f0f0?text=Details" alt="Thumbnail 3" class="thumbnail-image">
+                <img src="https://placehold.co/300x200/2a2a2a/f0f0f0?text=More" alt="Thumbnail 4" class="thumbnail-image">
             </div>
         </section>
 
-        <!-- "Our Games" Section -->
-        <section class="mb-16">
-            <h2 class="text-3xl font-bold uppercase mb-8">Our Games</h2>
+        <section class="games-section">
+            <h2 class="section-title">Our Games</h2>
             
-            <!-- Slider Wrapper -->
-            <div class="relative">
-                <!-- Slider Container -->
-                <div id="our-games-slider" class="flex overflow-x-auto scroll-smooth scrollbar-hide snap-x snap-mandatory gap-6 pb-4">
+            <div class="slider-wrapper">
+                <div id="our-games-slider" class="slider-container">
                     
-                    <!-- Game Card 1 -->
-                    <div class="bg-gray-900 rounded-lg overflow-hidden shadow-lg group w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/5 flex-shrink-0 snap-start">
-                        <img src="photos for game page/READ DEAD.jfif" alt="Game 1" class="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-300">
-                        <div class="p-4">
-                            <h3 class="font-semibold text-lg mb-2 truncate">Red Dead Redemption 2</h3>
-                            <button class="w-full bg-purple-700 text-white font-semibold py-2 px-4 rounded-lg text-sm hover:bg-purple-800 transition duration-300">
+                    <div class="game-card">
+                        <img src="photos for game page/READ DEAD.jfif" alt="Game 1" class="game-card-image">
+                        <div class="game-card-info">
+                            <h3 class="game-card-title">Red Dead Redemption 2</h3>
+                            <button class="game-card-button">
                                 Details
                             </button>
                         </div>
                     </div>
 
-                    <!-- Game Card 2 -->
-                    <div class="bg-gray-900 rounded-lg overflow-hidden shadow-lg group w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/5 flex-shrink-0 snap-start">
-                        <img src="photos for game page/ELDEN RING.jfif" alt="Game 2" class="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-300">
-                        <div class="p-4">
-                            <h3 class="font-semibold text-lg mb-2 truncate">Elden Ring</h3>
-                            <button class="w-full bg-purple-700 text-white font-semibold py-2 px-4 rounded-lg text-sm hover:bg-purple-800 transition duration-300">
+                    <div class="game-card">
+                        <img src="photos for game page/ELDEN RING.jfif" alt="Game 2" class="game-card-image">
+                        <div class="game-card-info">
+                            <h3 class="game-card-title">Elden Ring</h3>
+                            <button class="game-card-button">
                                 Details
                             </button>
                         </div>
                     </div>
 
-                    <!-- Game Card 3 -->
-                    <div class="bg-gray-900 rounded-lg overflow-hidden shadow-lg group w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/5 flex-shrink-0 snap-start">
-                        <img src="photos for game page/witcher 3.jfif" alt="Game 3" class="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-300">
-                        <div class="p-4">
-                            <h3 class="font-semibold text-lg mb-2 truncate">The Witcher 3</h3>
-                            <button class="w-full bg-purple-700 text-white font-semibold py-2 px-4 rounded-lg text-sm hover:bg-purple-800 transition duration-300">
+                    <div class="game-card">
+                        <img src="photos for game page/witcher 3.jfif" alt="Game 3" class="game-card-image">
+                        <div class="game-card-info">
+                            <h3 class="game-card-title">The Witcher 3</h3>
+                            <button class="game-card-button">
                                 Details
                             </button>
                         </div>
                     </div>
 
-                    <!-- Game Card 4 -->
-                    <div class="bg-gray-900 rounded-lg overflow-hidden shadow-lg group w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/5 flex-shrink-0 snap-start">
-                        <img src="photos for game page/Assassin’s Creed.jfif" alt="Game 4" class="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-300">
-                        <div class="p-4">
-                            <h3 class="font-semibold text-lg mb-2 truncate">Assassin's Creed</h3>
-                            <button class="w-full bg-purple-700 text-white font-semibold py-2 px-4 rounded-lg text-sm hover:bg-purple-800 transition duration-300">
+                    <div class="game-card">
+                        <img src="photos for game page/Assassin’s Creed.jfif" alt="Game 4" class="game-card-image">
+                        <div class="game-card-info">
+                            <h3 class="game-card-title">Assassin's Creed</h3>
+                            <button class="game-card-button">
                                 Details
                             </button>
                         </div>
                     </div>
 
-                    <!-- Game Card 5 -->
-                    <div class="bg-gray-900 rounded-lg overflow-hidden shadow-lg group w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/5 flex-shrink-0 snap-start">
-                        <img src="photos for game page/Dark Souls III .jfif" alt="Game 5" class="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-300">
-                        <div class="p-4">
-                            <h3 class="font-semibold text-lg mb-2 truncate">Dark Souls III</h3>
-                            <button class="w-full bg-purple-700 text-white font-semibold py-2 px-4 rounded-lg text-sm hover:bg-purple-800 transition duration-300">
+                    <div class="game-card">
+                        <img src="photos for game page/Dark Souls III .jfif" alt="Game 5" class="game-card-image">
+                        <div class="game-card-info">
+                            <h3 class="game-card-title">Dark Souls III</h3>
+                            <button class="game-card-button">
                                 Details
                             </button>
                         </div>
                     </div>
 
-                    <!-- Game Card 6 -->
-                    <div class="bg-gray-900 rounded-lg overflow-hidden shadow-lg group w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/5 flex-shrink-0 snap-start">
-                        <img src="photos for game page/RE VILLAGE.jfif" alt="Game 6" class="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-300">
-                        <div class="p-4">
-                            <h3 class="font-semibold text-lg mb-2 truncate">Resident Evil Village</h3>
-                            <button class="w-full bg-purple-700 text-white font-semibold py-2 px-4 rounded-lg text-sm hover:bg-purple-800 transition duration-300">
+                    <div class="game-card">
+                        <img src="photos for game page/RE VILLAGE.jfif" alt="Game 6" class="game-card-image">
+                        <div class="game-card-info">
+                            <h3 class="game-card-title">Resident Evil Village</h3>
+                            <button class="game-card-button">
                                 Details
                             </button>
                         </div>
                     </div>
 
-                    <!-- Game Card 7 -->
-                    <div class="bg-gray-900 rounded-lg overflow-hidden shadow-lg group w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/5 flex-shrink-0 snap-start">
-                        <img src="https://placehold.co/300x450/2a2a2a/f0f0f0?text=Game+Title+7" alt="Game 7" class="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-300">
-                        <div class="p-4">
-                            <h3 class="font-semibold text-lg mb-2 truncate">Cyberpunk 2077</h3>
-                            <button class="w-full bg-purple-700 text-white font-semibold py-2 px-4 rounded-lg text-sm hover:bg-purple-800 transition duration-300">
+                    <div class="game-card">
+                        <img src="https://placehold.co/300x450/2a2a2a/f0f0f0?text=Game+Title+7" alt="Game 7" class="game-card-image">
+                        <div class="game-card-info">
+                            <h3 class="game-card-title">Cyberpunk 2077</h3>
+                            <button class="game-card-button">
                                 Details
                             </button>
                         </div>
                     </div>
 
-                    <!-- Game Card 8 -->
-                    <div class="bg-gray-900 rounded-lg overflow-hidden shadow-lg group w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/5 flex-shrink-0 snap-start">
-                        <img src="https://placehold.co/300x450/2a2a2a/f0f0f0?text=Game+Title+8" alt="Game 8" class="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-300">
-                        <div class="p-4">
-                            <h3 class="font-semibold text-lg mb-2 truncate">Starfield</h3>
-                            <button class="w-full bg-purple-700 text-white font-semibold py-2 px-4 rounded-lg text-sm hover:bg-purple-800 transition duration-300">
+                    <div class="game-card">
+                        <img src="https://placehold.co/300x450/2a2a2a/f0f0f0?text=Game+Title+8" alt="Game 8" class="game-card-image">
+                        <div class="game-card-info">
+                            <h3 class="game-card-title">Starfield</h3>
+                            <button class="game-card-button">
                                 Details
                             </button>
                         </div>
                     </div>
 
-                    <!-- Game Card 9 (New) -->
-                    <div class="bg-gray-900 rounded-lg overflow-hidden shadow-lg group w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/5 flex-shrink-0 snap-start">
-                        <img src="https://placehold.co/300x450/2a2a2a/f0f0f0?text=Game+Title+9" alt="Game 9" class="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-300">
-                        <div class="p-4">
-                            <h3 class="font-semibold text-lg mb-2 truncate">Zelda: TotK</h3>
-                            <button class="w-full bg-purple-700 text-white font-semibold py-2 px-4 rounded-lg text-sm hover:bg-purple-800 transition duration-300">
+                    <div class="game-card">
+                        <img src="https://placehold.co/300x450/2a2a2a/f0f0f0?text=Game+Title+9" alt="Game 9" class="game-card-image">
+                        <div class="game-card-info">
+                            <h3 class="game-card-title">Zelda: TotK</h3>
+                            <button class="game-card-button">
                                 Details
                             </button>
                         </div>
                     </div>
 
-                    <!-- Game Card 10 (New) -->
-                    <div class="bg-gray-900 rounded-lg overflow-hidden shadow-lg group w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/5 flex-shrink-0 snap-start">
-                        <img src="https://placehold.co/300x450/2a2a2a/f0f0f0?text=Game+Title+10" alt="Game 10" class="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-300">
-                        <div class="p-4">
-                            <h3 class="font-semibold text-lg mb-2 truncate">Hogwarts Legacy</h3>
-                            <button class="w-full bg-purple-700 text-white font-semibold py-2 px-4 rounded-lg text-sm hover:bg-purple-800 transition duration-300">
+                    <div class="game-card">
+                        <img src="https://placehold.co/300x450/2a2a2a/f0f0f0?text=Game+Title+10" alt="Game 10" class="game-card-image">
+                        <div class="game-card-info">
+                            <h3 class="game-card-title">Hogwarts Legacy</h3>
+                            <button class="game-card-button">
                                 Details
                             </button>
                         </div>
                     </div>
 
-                    <!-- Game Card 11 (New) -->
-                    <div class="bg-gray-900 rounded-lg overflow-hidden shadow-lg group w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/5 flex-shrink-0 snap-start">
-                        <img src="https://placehold.co/300x450/2a2a2a/f0f0f0?text=Game+Title+11" alt="Game 11" class="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-300">
-                        <div class="p-4">
-                            <h3 class="font-semibold text-lg mb-2 truncate">Diablo IV</h3>
-                            <button class="w-full bg-purple-700 text-white font-semibold py-2 px-4 rounded-lg text-sm hover:bg-purple-800 transition duration-300">
+                    <div class="game-card">
+                        <img src="https://placehold.co/300x450/2a2a2a/f0f0f0?text=Game+Title+11" alt="Game 11" class="game-card-image">
+                        <div class="game-card-info">
+                            <h3 class="game-card-title">Diablo IV</h3>
+                            <button class="game-card-button">
                                 Details
                             </button>
                         </div>
                     </div>
 
-                    <!-- Game Card 12 (New) -->
-                    <div class="bg-gray-900 rounded-lg overflow-hidden shadow-lg group w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/5 flex-shrink-0 snap-start">
-                        <img src="https://placehold.co/300x450/2a2a2a/f0f0f0?text=Game+Title+12" alt="Game 12" class="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-300">
-                        <div class="p-4">
-                            <h3 class="font-semibold text-lg mb-2 truncate">Baldur's Gate 3</h3>
-                            <button class="w-full bg-purple-700 text-white font-semibold py-2 px-4 rounded-lg text-sm hover:bg-purple-800 transition duration-300">
+                    <div class="game-card">
+                        <img src="https://placehold.co/300x450/2a2a2a/f0f0f0?text=Game+Title+12" alt="Game 12" class="game-card-image">
+                        <div class="game-card-info">
+                            <h3 class="game-card-title">Baldur's Gate 3</h3>
+                            <button class="game-card-button">
                                 Details
                             </button>
                         </div>
@@ -193,14 +711,13 @@
 
                 </div>
 
-                <!-- Slider Controls -->
-                <button id="slider-prev" class="absolute top-1/2 left-0 -translate-y-1/2 -translate-x-4 bg-gray-800/50 hover:bg-gray-800/90 p-3 rounded-full z-10 text-white transition duration-300 disabled:opacity-0 disabled:cursor-not-allowed">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <button id="slider-prev" class="slider-control-prev">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="slider-control-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
                     </svg>
                 </button>
-                <button id="slider-next" class="absolute top-1/2 right-0 -translate-y-1/2 translate-x-4 bg-gray-800/50 hover:bg-gray-800/90 p-3 rounded-full z-10 text-white transition duration-300 disabled:opacity-0 disabled:cursor-not-allowed">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <button id="slider-next" class="slider-control-next">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="slider-control-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
                     </svg>
                 </button>
@@ -208,16 +725,14 @@
             </div>
         </section>
 
-        <!-- "All New Games" Banner -->
-        <section class="mb-16">
-            <div class="relative rounded-lg overflow-hidden shadow-2xl h-[400px] bg-gray-900">
-                <img src="https://placehold.co/1200x500/400000/f0f0f0?text=Marvel+Avengers" alt="All New Games" class="w-full h-full object-cover">
-                <!-- Overlay content -->
-                <div class="absolute inset-y-0 left-0 flex items-center">
-                    <div class="bg-red-700 p-8 md:p-12 h-full flex flex-col justify-center rounded-l-lg" style="width: 35%;">
-                        <h2 class="text-4xl font-black uppercase mb-4 text-white">All New Games</h2>
-                        <p class="text-lg mb-6 text-white">Check out the latest releases.</p>
-                        <button class="bg-white text-red-700 font-bold py-3 px-8 rounded-lg text-lg hover:bg-gray-200 transition duration-300 self-start">
+        <section class="banner-section">
+            <div class="banner-new-games">
+                <img src="https://placehold.co/1200x500/400000/f0f0f0?text=Marvel+Avengers" alt="All New Games" class="banner-image">
+                <div class="banner-content-wrapper-left">
+                    <div class="banner-content-box-red" style="width: 35%;">
+                        <h2 class="banner-title">All New Games</h2>
+                        <p class="banner-text">Check out the latest releases.</p>
+                        <button class="banner-button-white">
                             See All
                         </button>
                     </div>
@@ -225,16 +740,14 @@
             </div>
         </section>
 
-        <!-- "Explore Catalog" Banner -->
-        <section class="mb-16">
-            <div class="relative rounded-lg overflow-hidden shadow-2xl h-[400px] bg-gray-900">
-                <img src="https://placehold.co/1200x500/301040/f0f0f0?text=Catalog+Characters" alt="Explore Catalog" class="w-full h-full object-cover">
-                <!-- Overlay content -->
-                <div class="absolute inset-y-0 right-0 flex items-center justify-end">
-                    <div class="p-8 md:p-12 h-full flex flex-col justify-center text-right rounded-r-lg" style="width: 50%;">
-                        <h2 class="text-4xl font-black uppercase mb-4 text-white">Explore Our Catalog</h2>
-                        <p class="text-lg mb-6 text-gray-200">Find your next favorite game.</p>
-                        <button class="bg-purple-700 text-white font-bold py-3 px-8 rounded-lg text-lg hover:bg-purple-800 transition duration-300 self-end btn-purple">
+        <section class="banner-section">
+            <div class="banner-catalog">
+                <img src="https://placehold.co/1200x500/301040/f0f0f0?text=Catalog+Characters" alt="Explore Catalog" class="banner-image">
+                <div class="banner-content-wrapper-right">
+                    <div class="banner-content-box-right" style="width: 50%;">
+                        <h2 class="banner-title">Explore Our Catalog</h2>
+                        <p class="banner-text-gray">Find your next favorite game.</p>
+                        <button class="banner-button-purple button-glow-purple">
                             Browse Now
                         </button>
                     </div>
@@ -242,38 +755,34 @@
             </div>
         </section>
 
-        <!-- Bottom Banners Section -->
-        <section class="space-y-16">
+        <section class="bottom-banners-section">
             
-            <!-- Cyberpunk Banner -->
-            <div class="relative rounded-lg overflow-hidden shadow-2xl">
-                <img src="https://placehold.co/1200x500/403000/f0f0f0?text=Cyberpunk+2077" alt="Cyberpunk 2077" class="w-full h-auto object-cover">
-                <div class="absolute bottom-10 left-10">
-                    <h3 class="text-5xl font-black text-yellow-300 uppercase">Cyberpunk 2077</h3>
-                    <button class="bg-yellow-400 text-black font-bold py-3 px-8 rounded-lg text-lg hover:bg-yellow-500 transition duration-300 mt-4">
+            <div class="promo-banner">
+                <img src="https://placehold.co/1200x500/403000/f0f0f0?text=Cyberpunk+2077" alt="Cyberpunk 2077" class="promo-image">
+                <div class="promo-content-bottom-left">
+                    <h3 class="promo-title-cyberpunk">Cyberpunk 2077</h3>
+                    <button class="promo-button-yellow">
                         Get It Now
                     </button>
                 </div>
             </div>
             
-            <!-- GTA V Banner -->
-            <div class="relative rounded-lg overflow-hidden shadow-2xl">
-                <img src="https://placehold.co/1200x500/502000/f0f0f0?text=Grand+Theft+Auto+V" alt="GTA V" class="w-full h-auto object-cover">
-                <div class="absolute top-10 left-10 bg-orange-600 p-6 rounded-lg shadow-lg">
-                    <h3 class="text-4xl font-black text-white uppercase">Grand Theft Auto V</h3>
-                     <button class="bg-black text-white font-bold py-3 px-8 rounded-lg text-lg hover:bg-gray-800 transition duration-300 mt-4">
+            <div class="promo-banner">
+                <img src="https://placehold.co/1200x500/502000/f0f0f0?text=Grand+Theft+Auto+V" alt="GTA V" class="promo-image">
+                <div class="promo-content-box-orange">
+                    <h3 class="promo-title-gta">Grand Theft Auto V</h3>
+                     <button class="promo-button-black">
                         Buy Now
                     </button>
                 </div>
             </div>
             
-            <!-- Assassin's Creed Banner -->
-            <div class="relative rounded-lg overflow-hidden shadow-2xl">
-                <img src="https://placehold.co/1200x500/202040/f0f0f0?text=Assassin's+Creed" alt="Assassin's Creed" class="w-full h-auto object-cover">
-                <div class="absolute inset-0 flex items-center justify-center text-center bg-black bg-opacity-40">
+            <div class="promo-banner">
+                <img src="https://placehold.co/1200x500/202040/f0f0f0?text=Assassin's+Creed" alt="Assassin's Creed" class="promo-image">
+                <div class="promo-content-center-overlay">
                     <div>
-                        <h3 class="text-6xl font-black text-white opacity-90 uppercase">Assassin's Creed</h3>
-                        <button class="bg-purple-700 text-white font-bold py-3 px-8 rounded-lg text-lg hover:bg-purple-800 transition duration-300 mt-6 btn-purple">
+                        <h3 class="promo-title-ac">Assassin's Creed</h3>
+                        <button class="promo-button-purple button-glow-purple">
                             Explore Franchise
                         </button>
                     </div>
@@ -281,20 +790,18 @@
             </div>
         </section>
 
-        <!-- Footer -->
-        <footer class="mt-20 pt-10 border-t border-gray-800 text-center text-gray-500">
-            <p>&copy; 2025 GameStore. All rights reserved.</p>
-            <div class="flex justify-center space-x-6 mt-4">
-                <a href="#" class="hover:text-white transition">Twitter</a>
-                <a href="#" class="hover:text-white transition">Instagram</a>
-                <a href="#" class="hover:text-white transition">Twitch</a>
-                <a href="#" class="hover:text-white transition">YouTube</a>
+        <footer class="page-footer">
+            <p class="footer-copyright">&copy; 2025 GameStore. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="#" class="footer-link">Twitter</a>
+                <a href="#" class="footer-link">Instagram</a>
+                <a href="#" classs="footer-link">Twitch</a>
+                <a href="#" class="footer-link">YouTube</a>
             </div>
         </footer>
 
     </div>
 
-    <!-- Slider JavaScript -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const slider = document.getElementById('our-games-slider');
