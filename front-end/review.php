@@ -1,3 +1,4 @@
+<?php require '../header/header-1.php'; ?>
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -9,36 +10,7 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
         
-        :root {
-            --primary-color: #00bfff; /* Neon blue accent */
-            --background-color: #121212; /* Deep black */
-            --surface-color: #1e1e1e;   /* Slightly lighter for cards/headers */
-            --text-color: #e0e0e0;      /* Light grey for readability */
-            --text-secondary-color: #a0a0a0; /* Dimmer text */
-        }
 
-
-        /* 1. 全体の背景をダークテーマに変更 */
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #1a1a1a; /* ディープチャコール */
-            min-height: 100vh;
-            padding: 0;
-            color: #e5e7eb; /* デフォルトテキストを明るく */
-        }
-        
-        .logo {
-            font-size: 1.8rem;
-            font-weight: bold;
-            
-            color: var(--primary-color);
-                text-shadow: 0 0 5px var(--primary-color);    
-            
-            text-decoration: none;
-
-                 
-          
-        }
 
         /* 2. シャドウをダークモードに適した、控えめな光に変更 */
         .container-shadow {
@@ -305,19 +277,7 @@
     <!-- メインコンテナ (全体にパディングを追加) -->
     <div class="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
         
-        <!-- ヘッダー -->
-        <header class="mb-8 p-4 bg-[#242424] rounded-xl container-shadow">
-            <div class="flex items-center justify-between">
-                <div class="logo">
-                   GG STORE
-                </div>
-                <p class="text-base text-gray-400 font-medium hidden sm:block">
-                    レビュー特典シミュレーション
-                </p>
-            </div>
-            <!-- ユーザーID表示をヘッダーの下部に配置し、控えめにする -->
-            <p id="user-id-display" class="mt-2 text-xs text-gray-500 truncate text-right">ユーザーID: 接続中...</p>
-        </header>
+
 
         <!-- メッセージコンテナ (カスタムアラート用) -->
         <div id="custom-message-container"></div>

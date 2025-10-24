@@ -1,3 +1,4 @@
+<?php require '../header/header-1.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,10 +10,6 @@
     <!-- Import Inter font -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
     <style>
-        /* Set body font to Inter */
-        body {
-            font-family: 'Inter', sans-serif;
-        }
         /* Custom styles for a subtle glow on buttons */
         .btn-purple {
             box-shadow: 0 0 15px rgba(168, 85, 247, 0.3);
@@ -35,7 +32,7 @@
         <!-- Hero Section -->
         <section class="mb-16">
             <div class="relative rounded-lg overflow-hidden shadow-2xl">
-                <img src="photos for game page/GOW.jpg" alt="God of War Ragnarok" class="w-full h-auto object-cover">
+                <img src="./photos/GOW.jpg" alt="God of War Ragnarok" class="w-full h-auto object-cover">
                 <!-- Overlay content -->
                 <div class="absolute bottom-10 left-10">
                     <h1 class="text-3xl md:text-5xl font-black uppercase mb-4 text-shadow-lg">God of War</h1>

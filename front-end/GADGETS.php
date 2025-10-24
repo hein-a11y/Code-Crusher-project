@@ -93,7 +93,7 @@
     </style>
 </head>
 <body>
-        <main>
+    <div class="container"> <main>
             <div class="product-grid">
 
                 <div class="product-card">
