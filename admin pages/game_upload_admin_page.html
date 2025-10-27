@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ECゲームアップローダーダッシュボード</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Configure Tailwind for custom colors and Inter font -->
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+            },
+            colors: {
+              'primary-dark': '#1e293b', // slate-800
+              'secondary-dark': '#334155', // slate-700
+              'accent': '#6366f1', // indigo-500
+            },
+          }
+        }
+      }
+    </script>
+    <!-- Lucide Icons for aesthetic -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <style>
+      /* Ensure select elements look consistent across browsers in dark mode (Only impacts Platform dropdown now) */
+      select {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%2394A3B8'%3e%3cpath d='M7 7l3 5 3-5' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: right 0.75rem center;
+        background-size: 1.5em 1.5em;
+        padding-right: 2.5rem;
+      }
+      /* Hide the default number input arrows */
+      input[type=number]::-webkit-inner-spin-button, 
+      input[type=number]::-webkit-outer-spin-button { 
+          -webkit-appearance: none;
+          margin: 0;
+      }
+      input[type=number] {
+          -moz-appearance: textfield;
+      }
+      /* Custom style for the dropdown container to allow relative positioning */
+      .dropdown-container {
+        position: relative;
+      }
+    </style>
+</head>
+<!-- Reduced mobile padding (p-4 to p-2) for a tighter gadget feel -->
+<body class="bg-primary-dark min-h-screen p-2 sm:p-8 font-sans text-white">
+
+    <!-- Header -->
+    <!-- Reduced mb-8 to mb-6 for slightly more compact layout -->
+    <header class="border-b border-secondary-dark pb-4 mb-6">
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-accent tracking-tight">
+            ゲームアップローダー（PHPフロントエンド）
+        </h1>
+        <p class="text-sm text-gray-400 mt-2">新しいゲームのメタデータをバックエンドに送信して公開します。</p>
+    </header>
+
+    <!-- max-w-2xl keeps the layout compact -->
+    <div class="max-w-2xl mx-auto">
+        <!-- Upload Form Container -->
+        <section class="bg-secondary-dark p-6 sm:p-8 rounded-xl shadow-2xl">
+            <h2 class="text-2xl font-bold mb-6 flex items-center text-white">
+                <i data-lucide="upload-cloud" class="w-6 h-6 mr-2 text-accent"></i>
+                ゲーム詳細フォーム
+            </h2>
+            
+            <!-- PHP Target Form -->
+            <form id="uploadForm" action="game_submit.php" method="POST" class="space-y-6">
+
+                <!-- 1. Title -->
+                <div>
+                    <label for="title" class="block text-sm font-medium text-gray-300 mb-1">タイトル <span class="text-red-400">*</span></label>
+                    <div class="flex items-center bg-primary-dark rounded-lg shadow-inner">
+                        <i data-lucide="gamepad" class="w-5 h-5 text-gray-400 ml-3"></i>
+                        <input
+                            id="title"
+                            name="title"
+                            type="text"
+                            required
+                            class="w-full p-3 bg-transparent text-white focus:outline-none focus:ring-1 focus:ring-accent placeholder-gray-500 rounded-lg transition"
+                            placeholder="例：サイバーパンク2077"
+                        >
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- 2. Genre (Checkbox Dropdown) -->
+                    <div class="dropdown-container">
+                        <label class="block text-sm font-medium text-gray-300 mb-1">ジャンル (複数選択可) <span class="text-red-400">*</span></label>
+                        
+                        <!-- Dropdown Toggle Button -->
+                        <div 
+                            id="genre-dropdown-toggle"
+                            class="w-full p-3 bg-primary-dark text-white rounded-lg shadow-inner flex items-center justify-between cursor-pointer border border-gray-600 focus:outline-none focus:ring-1 focus:ring-accent transition"
+                            tabindex="0"
+                        >
+                            <span id="selected-genres-text" class="text-gray-400">ジャンルを選択...</span>
+                            <i data-lucide="chevron-down" class="w-5 h-5 text-gray-400 transition-transform duration-200"></i>
+                        </div>
+
+                        <!-- Checkbox Dropdown Content -->
+                        <div 
+                            id="genre-dropdown-content"
+                            class="absolute z-10 w-full mt-1 bg-primary-dark border border-gray-600 rounded-lg shadow-xl max-h-60 overflow-y-auto hidden"
+                        >
+                            <div class="p-3 space-y-2">
+                                <!-- Checkbox items here -->
+                                <label class="flex items-center text-sm text-gray-200 cursor-pointer hover:text-white transition">
+                                    <input type="checkbox" name="genre[]" value="Action" class="genre-checkbox">
+                                    <span class="ml-2">アクション</span>
+                                </label>
+                                <label class="flex items-center text-sm text-gray-200 cursor-pointer hover:text-white transition">
+                                    <input type="checkbox" name="genre[]" value="Adventure" class="genre-checkbox">
+                                    <span class="ml-2">アドベンチャー</span>
+                                </label>
+                                <label class="flex items-center text-sm text-gray-200 cursor-pointer hover:text-white transition">
+                                    <input type="checkbox" name="genre[]" value="RPG" class="genre-checkbox">
+                                    <span class="ml-2">RPG</span>
+                                </label>
+                                <label class="flex items-center text-sm text-gray-200 cursor-pointer hover:text-white transition">
+                                    <input type="checkbox" name="genre[]" value="Strategy" class="genre-checkbox">
+                                    <span class="ml-2">ストラテジー</span>
+                                </label>
+                                <label class="flex items-center text-sm text-gray-200 cursor-pointer hover:text-white transition">
+                                    <input type="checkbox" name="genre[]" value="Simulation" class="genre-checkbox">
+                                    <span class="ml-2">シミュレーション</span>
+                                </label>
+                                <label class="flex items-center text-sm text-gray-200 cursor-pointer hover:text-white transition">
+                                    <input type="checkbox" name="genre[]" value="Sports" class="genre-checkbox">
+                                    <span class="ml-2">スポーツ</span>
+                                </label>
+                                <label class="flex items-center text-sm text-gray-200 cursor-pointer hover:text-white transition">
+                                    <input type="checkbox" name="genre[]" value="Puzzle" class="genre-checkbox">
+                                    <span class="ml-2">パズル</span>
+                                </label>
+                                <label class="flex items-center text-sm text-gray-200 cursor-pointer hover:text-white transition">
+                                    <input type="checkbox" name="genre[]" value="Indie" class="genre-checkbox">
+                                    <span class="ml-2">インディー</span>
+                                </label>
+                                <label class="flex items-center text-sm text-gray-200 cursor-pointer hover:text-white transition">
+                                    <input type="checkbox" name="genre[]" value="Arcade" class="genre-checkbox">
+                                    <span class="ml-2">アーケード</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3. Platform ID (Single-Select Dropdown) -->
+                    <div>
+                        <label for="platformIds" class="block text-sm font-medium text-gray-300 mb-1">プラットフォーム <span class="text-red-400">*</span></label>
+                        <div class="flex items-center bg-primary-dark rounded-lg shadow-inner">
+                            <i data-lucide="monitor" class="w-5 h-5 text-gray-400 ml-3"></i>
+                            <select
+                                id="platformIds"
+                                name="platformIds[]"
+                                required
+                                class="w-full p-3 bg-transparent text-white focus:outline-none focus:ring-1 focus:ring-accent appearance-none rounded-lg transition"
+                            >
+                                <option value="" class="bg-secondary-dark" disabled selected>選択してください</option>
+                                <option value="PC" class="bg-secondary-dark">PC</option>
+                                <option value="PlayStation 5" class="bg-secondary-dark">PlayStation 5</option>
+                                <option value="Xbox Series X|S" class="bg-secondary-dark">Xbox Series X|S</option>
+                                <option value="Nintendo Switch" class="bg-secondary-dark">Nintendo Switch</option>
+                                <option value="Mobile" class="bg-secondary-dark">モバイル（iOS/Android）</option>
+                                <option value="VR" class="bg-secondary-dark">VR</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. Manufacturer (Text Input) -->
+                <div>
+                    <label for="manufacturer" class="block text-sm font-medium text-gray-300 mb-1">製造元／開発元 <span class="text-red-400">*</span></label>
+                    <div class="flex items-center bg-primary-dark rounded-lg shadow-inner">
+                        <i data-lucide="building-2" class="w-5 h-5 text-gray-400 ml-3"></i>
+                        <input
+                            id="manufacturer"
+                            name="manufacturer"
+                            type="text"
+                            required
+                            class="w-full p-3 bg-transparent text-white focus:outline-none focus:ring-1 focus:ring-accent placeholder-gray-500 rounded-lg transition"
+                            placeholder="例：CD Projekt Red"
+                        >
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                    <!-- 5. Price ($) -->
+                    <div>
+                        <label for="price" class="block text-sm font-medium text-gray-300 mb-1">価格（ドル） <span class="text-red-400">*</span></label>
+                        <div class="flex items-center bg-primary-dark rounded-lg shadow-inner">
+                            <i data-lucide="dollar-sign" class="w-5 h-5 text-gray-400 ml-3"></i>
+                            <input
+                                id="price"
+                                name="price"
+                                type="number"
+                                step="0.01"
+                                min="0"
+                                required
+                                value="59.99"
+                                class="w-full p-3 bg-transparent text-white focus:outline-none focus:ring-1 focus:ring-accent placeholder-gray-500 rounded-lg transition"
+                            >
+                        </div>
+                    </div>
+
+                    <!-- 6. Stock Quantity -->
+                    <div class="sm:col-span-2">
+                        <label for="stockQuantity" class="block text-sm font-medium text-gray-300 mb-1">在庫数 <span class="text-red-400">*</span></label>
+                        <div class="flex items-center bg-primary-dark rounded-lg shadow-inner">
+                            <i data-lucide="package" class="w-5 h-5 text-gray-400 ml-3"></i>
+                            <input
+                                id="stockQuantity"
+                                name="stockQuantity"
+                                type="number"
+                                step="1"
+                                min="0"
+                                required
+                                value="100"
+                                class="w-full p-3 bg-transparent text-white focus:outline-none focus:ring-1 focus:ring-accent placeholder-gray-500 rounded-lg transition"
+                            >
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 7. Image URL -->
+                <div>
+                    <label for="imageUrl" class="block text-sm font-medium text-gray-300 mb-1">画像URL <span class="text-red-400">*</span></label>
+                    <div class="flex items-center bg-primary-dark rounded-lg shadow-inner">
+                        <i data-lucide="image" class="w-5 h-5 text-gray-400 ml-3"></i>
+                        <input
+                            id="imageUrl"
+                            name="imageUrl"
+                            type="url"
+                            required
+                            value="https://placehold.co/400x250/1e293b/cbd5e1?text=Game+Cover"
+                            class="w-full p-3 bg-transparent text-white focus:outline-none focus:ring-1 focus:ring-accent placeholder-gray-500 rounded-lg transition"
+                            placeholder="例：https://example.com/cover.jpg"
+                        >
+                    </div>
+                </div>
+
+                <!-- 8. Description -->
+                <div>
+                    <label for="description" class="block text-sm font-medium text-gray-300 mb-1">説明 <span class="text-red-400">*</span></label>
+                    <textarea
+                        id="description"
+                        name="description"
+                        rows="5"
+                        required
+                        class="w-full p-3 bg-primary-dark rounded-lg text-white focus:ring-1 focus:ring-accent focus:outline-none placeholder-gray-500 shadow-inner transition"
+                        placeholder="ゲームのプロット、機能、ターゲット層の簡単な説明..."
+                    ></textarea>
+                </div>
+
+                <!-- Validation Message Area -->
+                <div id="validation-message" class="hidden p-3 bg-red-800/30 text-red-300 border border-red-500 rounded-lg"></div>
+
+                <!-- Submit Button -->
+                <button
+                    type="submit"
+                    class="w-full py-3 mt-4 rounded-lg font-semibold text-white transition-all duration-300 flex items-center justify-center bg-accent hover:bg-indigo-400 shadow-lg shadow-accent/50 hover:shadow-accent/70"
+                >
+                    <i data-lucide="cloud-upload" class="w-5 h-5 mr-2"></i>
+                    PHPバックエンドにゲームを送信
+                </button>
+            </form>
+        </section>
+    </div>
+
+    <!-- Script to initialize Lucide icons and add validation -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Replaces all <i> tags with Lucide icons
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+            
+            const form = document.getElementById('uploadForm');
+            const validationMessage = document.getElementById('validation-message');
+            const genreToggle = document.getElementById('genre-dropdown-toggle');
+            const genreContent = document.getElementById('genre-dropdown-content');
+            const genreCheckboxes = document.querySelectorAll('.genre-checkbox');
+            const selectedGenresText = document.getElementById('selected-genres-text');
+            const chevronIcon = genreToggle.querySelector('[data-lucide="chevron-down"]');
+
+            // --- Dropdown Logic ---
+
+            // Function to update the text in the toggle button
+            const updateGenreText = () => {
+                const checked = Array.from(genreCheckboxes).filter(cb => cb.checked);
+                if (checked.length === 0) {
+                    selectedGenresText.textContent = 'ジャンルを選択...';
+                    selectedGenresText.classList.add('text-gray-400');
+                } else if (checked.length === 1) {
+                    selectedGenresText.textContent = checked[0].nextElementSibling.textContent;
+                    selectedGenresText.classList.remove('text-gray-400');
+                } else {
+                    selectedGenresText.textContent = `${checked.length} 件選択済み`;
+                    selectedGenresText.classList.remove('text-gray-400');
+                }
+            };
+
+            // Toggle dropdown visibility
+            genreToggle.addEventListener('click', (e) => {
+                e.stopPropagation();
+                genreContent.classList.toggle('hidden');
+                chevronIcon.classList.toggle('rotate-180');
+            });
+            
+            // Hide dropdown when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!genreContent.contains(e.target) && e.target !== genreToggle) {
+                    genreContent.classList.add('hidden');
+                    chevronIcon.classList.remove('rotate-180');
+                }
+            });
+
+            // Update text on checkbox change
+            genreCheckboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', updateGenreText);
+            });
+
+            // Initial text update
+            updateGenreText();
+
+            // --- Form Validation (replacing alert()) ---
+            
+            const displayError = (message) => {
+                validationMessage.textContent = message;
+                validationMessage.classList.remove('hidden');
+            };
+
+            const clearError = () => {
+                validationMessage.textContent = '';
+                validationMessage.classList.add('hidden');
+            };
+
+            form.addEventListener('submit', function(e) {
+                clearError();
+                
+                const price = parseFloat(document.getElementById('price').value);
+                const stock = parseInt(document.getElementById('stockQuantity').value);
+                const isGenreSelected = Array.from(genreCheckboxes).some(checkbox => checkbox.checked);
+
+                // Validation 1: Price and Stock Quantity
+                if (price < 0) {
+                    displayError('価格は負でない数値である必要があります。');
+                    e.preventDefault();
+                    return;
+                }
+                
+                if (stock < 0) {
+                    displayError('在庫数は負でない整数である必要があります。');
+                    e.preventDefault();
+                    return;
+                }
+
+                // Validation 2: At least one Genre must be selected
+                if (!isGenreSelected) {
+                    displayError('少なくとも1つのジャンルを選択する必要があります。');
+                    e.preventDefault();
+                    return;
+                }
+                
+                // Validation 3: Platform must be selected
+                const platformSelect = document.getElementById('platformIds');
+                if (!platformSelect.value) {
+                    displayError('プラットフォームを選択する必要があります。');
+                    e.preventDefault();
+                    return;
+                }
+            });
+        });
+    </script>
+</body>
+</html>

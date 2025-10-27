@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EC Gadget Uploader</title>
+    <!-- Load Tailwind CSS --><script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Inter font for modern look --><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;550;600&display=swap" rel="stylesheet">
+    <!-- Configure Tailwind with Dark Theme Colors --><script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        'dark-bg': '#2C2D39',
+                        'card-bg': '#3A3B47',
+                        'input-bg': '#2C2D39',
+                        'border-dark': '#4F515F',
+                        'placeholder-dark': '#7A7C8B',
+                        'text-light': '#E2E8F0',
+                        'primary-purple': '#8B5CF6',
+                        'button-bg-dark': '#6B5DF6',
+                        'button-hover-dark': '#7C70F8',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom styling for icons to match the input height */
+        .input-icon {
+            @apply flex items-center h-full px-3 text-placeholder-dark;
+        }
+    </style>
+</head>
+<body class="font-sans bg-dark-bg text-text-light antialiased">
+    <div class="min-h-screen flex items-center justify-center p-4">
+        <div class="w-full max-w-2xl bg-card-bg p-6 sm:p-8 rounded-xl shadow-lg border border-border-dark">
+            <h2 class="text-2xl font-bold text-text-light mb-2 text-center flex items-center justify-center">
+                <svg class="w-6 h-6 mr-2 text-primary-purple" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                EC Gadget Uploader
+            </h2>
+            <p class="text-center text-placeholder-dark mb-8 text-sm">
+                Add a new cutting-edge product to your inventory.
+            </p>
+
+            <form class="space-y-6" action="#" method="POST">
+
+                <!-- Product Name Input -->
+                <div>
+                    <label for="product-name" class="block text-sm font-medium text-text-light mb-1">
+                        Product Name <span class="text-red-400">*</span>
+                    </label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 input-icon">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 11v10"></path></svg>
+                        </div>
+                        <input id="product-name" name="product-name" type="text" required
+                            class="block w-full pl-10 pr-4 py-2.5 bg-input-bg border border-border-dark rounded-lg shadow-sm placeholder-placeholder-dark focus:outline-none focus:ring-primary-purple focus:border-primary-purple sm:text-sm transition duration-150"
+                            placeholder="e.g., Quantum Noise-Cancelling Headphones"
+                        >
+                    </div>
+                </div>
+
+                <!-- Category and Brand/Manufacturer Selects -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div>
+                        <label for="category" class="block text-sm font-medium text-text-light mb-1">
+                            Category <span class="text-red-400">*</span>
+                        </label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 input-icon">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                            </div>
+                            <select id="category" name="category" required
+                                class="block w-full pl-10 pr-10 py-2.5 bg-input-bg border border-border-dark rounded-lg shadow-sm text-text-light focus:outline-none focus:ring-primary-purple focus:border-primary-purple sm:text-sm appearance-none transition duration-150"
+                            >
+                                <option value="" class="bg-card-bg text-placeholder-dark">Select a Category</option>
+                                <option value="audio" class="bg-card-bg text-text-light" selected>Audio</option>
+                                <option value="wearables" class="bg-card-bg text-text-light">Wearables</option>
+                                <option value="chargers" class="bg-card-bg text-text-light">Charging</option>
+                                <option value="home" class="bg-card-bg text-text-light">Smart Home</option>
+                            </select>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-placeholder-dark">
+                                <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="brand" class="block text-sm font-medium text-text-light mb-1">
+                            Brand/Manufacturer <span class="text-red-400">*</span>
+                        </label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 input-icon">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h2m4 0h2m-9 4h10a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2z"></path></svg>
+                            </div>
+                            <input id="brand" name="brand" type="text" required
+                                class="block w-full pl-10 pr-4 py-2.5 bg-input-bg border border-border-dark rounded-lg shadow-sm placeholder-placeholder-dark focus:outline-none focus:ring-primary-purple focus:border-primary-purple sm:text-sm transition duration-150"
+                                placeholder="e.g., Acme Tech, Future Corp"
+                            >
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Price and Quantity Inputs -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div>
+                        <label for="price" class="block text-sm font-medium text-text-light mb-1">
+                            Price (USD) <span class="text-red-400">*</span>
+                        </label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 input-icon">
+                                $
+                            </div>
+                            <input id="price" name="price" type="number" step="0.01" min="0" required
+                                class="block w-full pl-10 pr-4 py-2.5 bg-input-bg border border-border-dark rounded-lg shadow-sm placeholder-placeholder-dark focus:outline-none focus:ring-primary-purple focus:border-primary-purple sm:text-sm transition duration-150"
+                                placeholder="199.99"
+                            >
+                        </div>
+                    </div>
+                    <div>
+                        <label for="quantity" class="block text-sm font-medium text-text-light mb-1">
+                            Stock Quantity <span class="text-red-400">*</span>
+                        </label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 input-icon">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"></path></svg>
+                            </div>
+                            <input id="quantity" name="quantity" type="number" min="0" required
+                                class="block w-full pl-10 pr-4 py-2.5 bg-input-bg border border-border-dark rounded-lg shadow-sm placeholder-placeholder-dark focus:outline-none focus:ring-primary-purple focus:border-primary-purple sm:text-sm transition duration-150"
+                                placeholder="50"
+                            >
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Image URL Input (Kept for simplicity over file upload) -->
+                <div>
+                    <label for="image-url" class="block text-sm font-medium text-text-light mb-1">
+                        Product Image URL
+                    </label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 input-icon">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                        </div>
+                        <input id="image-url" name="image-url" type="url"
+                            class="block w-full pl-10 pr-4 py-2.5 bg-input-bg border border-border-dark rounded-lg shadow-sm placeholder-placeholder-dark focus:outline-none focus:ring-primary-purple focus:border-primary-purple sm:text-sm transition duration-150"
+                            placeholder="https://example.com/product_image.png"
+                        >
+                    </div>
+                </div>
+
+                <!-- Description Textarea -->
+                <div>
+                    <label for="description" class="block text-sm font-medium text-text-light mb-1">
+                        Product Description
+                    </label>
+                    <textarea id="description" name="description" rows="4"
+                        class="block w-full px-4 py-2.5 bg-input-bg border border-border-dark rounded-lg shadow-sm placeholder-placeholder-dark focus:outline-none focus:ring-primary-purple focus:border-primary-purple sm:text-sm transition duration-150"
+                        placeholder="Provide a detailed description, including features, specifications, and what makes this gadget unique."
+                    ></textarea>
+                </div>
+
+                <!-- Submission Button -->
+                <div class="pt-4">
+                    <button type="submit"
+                        class="w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-xl shadow-lg text-base font-semibold text-white bg-button-bg-dark hover:bg-button-hover-dark focus:outline-none focus:ring-4 focus:ring-offset-2 focus:ring-primary-purple focus:ring-offset-card-bg transition duration-300 ease-in-out transform hover:scale-[1.01] hover:shadow-xl"
+                    >
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.27a.997.997 0 00-.012-1.41l-2.73-2.73a.997.997 0 00-1.412-.01l-10 10a.996.996 0 00-.28 1.09l2.5 7.5a1.002 1.002 0 001.32.74l7.5-2.5a.996.996 0 001.09-.28l10-10a.996.996 0 00-.012-1.41z"></path></svg>
+                        Publish Gadget Listing
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
