@@ -30,7 +30,7 @@
     <section class="contact-section">
         <h2 class="contact-title">問題が解決しませんか？</h2>
         <p class="contact-description">サポートチームまでお気軽にお問い合わせください。</p>
-        <a href="form.php" class="contact-button" role="button">お問い合わせフォームへ</a>
+        <a href="form-input.php" class="contact-button" role="button">お問い合わせフォームへ</a>
     </section>
 </body>
 </html>

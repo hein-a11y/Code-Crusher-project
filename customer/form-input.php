@@ -17,7 +17,7 @@
             ご質問、ご相談など、お気軽にお問い合わせください。
         </p>
 
-        <form action="thanks.php" method="POST">
+        <form action="thanks-input.php" method="POST">
             <div class="form-group">
                 <label for="name">お名前 <span class="required">*</span></label>
                 <input type="text" id="name" name="name" placeholder="お名前を入力してください" required>

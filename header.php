@@ -159,10 +159,10 @@
             <nav>
                 <ul>
                     <li><a href="index.php" data-i18n="nav.home"></a></li>
-                    <li><a href="games.php" data-i18n="nav.games"></a></li>
-                    <li><a href="gadgets.php" data-i18n="nav.gadgets"></a></li>
-                    <li><a href="review.php" data-i18n="nav.reviews"></a></li>
-                    <li><a href="help.php" data-i18n="nav.help"></a></li>
+                    <li><a href="games-input.php" data-i18n="nav.games"></a></li>
+                    <li><a href="gadgets-input.php" data-i18n="nav.gadgets"></a></li>
+                    <li><a href="review-input.php" data-i18n="nav.reviews"></a></li>
+                    <li><a href="help-input.php" data-i18n="nav.help"></a></li>
                 </ul>
             </nav>
             <div class="header-actions">
@@ -171,7 +171,7 @@
                     <button id="btn-en">EN</button>
                     <button id="btn-ja" class="active">JA</button>
                 </div>
-                <span><a href=cart.php>🛒</a></span> <span><a href=login.php>👤</a></span> 
+                <span><a href=cart-input.php>🛒</a></span> <span><a href=login-input.php>👤</a></span> 
             </div>
         </div>
     </header>

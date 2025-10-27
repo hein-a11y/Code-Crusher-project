@@ -21,7 +21,7 @@
             </p>
         </div>
 
-        <a href="form.php" class="back-button">
+        <a href="form-input.php" class="back-button">
             トップページに戻る
         </a>
 

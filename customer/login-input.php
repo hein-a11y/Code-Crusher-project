@@ -35,7 +35,7 @@
                 <button type="submit" class="login-button">ログイン</button>
 
                 <div class="signup-link">
-                <p>アカウントをお持ちでない場合 <a href="./sign_up.php">新規登録</a></p>
+                <p>アカウントをお持ちでない場合 <a href="./sign_up-input.php">新規登録</a></p>
                 </div>
             </form>
         </div>
