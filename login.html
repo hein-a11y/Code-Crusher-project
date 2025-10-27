@@ -1,257 +1,286 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ログイン - My Game & Gadget Store</title>
+    <title data-i18n="title-page">Sign In to Your Account - GG Store Mockup</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
     <style>
-        /* --- 
-         * 基本設定と背景
-         * --- */
-         
+        /* Custom Styles to ensure Inter font and smooth transitions */
         :root {
-            --primary-color: #00bfff; /* Neon blue accent */
-            --background-color: #121212; /* Deep black */
-            --surface-color: #1e1e1e;   /* Slightly lighter for cards/headers */
-            --text-color: #e0e0e0;      /* Light grey for readability */
-            --text-secondary-color: #a0a0a0; /* Dimmer text */
+            --primary-red: #E11D48; /* Tailwind's red-600 */
         }
-
-        main {
-            /* ユーザーリクエスト: 全体的な色は黒 */
-            background-color: #333; /* 真っ黒より少し柔らかいダークグレー */
-            color: #ffffff; /* 白文字 */
-            
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
-            margin: 0;
-            
-            /* フォームを画面の中央に配置する */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0F172A; /* Dark Slate Blue - Tailwind bg-slate-900 */
         }
-
-        .line{
-             text-decoration: none;
+        .input-field:focus {
+            border-color: var(--primary-red);
+            box-shadow: 0 0 0 2px rgba(225, 29, 72, 0.5); /* Custom focus ring for red */
         }
-
-        .logo {
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: var(--primary-color);
-            text-shadow: 0 0 5px var(--primary-color);
-            
+        .primary-btn {
+            background-color: var(--primary-red);
+            transition: background-color 0.2s;
         }
-
-        
-        header {
-            background-color: var(--surface-color);
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #333;
-            
+        .primary-btn:hover {
+            background-color: #BE123C; /* Darker red on hover */
         }
-
-        .header-actions {
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
+        /* Style the language selector dropdown */
+        #language-selector {
+            background-color: #1E293B; /* Tailwind bg-slate-800 */
+            color: #E2E8F0; /* Tailwind text-slate-200 */
+            border: 1px solid #475569; /* Tailwind border-slate-600 */
         }
-
-
-        nav ul {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            gap: 1.5rem;
-        }
-
-        /*main {
-            max-width: 1200px;
-            margin: 2rem auto;
-            padding: 0 2rem;
-        }*/
-
-        /* --- 
-         * ログインフォームのコンテナ
-         * --- */
-        .login-container {
-            background-color: #1e1e1e; /* 背景より少し明るい黒 */
-            padding: 2.5rem;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            width: 100%;
-            max-width: 400px;
-            box-sizing: border-box; /* paddingを含めて幅を計算 */
-        }
-
-        /* --- 
-         * フォーム内の要素
-         * --- */
-        #login-form h1 {
-            text-align: center;
-            margin-top: 0;
-            margin-bottom: 1.5rem;
-            font-size: 1.8rem;
-        }
-
-        /* 各入力グループ (ラベル + 入力欄) */
-        .input-group {
-            margin-bottom: 1.25rem;
-        }
-
-        .input-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-            color: #b0b0b0; /* ラベルの色を少し抑える */
-        }
-
-        /* --- 
-         * 入力欄のスタイル
-         * --- */
-        .input-group input[type="email"],
-        .input-group input[type="password"] {
-            /* ユーザーリクエスト: ログインの記入欄は白 */
-            background-color: #ffffff;
-            color: #121212; /* 白い背景なので、文字は黒に */
-            
-            width: 100%;
-            padding: 0.8rem;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 1rem;
-            box-sizing: border-box; /* paddingを含めて幅を計算 */
-            
-            /* 入力中の見た目 */
-            transition: border-color 0.3s, box-shadow 0.3s;
-        }
-
-        /* 入力欄がフォーカスされた時のスタイル */
-        .input-group input:focus {
-            outline: none;
-            border-color: #007bff; /* フォーカス時に青い枠線 */
-            box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
-        }
-
-        /* --- 
-         * オプション (ログイン保持 / パスワード忘れ)
-         * --- */
-        .options-group {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 0.9rem;
-            color: #b0b0b0;
-            margin-bottom: 1.5rem;
-        }
-        
-        .options-group label {
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-        }
-
-        .options-group input[type="checkbox"] {
-            margin-right: 0.5em;
-        }
-        
-        .options-group a {
-            color: #007bff; /* リンクの色 */
-            text-decoration: none;
-        }
-
-        .options-group a:hover {
-            text-decoration: underline;
-        }
-
-        /* --- 
-         * ログインボタン
-         * --- */
-        .login-button {
-            width: 100%;
-            padding: 0.9rem;
-            border: none;
-            border-radius: 5px;
-            
-            /* サイトのテーマカラー（例: 明るい青） */
-            background-color: #007bff; 
-            color: white;
-            
-            font-size: 1.1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .login-button:hover {
-            background-color: #0056b3; /* ホバー時 */
-        }
-
-        /* --- 
-         * 新規登録リンク
-         * --- */
-        .signup-link {
-            text-align: center;
-            margin-top: 1.5rem;
-            font-size: 0.9rem;
-            color: #b0b0b0;
-        }
-        
-        .signup-link a {
-            color: #007bff;
-            text-decoration: none;
-            font-weight: 500;
-        }
-
-        .signup-link a:hover {
-            text-decoration: underline;
-        }
-        
     </style>
 </head>
-<body>
+<body class="min-h-screen flex flex-col items-center justify-center p-4">
 
-    <header>
-        <div class="logo">GG STORE</div>
+    <!-- Language Selector in Top Right -->
+    <div class="fixed top-4 right-4 z-10">
+        <select id="language-selector" onchange="setLanguage(this.value)"
+                class="rounded-lg p-2 text-sm focus:ring-red-500 focus:border-red-500 transition duration-150">
+            <option value="en">English (EN)</option>
+            <option value="ja">日本語 (JA)</option>
+        </select>
+    </div>
+
+    <!-- Login Card Container -->
+    <div class="w-full max-w-md bg-gray-800 p-8 md:p-10 rounded-xl shadow-2xl border border-gray-700">
         
-        <div class="header-actions">
-           
-    </header>
-    
-    <main>
-        <div class="login-container">
-            <form id="login-form">
-                <h1>ログイン</h1>
+        <!-- Header -->
+        <h1 class="text-4xl font-extrabold text-white mb-2 tracking-tight" data-i18n="title-h1">Welcome Back</h1>
+        <p class="text-gray-400 mb-6" data-i18n="title-p">Sign in to access your orders and saved items.</p>
 
-                <div class="input-group">
-                <label for="email">メールアドレス</label>
-                <input type="email" id="email" name="email" placeholder="email@example.com" required>
+        <!-- Login Form -->
+        <form id="loginForm" onsubmit="handleLogin(event)">
+            
+            <!-- Email Field -->
+            <div class="mb-4">
+                <label for="email" class="block text-sm font-medium text-gray-300 mb-1" data-i18n="label-email">Email Address</label>
+                <input type="email" id="email" name="email" data-i18n-ph="ph-email" 
+                       required 
+                       class="input-field w-full px-4 py-3 rounded-lg bg-gray-700 border border-gray-600 text-white placeholder-gray-500 focus:outline-none">
+            </div>
+
+            <!-- Password Field -->
+            <div class="mb-6">
+                <label for="password" class="block text-sm font-medium text-gray-300 mb-1" data-i18n="label-password">Password</label>
+                <div class="relative">
+                    <input type="password" id="password" name="password" data-i18n-ph="ph-password"
+                           required 
+                           class="input-field w-full px-4 py-3 rounded-lg bg-gray-700 border border-gray-600 text-white placeholder-gray-500 pr-12 focus:outline-none">
+                    
+                    <!-- Show/Hide Password Toggle Button -->
+                    <button type="button" id="togglePassword" aria-label="Toggle password visibility" 
+                            class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-white transition duration-150">
+                        <svg id="eye-icon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                        </svg>
+                    </button>
                 </div>
-
-                <div class="input-group">
-                <label for="password">パスワード</label>
-                <input type="password" id="password" name="password" placeholder="パスワード" required>
+                
+                <!-- Helper Links -->
+                <div class="flex justify-between items-center mt-2 text-sm">
+                    <div class="flex items-center">
+                        <input id="remember-me" name="remember-me" type="checkbox" class="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-600 rounded bg-gray-700">
+                        <label for="remember-me" class="ml-2 text-gray-400" data-i18n="checkbox-label">Keep me signed in</label>
+                    </div>
+                    <a href="#" class="text-red-500 hover:text-red-400 font-medium transition duration-150" data-i18n="link-forgot">Forgot your password?</a>
                 </div>
+            </div>
+            
+            <!-- Primary Login Button -->
+            <button type="submit" 
+                    class="primary-btn w-full text-white font-semibold py-3 rounded-lg shadow-lg uppercase tracking-wider mb-4" data-i18n="btn-login">
+                Log In Securely
+            </button>
+            
+            <!-- Message Box for Login Status -->
+            <div id="statusMessage" class="hidden p-3 rounded-lg text-sm text-center font-medium mb-4" role="alert"></div>
 
-                <div class="options-group">
-                <label>
-                    <input type="checkbox" name="remember"> ログイン状態を保持
-                </label>
-                <a href="#" class="forgot-password">パスワードをお忘れですか？</a>
-                </div>
+            <!-- Social Login Options -->
+            <div class="space-y-3 mb-6">
+                <p class="text-center text-gray-400 text-sm" data-i18n="divider-text">— Or sign in with —</p>
+                <button type="button" class="w-full flex items-center justify-center space-x-2 bg-gray-700 text-white py-3 rounded-lg border border-gray-600 hover:bg-gray-600 transition duration-150">
+                    <!-- Placeholder SVG for Google Icon -->
+                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M12 4.00002C14.07 4.00002 15.74 4.67002 17 5.96002L19.5 3.46002C17.78 1.77002 15.02 0.99002 12 0.99002C7.38 0.99002 3.32 3.65002 1.42 7.29002L5.05 9.99002C6.01 7.15002 8.78 5.00002 12 5.00002V4.00002Z" fill="#EA4335"/><path d="M23.1 12C23.1 11.23 23.01 10.53 22.84 9.87002H12V14.15H18.78C18.42 15.93 17.31 17.43 15.82 18.39V21.14H19.54C21.75 19.17 23.1 16.03 23.1 12Z" fill="#4285F4"/><path d="M5.05 14.01C4.84 13.43 4.74 12.72 4.74 12C4.74 11.28 4.84 10.57 5.05 9.99002L1.42 7.29002C0.53 9.07002 0 10.98 0 12.99C0 15.01 0.53 16.92 1.42 18.7L5.05 16.01C4.84 15.43 4.74 14.72 4.74 14.01V14.01Z" fill="#FBBC04"/><path d="M12 23.0001C15.02 23.0001 17.78 22.0101 19.54 21.1401L15.82 18.3901C14.73 19.1201 13.41 19.5401 12 19.5401C8.78 19.5401 6.01 17.3901 5.05 14.5501L1.42 17.2501C3.32 20.8901 7.38 23.0001 12 23.0001Z" fill="#34A853"/></svg>
+                    <span data-i18n="btn-google">Sign in with Google</span>
+                </button>
+                <button type="button" class="w-full flex items-center justify-center space-x-2 bg-gray-700 text-white py-3 rounded-lg border border-gray-600 hover:bg-gray-600 transition duration-150">
+                    <!-- Placeholder SVG for Apple Icon -->
+                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M18.8 11.08c-.02-.84.58-1.57 1.43-1.61.02 0 .04 0 .07 0-.02-.85-.45-1.92-1.25-2.9-1.39-1.7-3.03-1.84-3.79-1.87-.93-.03-1.92.51-2.58.51-.67 0-1.67-.54-2.29-.54-1.03 0-2.02.72-2.73 1.95-1.29 2.27-.67 5.67 1.15 6.94.85.58 1.8.87 2.9.89.02.01.03.01.05.01.88 0 1.76-.23 2.54-.64.67-.36 1.46-.86 2.37-.86.32 0 .58.07.82.24.46.3.82.72 1.05 1.25.07.16.15.35.21.57.06.21.09.43.09.65 0 .19-.04.38-.11.56-.23.6-.62 1.13-1.15 1.58-.26.23-.55.43-.87.59-.72.36-1.53.53-2.3.53-.41 0-.82-.09-1.21-.26-.14-.07-.27-.16-.4-.25-.09-.07-.17-.14-.25-.22-.38-.36-.75-.72-1.12-1.08-.27-.26-.64-.54-1.12-.54-1.4 0-2.28 1.16-3.73 1.16-1.5 0-2.56-1.21-3.33-1.21-.36 0-.69.07-1.05.21-.86.36-1.64.93-2.18 1.83-.55.9-.69 1.94-.48 2.92.17.78.6 1.47 1.22 2.05.51.48 1.1.84 1.75 1.09.68.27 1.41.39 2.14.39 1.25 0 2.45-.49 3.56-1.46.21-.19.4-.39.58-.6.28-.3.57-.61.85-.92.21-.24.4-.49.57-.75.46-.71.97-1.46 1.63-1.46.66 0 1.17.65 1.56 1.14.39.5.76 1.05 1.12 1.6.43.66.92 1.27 1.51 1.78.22.18.45.36.69.51.52.33 1.09.58 1.68.74.83.22 1.7.32 2.56.32 1.92 0 3.76-.84 5.23-2.45 1.18-1.28 1.86-2.9 1.86-4.63 0-.05-.01-.09-.01-.14 0-.17-.03-.33-.07-.5" /></svg>
+                    <span data-i18n="btn-apple">Sign in with Apple</span>
+                </button>
+            </div>
+            
+            <!-- New User Section -->
+            <div class="border-t border-gray-700 pt-6 text-center">
+                <h3 class="text-gray-400 mb-4" data-i18n="new-customer-h3">New Customer?</h3>
+                <button type="button" 
+                        onclick="alert('Redirecting to Registration Page...')"
+                        class="w-full text-red-400 border border-red-500 hover:border-red-400 hover:bg-gray-700 font-semibold py-3 rounded-lg transition duration-150 shadow-md uppercase tracking-wider" data-i18n="btn-create">
+                    Create Account
+                </button>
+            </div>
+            
+        </form>
+    </div>
 
-                <button type="submit" class="login-button">ログイン</button>
+    <script>
+        // --- Internationalization (i18n) Data ---
+        const translations = {
+            'en': {
+                'title-page': 'Sign In to Your Account - GG Store Mockup',
+                'title-h1': 'Welcome Back',
+                'title-p': 'Sign in to access your orders and saved items.',
+                'label-email': 'Email Address',
+                'ph-email': 'Enter your email address',
+                'label-password': 'Password',
+                'ph-password': 'Enter your password',
+                'checkbox-label': 'Keep me signed in',
+                'link-forgot': 'Forgot your password?',
+                'btn-login': 'Log In Securely',
+                'divider-text': '— Or sign in with —',
+                'btn-google': 'Sign in with Google',
+                'btn-apple': 'Sign in with Apple',
+                'new-customer-h3': 'New Customer?',
+                'btn-create': 'Create Account',
+                'msg-required': 'Email and password are required.',
+                'msg-length': 'Password must be at least 6 characters long.',
+                'msg-success': 'Login successful! Redirecting to dashboard...',
+                'msg-error': 'Invalid credentials. Please check your email and password.',
+            },
+            'ja': {
+                'title-page': 'アカウントにサインイン - GGストアモックアップ',
+                'title-h1': 'おかえりなさい',
+                'title-p': 'ご注文履歴と保存されたアイテムにアクセスするにはサインインしてください。',
+                'label-email': 'メールアドレス',
+                'ph-email': 'メールアドレスを入力してください',
+                'label-password': 'パスワード',
+                'ph-password': 'パスワードを入力してください',
+                'checkbox-label': 'サインインしたままにする',
+                'link-forgot': 'パスワードをお忘れですか？',
+                'btn-login': '安全にログイン',
+                'divider-text': '— または、次の方法でサインイン —',
+                'btn-google': 'Googleでサインイン',
+                'btn-apple': 'Appleでサインイン',
+                'new-customer-h3': '新規のお客様ですか？',
+                'btn-create': 'アカウントを作成',
+                'msg-required': 'メールアドレスとパスワードは必須です。',
+                'msg-length': 'パスワードは6文字以上である必要があります。',
+                'msg-success': 'ログイン成功！ダッシュボードにリダイレクトしています...',
+                'msg-error': '認証情報が無効です。メールアドレスとパスワードを確認してください。',
+            }
+        };
 
-                <div class="signup-link">
-                <p>アカウントをお持ちでない場合 <a href="#">新規登録</a></p>
-                </div>
-            </form>
-        </div>
-    </main>
+        let currentLang = 'en';
+
+        // Function to update the DOM elements based on the selected language
+        function setLanguage(lang) {
+            currentLang = lang;
+            const t = translations[lang];
+
+            // 1. Update text content
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (t[key]) {
+                    element.textContent = t[key];
+                }
+            });
+
+            // 2. Update placeholder attributes
+            document.querySelectorAll('[data-i18n-ph]').forEach(element => {
+                const key = element.getAttribute('data-i18n-ph');
+                if (t[key]) {
+                    element.placeholder = t[key];
+                }
+            });
+            
+            // 3. Update title
+            document.title = t['title-page'];
+            
+            // Re-apply current message if one is visible
+            const statusMessage = document.getElementById('statusMessage');
+            if (!statusMessage.classList.contains('hidden')) {
+                // If a message is showing, re-display it in the new language
+                if (statusMessage.dataset.msgKey) {
+                    const msgType = statusMessage.dataset.msgType;
+                    const msgKey = statusMessage.dataset.msgKey;
+                    showMessage(t[msgKey], msgType, msgKey);
+                } else {
+                    // Clear message if key is unknown
+                    statusMessage.classList.add('hidden');
+                }
+            }
+        }
+
+        // --- Core Application Logic (Modified to use i18n) ---
+
+        // Password Visibility Toggle Logic
+        const togglePassword = document.getElementById('togglePassword');
+        const password = document.getElementById('password');
+        const eyeIcon = document.getElementById('eye-icon');
+
+        togglePassword.addEventListener('click', function (e) {
+            // Toggle the type attribute
+            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+            password.setAttribute('type', type);
+
+            // Toggle the eye icon SVG path for visual feedback
+            if (type === 'password') {
+                // Show eye (default state)
+                eyeIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>';
+            } else {
+                // Slashed eye (text visible)
+                eyeIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7 1.274-4.057 5.064-7 9.542-7 1.634 0 3.205.385 4.618 1.096M21 12c-1.274 4.057-5.064 7-9.542 7A10.05 10.05 0 018.125 18.825"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.25 12a5.25 5.25 0 00-10.5 0"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.5-4.5"></path>';
+            }
+        });
+        
+        // Message Box Handler (Updated to store key for language switching)
+        function showMessage(message, type, key) {
+            const statusMessage = document.getElementById('statusMessage');
+            statusMessage.textContent = message;
+            statusMessage.classList.remove('hidden', 'bg-red-900', 'text-red-300', 'bg-green-900', 'text-green-300');
+            statusMessage.dataset.msgType = type;
+            statusMessage.dataset.msgKey = key;
+
+            if (type === 'error') {
+                statusMessage.classList.add('bg-red-900', 'text-red-300');
+            } else if (type === 'success') {
+                statusMessage.classList.add('bg-green-900', 'text-green-300');
+            }
+        }
+
+        // Placeholder Login Handler (Updated to use i18n messages)
+        function handleLogin(event) {
+            event.preventDefault(); // Stop the form from submitting normally
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const t = translations[currentLang];
+
+            // Simple validation and message display (simulating backend response)
+            if (email.trim() === "" || password.trim() === "") {
+                showMessage(t['msg-required'], 'error', 'msg-required');
+            } else if (password.length < 6) {
+                showMessage(t['msg-length'], 'error', 'msg-length');
+            } else if (email.includes("test@")) {
+                // Example of successful login simulation
+                showMessage(t['msg-success'], 'success', 'msg-success');
+                // In a real app, you would redirect the user here.
+            } else {
+                // Example of general failure simulation
+                showMessage(t['msg-error'], 'error', 'msg-error');
+            }
+        }
+
+        // Initialize language on load (defaults to English)
+        document.addEventListener('DOMContentLoaded', () => {
+            setLanguage(currentLang);
+        });
+    </script>
 </body>
 </html>
