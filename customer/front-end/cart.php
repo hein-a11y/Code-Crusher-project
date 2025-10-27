@@ -1,4 +1,4 @@
-<?php require '../header/header-1.php'; ?>
+<?php require '../header.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
