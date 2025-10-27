@@ -1,6 +1,6 @@
 main {
     /* ユーザーリクエスト: 全体的な色は黒 */
-    background-color: #333; /* 真っ黒より少し柔らかいダークグレー */
+     /* 真っ黒より少し柔らかいダークグレー */
     color: #ffffff; /* 白文字 */
     
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
