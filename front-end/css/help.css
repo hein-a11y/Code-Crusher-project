@@ -1,0 +1,164 @@
+/* --- コンテナ --- */
+.container {
+    max-width: 800px; /* 最大幅 */
+    margin: 40px auto; /* 上下マージンと左右中央揃え */
+    padding: 0 20px; /* モバイル用の左右パディング */
+}
+
+/* --- ヘッダー（タイトル） --- */
+.header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.header .sub-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #e0e0e0; /* 画像の薄い「FAQ」 */
+    letter-spacing: 2px;
+}
+
+.header .main-title {
+    font-size: 2rem; /* 32px */
+    font-weight: 700;
+    color: #e0e0e0; /* メインタイトルの色 */
+    margin-top: 8px;
+}
+
+/* --- FAQリストコンテナ --- */
+#faq-container {
+    width: 100%;
+}
+
+/* --- 各FAQアイテム --- */
+.faq-item {
+    background-color: #333;
+    border-radius: 12px; /* 角丸 */
+    margin-bottom: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04); /* 影 */
+    overflow: hidden; /* 角丸を維持するため */
+    transition: box-shadow 0.3s ease;
+}
+.faq-item:hover {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.07);
+}
+
+/* --- 質問部分 --- */
+.faq-question {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    cursor: pointer;
+    user-select: none; /* テキスト選択を無効化 */
+}
+
+/* --- Q/A アイコン共通スタイル --- */
+.faq-icon {
+    width: 28px;
+    height: 28px;
+    min-width: 28px; /* 縮まないように */
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 15px;
+    color: #ffffff;
+    margin-right: 15px;
+}
+
+/* Q アイコン（画像参照） */
+.q-icon {
+    background-color: #00bfff; /* 青系 */
+}
+
+/* A アイコン（画像参照） */
+.a-icon {
+    background-color: #00bfff; /* グレー系 */
+}
+
+/* 質問テキスト */
+.faq-question-text {
+    flex-grow: 1; /* 残りのスペースを埋める */
+    font-weight: 700;
+    color: #e0e0e0;
+}
+
+/* 開閉トグル (+/-) */
+.faq-toggle {
+    font-size: 24px;
+    font-weight: 700;
+    color: #00bfff; /* 青系 */
+    margin-left: 15px;
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+/* active（開いた）状態のトグル */
+.faq-item.active .faq-toggle {
+    color: #00bfff; /* グレー系（または赤系 #d0021b） */
+    transform: rotate(180deg); /* アニメーション（+を-に見せるため）*/
+}
+
+/* --- 回答部分 --- */
+.faq-answer {
+    /* 初期状態は非表示 */
+    display: none;
+    padding: 0 20px 20px 20px; /* 上パディングはボーダーで制御 */
+}
+
+/* active（開いた）状態の回答 */
+.faq-item.active .faq-answer {
+    display: flex; /* Flexboxでアイコンとテキストを横並び */
+    align-items: flex-start; /* アイコンとテキストの上端を揃える */
+    
+    border-top: 1px dashed #e0e0e0; /* 質問と回答の間の区切り線 */
+    margin: 0 20px; /* 左右のパディング分をマージンで相殺 */
+    padding: 20px 0 20px 0; /* ボーダーの上(20px)と下(20px)にパディングを追加（変更点） */
+}
+
+/* 回答テキスト */
+.faq-answer-text {
+    flex-grow: 1;
+    color: #e0e0e0;
+}
+
+/* --- お問い合わせセクション --- */
+.contact-section {
+    background-color: #121212;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+    text-align: center;
+    padding: 30px 20px;
+    margin-top: 40px;
+}
+
+.contact-title {
+    font-size: 1.5rem; /* 24px */
+    font-weight: 700;
+    color: #e0e0e0;
+    margin-bottom: 12px;
+}
+
+.contact-description {
+    font-size: 1rem; /* 16px */
+    color: #e0e0e0;
+    margin-bottom: 24px;
+}
+
+.contact-button {
+    background-color: #00bfff; /* Qアイコンと同じ青系 */
+    color: #e0e0e0;
+    font-size: 1rem;
+    font-weight: 700;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 24px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.contact-button:hover {
+    background-color: #0097ca; /* 少し濃い青 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
