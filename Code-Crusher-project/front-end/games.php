@@ -232,7 +232,7 @@
                 <div class="promo-content-center-overlay">
                     <div>
                         <h3 class="promo-title-ac">Assassin's Creed</h3>
-                        <button class="promo-button-purple button-glow-purple">
+                        <button class="promo-button-purple">
                             Explore Franchise
                         </button>
                     </div>
