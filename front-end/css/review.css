@@ -1,0 +1,283 @@
+/* --- 1. 基本設定とフォント --- */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+
+
+
+/* --- 2. 元のファイルにあったカスタムスタイル --- */
+.container-shadow {
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4), 0 1px 5px rgba(0, 0, 0, 0.2);
+}
+.rating-star {
+    color: #FFC700;
+}
+
+/* --- 3. ローディング画面 --- */
+.loader {
+    position: fixed;
+    top: 0; right: 0; bottom: 0; left: 0;
+    background-color: #1a1a1a;
+    z-index: 50;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.loader-spin {
+    height: 4rem;
+    width: 4rem;
+    border-radius: 9999px;
+    border-top: 4px solid #22d3ee;
+    border-bottom: 4px solid #22d3ee;
+    animation: spin 1s linear infinite;
+}
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+.loader-txt {
+    margin-top: 1rem;
+    color: #22d3ee;
+    font-weight: 600;
+}
+.hidden { display: none; }
+
+
+/* --- 4. メインレイアウト --- */
+.main-ctn {
+    max-width: 80rem; /* 1280px */
+    margin-left: auto;
+    margin-right: auto;
+    padding: 2rem 1rem;
+}
+@media (min-width: 640px) {
+    .main-ctn { padding: 2rem 1.5rem; }
+}
+@media (min-width: 1024px) {
+    .main-ctn { padding: 2rem 2rem; }
+}
+
+/* --- 5. カード共通スタイル --- */
+.card {
+    background-color: #242424;
+    padding: 1.5rem;
+    border-radius: 1rem;
+    margin-bottom: 2rem;
+}
+.card.bdr-top {
+    border-top: 8px solid #22d3ee;
+}
+.card-ttl {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #f3f4f6;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+}
+.ttl-icon {
+    height: 1.5rem;
+    width: 1.5rem;
+    color: #22d3ee;
+    margin-right: 0.5rem;
+}
+.card-foot {
+    font-size: 0.75rem;
+    color: #6b7280;
+    margin-top: 1rem;
+    text-align: right;
+}
+
+/* --- 6. ステータスカード --- */
+.stat-grid {
+    display: grid;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+    gap: 1rem;
+    text-align: center;
+}
+@media (min-width: 640px) {
+    .stat-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+.stat-box {
+    padding: 1rem;
+    background-color: #333333;
+    border-radius: 0.5rem;
+    border: 1px solid;
+}
+.stat-box.bdr-cyan { border-color: #22d3ee; }
+.stat-box.bdr-green { border-color: #4ade80; }
+.stat-box.bdr-yellow { border-color: #facc15; }
+.stat-box.stat-goal {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.stat-sub {
+    font-size: 0.875rem;
+    color: #d1d5db;
+    font-weight: 500;
+}
+.stat-num {
+    font-size: 2.25rem;
+    font-weight: 800;
+    margin-top: 0.25rem;
+}
+.stat-unit {
+    font-size: 0.875rem;
+    color: #9ca3af;
+}
+.stat-goal-txt {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #facc15;
+}
+.stat-goal .stat-sub { margin-bottom: 0.25rem; }
+
+/* --- 7. フォーム --- */
+.form-ttl {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #f3f4f6;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #4b5563;
+}
+.form-group { margin-bottom: 1rem; }
+.form-group-last { margin-bottom: 1.5rem; }
+.form-label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: #d1d5db;
+}
+.req { color: #f87171; }
+.form-input {
+    margin-top: 0.25rem;
+    display: block;
+    width: 100%;
+    padding: 0.75rem;
+    background-color: #333333;
+    color: #f3f4f6;
+    border: 1px solid #4b5563;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    transition: all 150ms ease-in-out;
+}
+.form-input:focus {
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+    border-color: #22d3ee;
+    box-shadow: 0 0 0 2px rgba(52, 211, 235, 0.5);
+}
+select.form-input option[disabled] { color: #9ca3af; }
+.btn-submit {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: none;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1);
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: white;
+    background-color: #0891b2; /* cyan-600 */
+    cursor: pointer;
+    transition: all 150ms ease-in-out;
+}
+.btn-submit:hover {
+    background-color: #06b6d4; /* cyan-500 */
+    transform: scale(1.005);
+}
+.btn-submit:active {
+    background-color: #0e7490; /* cyan-700 */
+}
+.btn-submit:focus {
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(34, 211, 238, 0.5);
+}
+.btn-submit.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* --- 8. レビューリスト --- */
+.review-card {
+    background-color: #242424;
+    padding: 1.5rem;
+    border-radius: 0.75rem;
+    border: 1px solid #4b5563;
+    margin-bottom: 1rem;
+    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+}
+.review-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+    border-color: #22d3ee;
+}
+.rev-uid {
+    font-size: 0.75rem;
+    color: #22d3ee;
+    margin-bottom: 0.25rem;
+    font-weight: 500;
+}
+.rev-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+}
+.rev-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #f3f4f6;
+}
+.rev-rate {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+}
+.rev-rate .rating-star {
+    font-size: 1.5rem;
+    margin-right: 0.25rem;
+}
+.rev-rate-num {
+    font-size: 0.875rem;
+    color: #9ca3af;
+    font-weight: 600;
+}
+.rev-com {
+    color: #d1d5db;
+    line-height: 1.625;
+    font-style: italic;
+    border-left: 2px solid #4b5563;
+    padding-left: 0.75rem;
+}
+.rev-date {
+    font-size: 0.75rem;
+    color: #6b7280;
+    margin-top: 0.75rem;
+    text-align: right;
+}
+.empty-msg {
+    text-align: center;
+    color: #6b7280;
+    padding: 1rem 0;
+}
+.error-msg {
+    text-align: center;
+    color: #f87171;
+    padding: 1rem 0;
+}
+
+/* --- 9. メッセージ & ユーティリティ --- */
+.msg-box {
+    color: white;
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+    margin-bottom: 1rem;
+    opacity: 1;
+    transition: opacity 0.3s ease-out;
+}
+.msg-ok { background-color: #16a34a; } /* green-600 */
+.msg-err { background-color: #dc2626; } /* red-600 */
+.accent-txt { color: #22d3ee; font-weight: 800; }
+.success-txt { color: #4ade80; font-weight: 800; }
