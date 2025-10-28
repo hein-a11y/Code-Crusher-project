@@ -19,6 +19,7 @@
     <script src="https://cdn.jsdelivr.net/npm/i18next-browser-languagedetector@6.1.3/i18nextBrowserLanguageDetector.min.js"></script>
 
 </head>
+
 <body>
     <main>
         <div class="main-game-slider">
