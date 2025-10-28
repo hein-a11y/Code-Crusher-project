@@ -166,7 +166,9 @@
                 </ul>
             </nav>
             <div class="header-actions">
-                <input type="search" class="search-bar" data-i18n="[placeholder]searchPlaceholder">
+                <form action="header.php" method="post">
+                    <input type="search" class="search-bar" data-i18n="[placeholder]searchPlaceholder">
+                </form>
                 <div class="lang-switcher">
                     <button id="btn-en">EN</button>
                     <button id="btn-ja" class="active">JA</button>
