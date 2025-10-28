@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -166,7 +167,29 @@
                 </ul>
             </nav>
             <div class="header-actions">
-                <input type="search" class="search-bar" data-i18n="[placeholder]searchPlaceholder">
+                <form action="header.php" method="post">
+                    <input type="search" class="search-bar" data-i18n="[placeholder]searchPlaceholder">
+                </form>
+
+                <?php
+                $pdo = new PDO('mysql:host=localhost;dbname=gg_store;charset=utf8', 'crushers', 'crushggs@2025');
+
+                // キーワードが入力されているか・いないか判定
+                if(isset($_REQUEST['search'])) {
+                    // キーワードが入力されている場合の処理はここ
+                    // キーワードが含まれているname列(商品名)のデータに絞り込むSQLを実行する
+                    $sql = $pdo->prepare('SELECT * FROM gg_gadget WHERE name LIKE ?');
+                    $sql->execute(['%' . $_REQUEST['search'] . '%']);
+                } else {
+                    $sql = $pdo->prepare('SELECT * FROM gg_game WHERE name LIKE ?');
+                    $sql->execute(['%' . $_REQUEST['search'] . '%']);
+                    // キーワードが入力されていない場合の処理はここ
+                    // すべての商品を表示するSQLを実行する
+                    $sql = $pdo->query('SELECT * FROM gg_gadget');
+                }
+
+                
+                ?>
                 <div class="lang-switcher">
                     <button id="btn-en">EN</button>
                     <button id="btn-ja" class="active">JA</button>
