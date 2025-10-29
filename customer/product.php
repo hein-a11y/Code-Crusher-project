@@ -1,4 +1,4 @@
-<?php require_once('../functions.php'); ?>
+<?php require_once '../header.php'; ?>
 <form action="product.php" method="post">
     商品検索
     <input type="text" name="keyword">

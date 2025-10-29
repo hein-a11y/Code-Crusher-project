@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>基本的なPOST</title>
+</head>
+<body>
+    <h1>ユーザー登録</h1>
+    <button id="sendButton">データを送信</button>
+    <div id="result"></div>
+    
+    <script>
+    document.getElementById('sendButton').addEventListener('click', function() {
+        // 送信するデータ
+        const userData = {
+            name: '田中太郎',
+            email: 'tanaka@example.com',
+            age: 25
+        };
+        
+        // Fetch APIでPOSTリクエスト
+        fetch('save_user.php', {
+            method: 'POST',                          // HTTPメソッド
+            headers: {
+                'Content-Type': 'application/json',  // JSON形式で送信
+            },
+            body: JSON.stringify(userData)           // JavaScriptオブジェクトをJSON文字列に変換
+        })
+        .then(response => {
+            // レスポンスのステータスコードをチェック
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();  // JSONをパース
+        })
+        .then(data => {
+            // PHPからの返り値を処理
+            console.log('成功:', data);
+            document.getElementById('result').innerHTML = 
+                `<p style="color: green;">${data.message}</p>
+                 <p>ユーザーID: ${data.userId}</p>`;
+        })
+        .catch(error => {
+            // エラー処理
+            console.error('エラー:', error);
+            document.getElementById('result').innerHTML = 
+                `<p style="color: red;">エラーが発生しました: ${error.message}</p>`;
+        });
+    });
+    </script>
+</body>
+</html>

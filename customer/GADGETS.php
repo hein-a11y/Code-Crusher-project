@@ -1,4 +1,4 @@
-<?php require '../header-input.php'; ?>
+<?php require_once '../header.php'; ?>
 <?php require '../functions.php'; ?>
 <!DOCTYPE html>
 <html lang="ja">

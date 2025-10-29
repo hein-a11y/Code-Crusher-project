@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -167,29 +166,43 @@
                 </ul>
             </nav>
             <div class="header-actions">
-                <form action="header.php" method="post">
-                    <input type="search" class="search-bar" data-i18n="[placeholder]searchPlaceholder">
-                </form>
+                    <input type="text" name="keyword" id="keyword" class="search-bar" data-i18n="[placeholder]searchPlaceholder">
+                    <button type="submit" onclick="doit()">Search</button>
 
-                <?php
-                $pdo = new PDO('mysql:host=localhost;dbname=gg_store;charset=utf8', 'crushers', 'crushggs@2025');
+                <script>
+                function doit() {
+                const kw = document.querySelector('[name="keyword"]').value.trim();
+                // Fetch APIでPOSTリクエスト
+                fetch('search.php', {
+                    method: 'POST',                          // HTTPメソッド
+                    headers: {
+                        'Content-Type': 'application/json',  // JSON形式で送信
+                    },
+                    body: JSON.stringify(kw)           // JavaScriptオブジェクトをJSON文字列に変換
+                })
+                .then(response => {
+                    // レスポンスのステータスコードをチェック
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();  // JSONをパース
+                })
+                .then(data => {
+                    // PHPからの返り値を処理
+                    console.log('成功:', data);
+                    document.getElementById('result').innerHTML = 
+                        `<p style="color: green;">${data.message}</p>
+                        <p>ユーザーID: ${data.userId}</p>`;
+                })
+                .catch(error => {
+                    // エラー処理
+                    console.error('エラー:', error);
+                    document.getElementById('result').innerHTML = 
+                        `<p style="color: red;">エラーが発生しました: ${error.message}</p>`;
+                });
+            }
+                </script>
 
-                // キーワードが入力されているか・いないか判定
-                if(isset($_REQUEST['search'])) {
-                    // キーワードが入力されている場合の処理はここ
-                    // キーワードが含まれているname列(商品名)のデータに絞り込むSQLを実行する
-                    $sql = $pdo->prepare('SELECT * FROM gg_gadget WHERE name LIKE ?');
-                    $sql->execute(['%' . $_REQUEST['search'] . '%']);
-                } else {
-                    $sql = $pdo->prepare('SELECT * FROM gg_game WHERE name LIKE ?');
-                    $sql->execute(['%' . $_REQUEST['search'] . '%']);
-                    // キーワードが入力されていない場合の処理はここ
-                    // すべての商品を表示するSQLを実行する
-                    $sql = $pdo->query('SELECT * FROM gg_gadget');
-                }
-
-                
-                ?>
                 <div class="lang-switcher">
                     <button id="btn-en">EN</button>
                     <button id="btn-ja" class="active">JA</button>
