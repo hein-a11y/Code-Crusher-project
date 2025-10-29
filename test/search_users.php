@@ -1,4 +1,4 @@
-<?php require './functions.php'; ?>
+<?php require '../functions.php'; ?>
 <?php
 header('Content-Type: application/json; charset=utf-8');
 $keyword = $_GET['keyword'] ?? '';
@@ -7,7 +7,7 @@ $keyword = $_GET['keyword'] ?? '';
 if (empty($keyword)) {
     echo json_encode([
         'status' => 'redirect',
-        'action' => './index.php',
+        'action' => '../customer/index.php',
         'method' => 'POST'
     ], JSON_UNESCAPED_UNICODE);
     exit;
@@ -23,7 +23,7 @@ $sql->execute(['%' . $keyword . '%']);
 if ($sql->fetch(PDO::FETCH_ASSOC)) { // 1件でもヒットしたら
     echo json_encode([
         'status' => 'redirect',
-        'action' => './gadgets.php?keyword=' . $encoded_keyword,
+        'action' => '../customer/gadgets.php?keyword=' . $encoded_keyword,
         'method' => 'GET'
     ], JSON_UNESCAPED_UNICODE);
     exit;
@@ -37,7 +37,7 @@ $sql->execute(['%' . $keyword . '%']);
 if ($sql->fetch(PDO::FETCH_ASSOC)) { // 1件でもヒットしたら
     echo json_encode([
         'status' => 'redirect',
-        'action' => './games.php?keyword=' . $encoded_keyword,
+        'action' => '../customer/games.php?keyword=' . $encoded_keyword,
         'method' => 'GET'
     ], JSON_UNESCAPED_UNICODE);
     exit;
@@ -46,7 +46,7 @@ if ($sql->fetch(PDO::FETCH_ASSOC)) { // 1件でもヒットしたら
 // どちらにもヒットしなかった場合の応答を追加
 echo json_encode([
     'status' => 'redirect',
-    'action' => './not-found.php',
+    'action' => '../customer/not-found.php',
     'method' => 'GET'
 ], JSON_UNESCAPED_UNICODE);
 

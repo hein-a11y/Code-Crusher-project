@@ -142,8 +142,6 @@
     <footer>
         <p data-i18n="footer.copyright"></p>
     </footer>
-    
-
 
 </body>
 </html>

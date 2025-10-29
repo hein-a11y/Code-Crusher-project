@@ -92,15 +92,48 @@
             color: var(--background-color);
         }
 
+        .search-container {
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            border-radius: 3px;
+        }
 
         .search-bar {
-            background-color: #333;
-            border: 1px solid #555;
-            color: var(--text-color);
-            padding: 0.5rem;
-            border-radius: 5px;
+            width: 250px;
+            height: 45px;
+            padding: 5px 15px;
+            border: none;
+            border-radius: 3px 0 0 3px;
+            box-sizing: border-box;
+            background-color: #f2f2f2;
+            font-size: 1em;
+            outline: none;
         }
-        
+
+        .search-bar:focus {
+        }
+
+        .search-button {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 50px;
+            height: 45px;
+            border: none;
+            border-radius: 0 3px 3px 0;
+            background-color: #2589d0;
+            cursor: pointer;
+        }
+
+        .search-button::after {
+            width: 24px;
+            height: 24px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M18.031 16.6168L22.3137 20.8995L20.8995 22.3137L16.6168 18.031C15.0769 19.263 13.124 20 11 20C6.032 20 2 15.968 2 11C2 6.032 6.032 2 11 2C15.968 2 20 6.032 20 11C20 13.124 19.263 15.0769 18.031 16.6168ZM16.0247 15.8748C17.2475 14.6146 18 12.8956 18 11C18 7.1325 14.8675 4 11 4C7.1325 4 4 7.1325 4 11C4 14.8675 7.1325 18 11 18C12.8956 18 14.6146 17.2475 15.8748 16.0247L16.0247 15.8748Z' fill='%23fff'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            content: '';
+        }
+
         .hamburger-menu {
             display: none;
             cursor: pointer;
@@ -159,48 +192,81 @@
             <nav>
                 <ul>
                     <li><a href="index.php" data-i18n="nav.home"></a></li>
-                    <li><a href="games-input.php" data-i18n="nav.games"></a></li>
-                    <li><a href="gadgets-input.php" data-i18n="nav.gadgets"></a></li>
+                    <li><a href="games.php" data-i18n="nav.games"></a></li>
+                    <li><a href="gadgets.php" data-i18n="nav.gadgets"></a></li>
                     <li><a href="review-input.php" data-i18n="nav.reviews"></a></li>
                     <li><a href="help-input.php" data-i18n="nav.help"></a></li>
                 </ul>
             </nav>
             <div class="header-actions">
-                    <input type="text" name="keyword" id="keyword" class="search-bar" data-i18n="[placeholder]searchPlaceholder">
-                    <button type="submit" onclick="doit()">Search</button>
-
+                <div class="search-container">
+                    <label>
+                        <input type="text" id="searchInput" class="search-bar" data-i18n="[placeholder]searchPlaceholder">
+                    </label>
+                    <button id="searchButton" class="search-button" aria-label="検索"></button>
+                </div>
+                
                 <script>
-                function doit() {
-                const kw = document.querySelector('[name="keyword"]').value.trim();
-                // Fetch APIでPOSTリクエスト
-                fetch('search.php', {
-                    method: 'POST',                          // HTTPメソッド
-                    headers: {
-                        'Content-Type': 'application/json',  // JSON形式で送信
-                    },
-                    body: JSON.stringify(kw)           // JavaScriptオブジェクトをJSON文字列に変換
-                })
-                .then(response => {
-                    // レスポンスのステータスコードをチェック
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
+                    async function searchUsers() {
+                        const keyword = document.getElementById('searchInput').value;
+                        const resultsDiv = document.getElementById('results'); // 結果表示エリア
+                        
+                        // URLパラメータを作成
+                        const params = new URLSearchParams({
+                            keyword: keyword
+                        });
+                        
+                        try {
+                            // PHPファイル（search_users.php）にリクエスト
+                            const response = await fetch(`../search.php?${params}`);
+                            
+                            if (!response.ok) {
+                                throw new Error(`HTTP error! status: ${response.status}`);
+                            }
+                            
+                            const result = await response.json(); // PHPからのJSON応答
+                            
+                            // PHPから返された 'status' に応じて処理を分岐
+                            
+                            switch (result.status) {
+                                case 'redirect':
+                                    // リダイレクト指示があった場合
+                                    if (result.method === 'GET') {
+                                        // GETならそのままページ遷移
+                                        window.location.href = result.action;
+                                    } else {
+                                        // POSTならフォームを作成して送信
+                                        const form = document.createElement('form');
+                                        form.method = result.method;
+                                        form.action = result.action;
+                                        document.body.appendChild(form);
+                                        form.submit();
+                                    }
+                                    break;
+                                
+                        case 'error':
+                            // 'error' (キーワードなし等) メッセージをアラートで表示
+                            alert(result.message);
+                            break;
+
+                        default:
+                            // PHPが 'success' や予期しないstatusを返した場合
+                            alert('予期しない応答がありました。');
                     }
-                    return response.json();  // JSONをパース
-                })
-                .then(data => {
-                    // PHPからの返り値を処理
-                    console.log('成功:', data);
-                    document.getElementById('result').innerHTML = 
-                        `<p style="color: green;">${data.message}</p>
-                        <p>ユーザーID: ${data.userId}</p>`;
-                })
-                .catch(error => {
-                    // エラー処理
-                    console.error('エラー:', error);
-                    document.getElementById('result').innerHTML = 
-                        `<p style="color: red;">エラーが発生しました: ${error.message}</p>`;
-                });
-            }
+                    
+                } catch (error) {
+                    // fetch失敗やJSONパース失敗の場合
+                    alert(`エラー: ${error.message}`);
+                }
+                    }
+
+                    // (ボタンクリックとEnterキーのイベントリスナーはそのまま)
+                    document.getElementById('searchButton').addEventListener('click', searchUsers);
+                    document.getElementById('searchInput').addEventListener('keydown', (event) => {
+                        if (event.key === 'Enter') {
+                            searchUsers();
+                        }
+                    });
                 </script>
 
                 <div class="lang-switcher">
