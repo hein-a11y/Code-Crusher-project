@@ -1,7 +1,7 @@
 <?php require './functions.php'; ?>
 <?php
 header('Content-Type: application/json; charset=utf-8');
-$keyword = $_GET['keyword'] ?? '';
+$keyword = h($_GET['keyword']) ?? '';
 
 // バリデーション
 if (empty($keyword)) {
@@ -46,7 +46,7 @@ if ($sql->fetch(PDO::FETCH_ASSOC)) { // 1件でもヒットしたら
 // どちらにもヒットしなかった場合の応答を追加
 echo json_encode([
     'status' => 'redirect',
-    'action' => './not-found.php',
+    'action' => './not-found.php?_keyword=' . $encoded_keyword,
     'method' => 'GET'
 ], JSON_UNESCAPED_UNICODE);
 

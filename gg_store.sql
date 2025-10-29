@@ -1,3 +1,6 @@
+create database gg_store;
+use gg_store;
+
 -- phpMyAdmin SQL Dump
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
@@ -222,6 +225,7 @@ CREATE TABLE `gg_gadget` (
   `manufacturer` varchar(100) NOT NULL,
   `connectivity_type` varchar(50) DEFAULT NULL,
   `price` decimal(10,2) NOT NULL,
+  `images` int NOT NULL,
   `stock` int(11) NOT NULL,
   `Sales_Status` int(11) NOT NULL,
   `created_time` datetime NOT NULL DEFAULT current_timestamp(),
@@ -238,7 +242,11 @@ INSERT INTO `gg_gadget` (`gadget_id`, `category_id`, `gadget_name`, `gadget_expl
 (3, 3, 'SteelSeries Apex Pro TKL', 'テンキーレスのメカニカルキーボード。アクチュエーションポイントを調整可能なOmniPointスイッチを搭載。', 'SteelSeries', '有線 (USB-C)', 25000.00, 15, 1, '2025-10-27 11:36:32', NULL),
 (4, 5, 'Xbox Elite ワイヤレス コントローラー シリーズ 2', '交換可能なスティックや背面パドルを備えた、プロ仕様のカスタマイズ可能なコントローラー。', 'Microsoft', '無線 (Bluetooth + USB-C)', 19980.00, 20, 1, '2025-10-27 11:36:32', NULL),
 (5, 7, 'Shure MV7', 'ポッドキャストや配信に最適なダイナミックマイク。USBとXLRの両方に対応し、クリアな音質を提供。', 'Shure', '有線 (USB / XLR)', 31000.00, 10, 1, '2025-10-27 11:36:32', NULL),
-(6, 2, 'ZOWIE EC2-C', 'eスポーツ、特にFPSプレイヤーに人気の有線ゲーミングマウス。エルゴノミクスデザインが特徴。', 'BenQ ZOWIE', '有線 (USB)', 8800.00, 0, 0, '2025-10-27 11:36:32', NULL);
+(6, 2, 'ZOWIE EC2-C', 'eスポーツ、特にFPSプレイヤーに人気の有線ゲーミングマウス。エルゴノミクスデザインが特徴。', 'BenQ ZOWIE', '有線 (USB)', 8800.00, 0, 0, '2025-10-27 11:36:32', NULL),
+(null, 2, 'Logicool G PRO X 2 LIGHTSPEED', '初のグラフェンドライバー「PRO-Gグラフェンドライバー」搭載、「PRO X 2 LIGHTSPEED ワイヤレスゲーミングヘッドセット」に保証期間1年間のAmazon.co.jp限定モデルが登場！
+PRO-Gグラフェンドライバー搭載で複数の音を認知。安定した高音質を楽しむことができます。最大連続使用時間50時間、前機種に比べ2倍を超える電池寿命に向上しました。
+さらに25gの軽量化も実現し、より長時間のプレイでも疲れにくくなりました。
+', 'Logicool', 'Bluetooth, LIGHTSPEED, ワイヤレス, 有線', 32500, 41, 1, now(), NULL);
 
 -- --------------------------------------------------------
 

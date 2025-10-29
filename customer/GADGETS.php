@@ -11,26 +11,44 @@
 
 </head>
 <body>
-    <div class="container"> <main>
+    <div class="container"> 
+        <main>
             <div class="product-grid">
-                <div class="product-card">
-                    <img src="https://via.placeholder.com/400x250/333333/FFFFFF?text=Keyboard+1" alt="商品画像">
-                    <div class="product-info">
-                        <?php
+                <?php
 
-                        $pdo = getPDO();
-                        
-                        foreach ($pdo as $row) {
-                            echo <<< HTML
-                            <p class="product-brand">{$row['manufacturer']}</p>
-                            <h2 class="product-title">{$row['gadget_name']}</h2>
-                            <p class="product-price">¥{$row['price']} <span class="price-tax">(税込)</span></p>
-                            <ul class="product-features"><li>{$row['connectivity_type']}</li></ul>
-                            HTML;
-                        }
-                        ?>
+                $pdo = getPDO();
+
+                if (isset($_GET['keyword'])) {
+                    $sql = $pdo->prepare('SELECT * FROM gg_gadget WHERE gadget_name LIKE ?');
+                    $sql->execute(['%' . $_GET['keyword'] . '%']);
+                } else {
+                    $sql = $pdo->query('SELECT * FROM gg_gadget');
+                }
+                
+                foreach ($sql as $row) {
+                    $id = h($row['gadget_id']);
+                    $name = h($row['gadget_name']);
+                    $manufacturer = h($row['manufacturer']);
+                    $connectivity = h($row['connectivity_type']);
+                    $price_number_format = number_format(h($row['price']));
+                    $keyword = $_GET['keyword'] ?? '';
+                    $img_src = "./gadget-images/gadgets-$id" . "_1.jpg";
+                    echo <<< HTML
+                    <div class="product-card">
+                        <a href="./gadget-details.php?name={$name}&keyword={$keyword}&id={$id}">
+                            <img src="$img_src" alt="商品画像">
+                                <div class="product-info">
+                                    <p class="product-brand">{$manufacturer}</p>
+                                    <h2 class="product-title">{$name}</h2>
+                                    <p class="product-price">¥{$price_number_format} <span class="price-tax">(税込)</span></p>
+                                    <ul class="product-features"><li>{$connectivity}</li></ul>
+                                </div>
+                        </a>
                     </div>
-                </div>
+                    
+                    HTML;
+                }
+                ?>
             </div>
         </main>
     </div>

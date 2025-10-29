@@ -9,4 +9,8 @@ function getPDO() {
     // db_ggstoreデータベースに接続するだけの処理
     return new PDO("mysql:host={$host};dbname={$dbname};charset=utf8", $id, $password);    
 }
+
+function h($string) {
+    return htmlspecialchars($string);
+}
 ?>
