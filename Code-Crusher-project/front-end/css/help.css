@@ -156,7 +156,10 @@
     cursor: pointer;
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    
 }
+
+
 
 .contact-button:hover {
     background-color: #0097ca; /* 少し濃い青 */

@@ -1,4 +1,4 @@
-<<<<<<<< HEAD:Code-Crusher-project/front-end/GADGETS.php
+
 <?php require '../header/header-1.php'; ?>
 <!DOCTYPE html>
 <html lang="ja">
