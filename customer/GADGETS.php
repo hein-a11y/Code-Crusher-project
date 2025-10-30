@@ -33,6 +33,7 @@
                     $price_number_format = number_format(h($row['price']));
                     $keyword = $_GET['keyword'] ?? '';
                     $img_src = "./gadget-images/gadgets-$id" . "_1.jpg";
+                    
                     echo <<< HTML
                     <div class="product-card">
                         <a href="./gadget-details.php?name={$name}&keyword={$keyword}&id={$id}">

@@ -8,7 +8,6 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
     <link rel="stylesheet" href="./css/style.css">
-    <script type="text/javascript" src="./js/script.js" defer></script>
 </head>
 <body>
     <main>
@@ -143,5 +142,6 @@
         <p data-i18n="footer.copyright"></p>
     </footer>
 
+    <script type="text/javascript" src="./js/script.js" defer></script>
 </body>
 </html>
