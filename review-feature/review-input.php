@@ -1,29 +1,99 @@
-<?php 
+<?php require "../functions.php" ?>
+<?php
+// 1. セッション管理の開始 (Firebase Authの匿名認証の代わり)
+// 必ずファイルの先頭に記述してください
 session_start();
 
-header('Content-Type: text/html; charset=utf-8');
+// --- データベース接続設定 ---
+// !!! 注意: ここの値はご自身の環境に合わせて変更してください !!!
 
-if(!isset($_SESSION['customer'])){
-    echo <<< HTML
-        <h1>Error</h1>
-        <h3>You must be logged in to submit review</h3>
-        <h3><a href="#">To login page</a></h3>
-    HTML;
+$pdo = null;
+$message = null; // ユーザーへの通知（投稿成功など）
+
+try {
+    // データベースに接続
+    $pdo = getPDO();
+
+} catch (PDOException $e) {
+    // 接続失敗時はエラーメッセージを表示して終了
+    die("データベース接続に失敗しました: " . $e->getMessage());
 }
 
-$product_id = (int)($_GET['product_id']);
+// 2. ユーザーIDの確認（セッションに無ければ新規作成）
+if (empty($_SESSION['customer'])) {
+    // 簡易的な匿名IDをセッションに保存
+    $_SESSION['customer']['id'] = 'user_' . bin2hex(random_bytes(16));
+}
+$currentUserId = $_SESSION['customer']['id'];
+$currentGameId = 1;
 
-$user_id = $_SESSION['customer']['id'];
-$username = $_SESSION['customer']['name'];
+// 3. POSTリクエストの処理 (フォームが送信された場合)
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    
+    // サーバーサイドでの入力値バリデーション
+    
+    $rating = filter_var($_POST['rating'] ?? 0, FILTER_VALIDATE_INT, ["options" => ["min_range" => 1, "max_range" => 5]]);
+    $comment = trim($_POST['comment'] ?? '');
 
-?>
-<?php "../../header-input.php" ?>
-<?php "../functions.php" ?>
-<?php
+    if ($rating !== false && !empty($comment)) {
+        // バリデーション成功
+        try {
+            $sql = "INSERT INTO gg_reviews (user_id, rating, game_id, comment) VALUES (?, ?, ?, ?)";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute([$currentUserId,$currentGameId, $rating, $comment]);
 
+            // 成功メッセージをセッションに保存
+            $_SESSION['message'] = ['text' => 'レビューが正常に投稿されました！', 'type' => 'success'];
 
+        } catch (PDOException $e) {
+            $_SESSION['message'] = ['text' => 'レビューの投稿中にエラーが発生しました。', 'type' => 'error'];
+        }
+    } else {
+        // バリデーション失敗
+        $_SESSION['message'] = ['text' => '全てのフィールドを正しく入力してください。', 'type' => 'error'];
+    }
 
+    // Post/Redirect/Get (PRG) パターン：二重投稿を防止
+    header("Location: " . $_SERVER['PHP_SELF']);
+    exit;
+}
 
+// 4. GETリクエストの処理 (ページの表示)
+
+// フォーム送信後のメッセージがあれば取得し、セッションから削除
+if (isset($_SESSION['message'])) {
+    $message = $_SESSION['message'];
+    unset($_SESSION['message']);
+}
+
+// (A) 該当ユーザーのレビューをすべて取得
+
+$sql = $pdo->prepare("SELECT * FROM gg_reviews WHERE user_id = ? ORDER BY review_date DESC");
+$sql->execute([$currentUserId]);
+$reviews = $sql->fetchAll();
+
+// (B) 割引ステータスを計算
+$reviewCount = count($reviews);
+$currentDiscount = min($reviewCount * 0.1, 10);
+
+// (C) 次の特典メッセージを生成
+$nextReviewMessageHtml = '';
+if ($currentDiscount < 10) {
+    $nextDiscountValue = number_format($currentDiscount + 0.1, 2);
+    $neededReviews = ceil((10 - $currentDiscount) / 0.1);
+    
+    $nextReviewMessageHtml = '
+        <span class="text-cyan-400 font-extrabold">次の割引 (' . $nextDiscountValue . '%)</span> まで **1レビュー**！<br>
+        最大割引率 **' . number_format(10, 0) . '%** まであと **' . $neededReviews . 'レビュー**です。
+    ';
+} else {
+    $nextReviewMessageHtml = '
+        <span class="text-green-400 font-extrabold">おめでとうございます！</span><br>
+        最大割引率 **' . number_format(10, 0) . '%** に到達しました。
+    ';
+}
+
+// これ以降はHTMLの描画
 ?>
 
 

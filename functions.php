@@ -2,7 +2,7 @@
 function getPDO() {
     // データベースの設定
     $host = 'localhost';
-    $dbname = 'db_ggstore';
+    $dbname = 'gg_store';
     $id = 'crushers';
     $password = 'crushggs@2025';
 

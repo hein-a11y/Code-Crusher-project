@@ -12,7 +12,7 @@ $message = null; // ユーザーへの通知（投稿成功など）
 
 try {
     // データベースに接続
-    $pdo = getPDO()
+    $pdo = getPDO();
 
 } catch (PDOException $e) {
     // 接続失敗時はエラーメッセージを表示して終了
@@ -24,8 +24,9 @@ if (empty($_SESSION['customer'])) {
     // 簡易的な匿名IDをセッションに保存
     $_SESSION['customer']['id'] = 'user_' . bin2hex(random_bytes(16));
 }
-$currentUserId = $_SESSION['customer']['id'];
-$currentGameId = $_POST['gameid'];
+//$_SESSION['customer']['id']
+$currentUserId = 1;
+$currentGameId = 1;
 
 // 3. POSTリクエストの処理 (フォームが送信された場合)
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -38,7 +39,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($rating !== false && !empty($comment)) {
         // バリデーション成功
         try {
-            $sql = "INSERT INTO gg_review (user_id, rating, game_id, comment) VALUES (?, ?, ?, ?)";
+            $sql = "INSERT INTO gg_reviews (user_id, rating, game_id, comment) VALUES (?, ?, ?, ?)";
             $stmt = $pdo->prepare($sql);
             $stmt->execute([$currentUserId,$currentGameId, $rating, $comment]);
 
@@ -68,28 +69,29 @@ if (isset($_SESSION['message'])) {
 
 // (A) 該当ユーザーのレビューをすべて取得
 
-$sql = $pdo->prepare("SELECT * FROM gg_review WHERE user_id = ? ORDER BY timestamp DESC");
+$sql = $pdo->prepare("SELECT * FROM gg_reviews WHERE user_id = ? ORDER BY review_date DESC");
 $sql->execute([$currentUserId]);
 $reviews = $sql->fetchAll();
 
 // (B) 割引ステータスを計算
 $reviewCount = count($reviews);
-$currentDiscount = min($reviewCount * INCREASE_PER_REVIEW, MAX_DISCOUNT);
-
+$currentDiscount = min($reviewCount * 0.1, 10);
+$maxdiscount = 10;
+$discountRate = 0.05;
 // (C) 次の特典メッセージを生成
 $nextReviewMessageHtml = '';
-if ($currentDiscount < MAX_DISCOUNT) {
-    $nextDiscountValue = number_format($currentDiscount + INCREASE_PER_REVIEW, 2);
-    $neededReviews = ceil((MAX_DISCOUNT - $currentDiscount) / INCREASE_PER_REVIEW);
+if ($currentDiscount < 10) {
+    $nextDiscountValue = number_format($currentDiscount + $discountRate, 2);
+    $neededReviews = ceil(($maxdiscount - $currentDiscount) / $discountRate);
     
     $nextReviewMessageHtml = '
         <span class="text-cyan-400 font-extrabold">次の割引 (' . $nextDiscountValue . '%)</span> まで **1レビュー**！<br>
-        最大割引率 **' . number_format(MAX_DISCOUNT, 0) . '%** まであと **' . $neededReviews . 'レビュー**です。
+        最大割引率 **' . number_format($maxdiscount, 0) . '%** まであと **' . $neededReviews . 'レビュー**です。
     ';
 } else {
     $nextReviewMessageHtml = '
         <span class="text-green-400 font-extrabold">おめでとうございます！</span><br>
-        最大割引率 **' . number_format(MAX_DISCOUNT, 0) . '%** に到達しました。
+        最大割引率 **' . number_format($maxdiscount, 0) . '%** に到達しました。
     ';
 }
 
@@ -208,7 +210,7 @@ if ($currentDiscount < MAX_DISCOUNT) {
             </div>
             
             <p class="text-xs text-gray-500 mt-4 text-right">
-                割引率: レビュー投稿ごとに<?php echo INCREASE_PER_REVIEW; ?>%上昇 (最大<?php echo number_format(MAX_DISCOUNT, 2); ?>%)
+                割引率: レビュー投稿ごとに<?php echo $discountRate; ?>%上昇 (最大<?php echo number_format($maxdiscount, 2); ?>%)
             </p>
         </div>
 
@@ -259,17 +261,17 @@ if ($currentDiscount < MAX_DISCOUNT) {
                         $stars = str_repeat('★', $review['rating']) . str_repeat('☆', 5 - $review['rating']);
                         // DateTimeオブジェクトを使って日付をフォーマット
                         try {
-                            $date = (new DateTime($review['timestamp']))->format('Y/m/d H:i');
+                            $date = (new DateTime($review['review_date']))->format('Y/m/d H:i');
                         } catch (Exception $e) {
                             $date = '日付不明';
                         }
                         ?>
                         <div class="review-card bg-[#242424] p-6 rounded-xl border border-gray-700 mb-4">
                             <p class="text-xs text-cyan-400 mb-1 font-medium">
-                                投稿者: <?php echo htmlspecialchars($review['userId']); ?>
+                                投稿者: <?php echo htmlspecialchars($review['user_id']); ?>
                             </p>
                             <div class="flex items-start justify-between mb-2">
-                                <h3 class="text-xl font-bold text-gray-100"><?php echo htmlspecialchars($review['gameTitle']); ?></h3>
+                                <h3 class="text-xl font-bold text-gray-100"><?php echo htmlspecialchars($review['game_id']==null ? $review['gadget_id'] : $review['game_id']); ?></h3>
                                 <div class="flex flex-shrink-0 items-center">
                                     <span class="rating-star text-2xl mr-1"><?php echo $stars; ?></span>
                                     <span class="text-sm text-gray-400 font-semibold">(<?php echo htmlspecialchars($review['rating']); ?>/5)</span>
