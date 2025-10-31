@@ -16,55 +16,7 @@
             overflow-x: hidden;
         }
 
-        /* Header & Navigation */
-        header {
-            background-color: var(--surface-color);
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #333;
-            position: relative;
-            z-index: 100;
-        }
-
-        .logo {
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: var(--primary-color);
-            text-shadow: 0 0 5px var(--primary-color);
-        }
-
-        .nav-container {
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-        }
-
-        nav ul {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            gap: 1.5rem;
-        }
-
-        nav a {
-            color: var(--text-color);
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-
-        nav a:hover {
-            color: var(--primary-color);
-        }
-
-        .header-actions {
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-        }
+        
         
         /* Language Switcher Styles */
         .lang-switcher button {

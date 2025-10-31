@@ -1,4 +1,4 @@
-
+<?php require '../header/header-1.php'; ?>
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -11,34 +11,6 @@
     
 </head>
 <body>
-
-    <header>
-        <div class="logo">GG STORE</div>
-        
-        <div class="hamburger-menu">
-            <div class="bar"></div><div class="bar"></div><div class="bar"></div>
-        </div>
-
-        <div class="nav-container">
-            <nav>
-                <ul>
-                    <li><a href="index.php" data-i18n="nav.home"></a></li>
-                    <li><a href="games.php" data-i18n="nav.games"></a></li>
-                    <li><a href="GADGETS.php" data-i18n="nav.gadgets"></a></li>
-                    <li><a href="review.php" data-i18n="nav.reviews"></a></li>
-                    <li><a href="form.php" data-i18n="nav.contact"></a></li>
-                </ul>
-            </nav>
-            <div class="header-actions">
-                <input type="search" class="search-bar" data-i18n="[placeholder]searchPlaceholder">
-                <div class="lang-switcher">
-                    <button id="btn-en">EN</button>
-                    <button id="btn-ja" class="active">JA</button>
-                </div>
-                <span><a href=cart.html>🛒</a></span> <span><a href=login.html>👤</a></span> 
-            </div>
-        </div>
-    </header>
 
     <main>
         <div class="main-game-slider">
