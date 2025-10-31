@@ -10,4 +10,14 @@ function getPDO() {
     return new PDO("mysql:host={$host};dbname={$dbname};charset=utf8",
                     $id, $password);
 }
+
+function debug($data){
+    echo '<pre>';
+    print_r($data);
+    echo '</pre>';
+}
+
+function h($string){
+    return htmlspecialchars($string);
+}
 ?>
