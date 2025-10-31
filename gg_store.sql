@@ -1,3 +1,6 @@
+CREATE USER 'crushers'@'localhost' identified by 'crushggs@2025';		
+GRANT ALL ON gg_store.* to 'crushers'@'localhost';		
+
 create database gg_store;
 use gg_store;
 
