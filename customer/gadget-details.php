@@ -39,6 +39,7 @@
             $explanation = h($row['gadget_explanation']);
             $manufacturer = h($row['manufacturer']);
             $connectivity_type = h($row['connectivity_type']);
+            $fruitsArray = explode(",", $connectivity_type); //,で分割して配列に変換
             $price = number_format(h($row['price']));
             $images = h($row['images']);
 
@@ -72,17 +73,19 @@
                         <div class="price">
                             ¥$price <span>(税込)</span>
                         </div>
-                HTML;
-            ?>
-
                         <div class="features">
-                            <!-- 画像のタグを再現 -->
-                            <span class="feature-tag">Bluetooth</span>
-                            <span class="feature-tag">LIGHTSPEEDワイヤレス</span>
-                            <span class="feature-tag">有線</span>
+                        <!-- 画像のタグを再現 -->
+                HTML;
+                foreach ($fruitsArray as $fruit) {
+                    echo <<< HTML
+                            <span class="feature-tag">$fruit</span>
+                    HTML;
+                }
+                echo <<< HTML
                         </div>
                     </div>
-                    
+                    HTML;
+            ?>
                     <!-- アクションボタン -->
                     <div class="actions">
                         <button class="action-button add-to-cart">カートに入れる</button>
