@@ -1,3 +1,133 @@
+<?php require "../functions.php" ?>
+<?php
+// 1. セッション管理の開始 
+// 必ずファイルの先頭に記述してください
+session_start();
+
+// --- データベース接続設定 ---
+
+$pdo = null;
+$message = null; // ユーザーへの通知（投稿成功など）
+
+try {
+    // データベースに接続
+    $pdo = getPDO();
+
+} catch (PDOException $e) {
+    // 接続失敗時はエラーメッセージを表示して終了
+    die("データベース接続に失敗しました: " . $e->getMessage());
+}
+
+// 2. ユーザーIDの確認（セッションに無ければ新規作成）
+if (empty($_SESSION['customer'])) {
+    // 簡易的な匿名IDをセッションに保存
+    $_SESSION['customer']['id'] = 'user_' . bin2hex(random_bytes(16));
+}
+//$_SESSION['customer']['id']
+$currentUserId = 1;
+$currentGameId = 1;
+
+// 3. POSTリクエストの処理 (フォームが送信された場合)
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    
+    // サーバーサイドでの入力値バリデーション
+    
+    $rating = filter_var($_POST['rating'] ?? 0, FILTER_VALIDATE_INT, ["options" => ["min_range" => 1, "max_range" => 5]]);
+    $comment = trim($_POST['comment'] ?? '');
+
+    if ($rating !== false && !empty($comment)) {
+        // バリデーション成功
+        try {
+            $sql = "INSERT INTO gg_reviews (user_id, rating, game_id, comment) VALUES (?, ?, ?, ?)";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute([$currentUserId,$rating,$currentGameId,$comment]);
+
+            // 成功メッセージをセッションに保存
+            $_SESSION['message'] = ['text' => 'レビューが正常に投稿されました！', 'type' => 'success'];
+
+        } catch (PDOException $e) {
+            $_SESSION['message'] = ['text' => 'レビューの投稿中にエラーが発生しました。', 'type' => 'error'];
+        }
+    } else {
+        // バリデーション失敗
+        $_SESSION['message'] = ['text' => '全てのフィールドを正しく入力してください。', 'type' => 'error'];
+    }
+
+    // Post/Redirect/Get (PRG) パターン：二重投稿を防止
+    header("Location: " . $_SERVER['PHP_SELF']);
+    exit;
+}
+
+// 4. GETリクエストの処理 (ページの表示)
+
+// フォーム送信後のメッセージがあれば取得し、セッションから削除
+if (isset($_SESSION['message'])) {
+    $message = $_SESSION['message'];
+    unset($_SESSION['message']);
+}
+
+// (A) 該当ユーザーのレビューをすべて取得
+
+$sql = $pdo->prepare("SELECT * FROM gg_reviews WHERE user_id = ? ORDER BY review_date DESC");
+$sql->execute([$currentUserId]);
+$reviews = $sql->fetchAll();
+
+// (B) 割引ステータスを計算
+$reviewCount = count($reviews);
+$currentDiscount = min($reviewCount * 0.1, 10);
+$maxDiscount = 10;
+$discountRate = 0.05;
+// (C) 次の特典メッセージを生成
+$nextReviewMessageHtml = '';
+if ($currentDiscount < 10) {
+    $nextDiscountValue = number_format($currentDiscount + $discountRate, 2);
+    $neededReviews = ceil(($maxDiscount - $currentDiscount) / $discountRate);
+    
+    $nextReviewMessageHtml = '
+        <span class="text-cyan-400 font-extrabold">次の割引 (' . $nextDiscountValue . '%)</span> まで **1レビュー**！<br>
+        最大割引率 **' . number_format($maxDiscount, 0) . '%** まであと **' . $neededReviews . 'レビュー**です。
+    ';
+} else {
+    $nextReviewMessageHtml = '
+        <span class="text-green-400 font-extrabold">おめでとうございます！</span><br>
+        最大割引率 **' . number_format($maxDiscount, 0) . '%** に到達しました。
+    ';
+}
+
+//D reviews table からgame か　gadget　の名前をほかの表からとってくる処理
+
+function game_name($id){
+    $pdo = getPDO();
+    $sql = $pdo->prepare("SELECT game_name FROM gg_game WHERE game_id=?");
+    $sql -> execute([(int)$id]);
+    $gameName = $sql->fetchAll();
+
+    return $gameName[0]['game_name'];
+}
+
+function gadget_name($id){
+    $pdo = getPDO();
+    $sql = $pdo->prepare("SELECT gadget_name FROM gg_gadget WHERE gadget_id=?");
+    $sql -> execute([(int)$id]);
+    $gadgetName = $sql->fetchAll();
+
+    return $gadgetName[0]['gadget_name'];
+}
+
+//E 今処理しているusernameと処理されているgameかgadgetの名前を取り出す。
+$sql = $pdo->prepare("SELECT * from gg_users as users,gg_game as game where users.user_id = ? and game.game_id = ?");
+$sql -> execute([h($currentUserId),h($currentGameId)]);
+$currentNames = $sql->fetchAll();
+
+$currentUserName = $currentNames[0]['firstname'] . " " . $currentNames[0]['lastname'];
+$currentProductName = $currentNames[0]['game_name'];
+
+
+// これ以降はHTMLの描画
+?>
+
+<?php // require "review.php"; ?>
+
 
 <!DOCTYPE html>
 <html lang="ja">
@@ -71,7 +201,7 @@
                 </p>
             </div>
             <p id="user-id-display" class="mt-2 text-xs text-gray-500 truncate text-right">
-                ユーザーID: <?php echo htmlspecialchars($currentUserId); ?>
+                ユーザー名: <?php echo htmlspecialchars($currentUserName); ?>様
             </p>
         </header>
 
@@ -123,7 +253,7 @@
                 
                 <div class="mb-4">
                     <label for="game-title" class="block text-sm font-bold text-gray-300">ゲーム/ガジェット名 <span class="text-red-400">*</span></label>
-                    <input type="text" id="game-title" name="game-title" required class="mt-1 block w-full rounded-lg bg-[#333333] text-gray-100 border-gray-600 shadow-sm p-3 border focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/50 transition">
+                    <input type="text" id="game-title" name="game-title" value="<?php echo $currentProductName ?>" required class="mt-1 block w-full rounded-lg bg-[#333333] text-gray-100 border-gray-600 shadow-sm p-3 border focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/50 transition">
                 </div>
 
                 <div class="mb-4">
@@ -170,10 +300,11 @@
                         ?>
                         <div class="review-card bg-[#242424] p-6 rounded-xl border border-gray-700 mb-4">
                             <p class="text-xs text-cyan-400 mb-1 font-medium">
-                                投稿者: <?php echo htmlspecialchars($review['user_id']); ?>
+                                投稿者: <?php echo htmlspecialchars($currentUserName); ?>
                             </p>
+                            <!--  $review['gadget_id'] : $review['game_id']) -->
                             <div class="flex items-start justify-between mb-2">
-                                <h3 class="text-xl font-bold text-gray-100"><?php echo htmlspecialchars($review['game_id']==null ? $review['gadget_id'] : $review['game_id']); ?></h3>
+                                <h3 class="text-xl font-bold text-gray-100"><?php echo htmlspecialchars($review['game_id']==null ? gadget_name($review['gadget_id']) : game_name($review['game_id'])); ?></h3> 
                                 <div class="flex flex-shrink-0 items-center">
                                     <span class="rating-star text-2xl mr-1"><?php echo $stars; ?></span>
                                     <span class="text-sm text-gray-400 font-semibold">(<?php echo htmlspecialchars($review['rating']); ?>/5)</span>

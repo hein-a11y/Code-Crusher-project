@@ -1,11 +1,10 @@
 <?php require "../functions.php" ?>
 <?php
-// 1. セッション管理の開始 (Firebase Authの匿名認証の代わり)
+// 1. セッション管理の開始 
 // 必ずファイルの先頭に記述してください
 session_start();
 
 // --- データベース接続設定 ---
-// !!! 注意: ここの値はご自身の環境に合わせて変更してください !!!
 
 $pdo = null;
 $message = null; // ユーザーへの通知（投稿成功など）
@@ -24,7 +23,8 @@ if (empty($_SESSION['customer'])) {
     // 簡易的な匿名IDをセッションに保存
     $_SESSION['customer']['id'] = 'user_' . bin2hex(random_bytes(16));
 }
-$currentUserId = $_SESSION['customer']['id'];
+//$_SESSION['customer']['id']
+$currentUserId = 1;
 $currentGameId = 1;
 
 // 3. POSTリクエストの処理 (フォームが送信された場合)
@@ -75,25 +75,26 @@ $reviews = $sql->fetchAll();
 // (B) 割引ステータスを計算
 $reviewCount = count($reviews);
 $currentDiscount = min($reviewCount * 0.1, 10);
-
+$maxDiscount = 10;
+$discountRate = 0.05;
 // (C) 次の特典メッセージを生成
 $nextReviewMessageHtml = '';
 if ($currentDiscount < 10) {
-    $nextDiscountValue = number_format($currentDiscount + 0.1, 2);
-    $neededReviews = ceil((10 - $currentDiscount) / 0.1);
+    $nextDiscountValue = number_format($currentDiscount + $discountRate, 2);
+    $neededReviews = ceil(($maxDiscount - $currentDiscount) / $discountRate);
     
     $nextReviewMessageHtml = '
         <span class="text-cyan-400 font-extrabold">次の割引 (' . $nextDiscountValue . '%)</span> まで **1レビュー**！<br>
-        最大割引率 **' . number_format(10, 0) . '%** まであと **' . $neededReviews . 'レビュー**です。
+        最大割引率 **' . number_format($maxDiscount, 0) . '%** まであと **' . $neededReviews . 'レビュー**です。
     ';
 } else {
     $nextReviewMessageHtml = '
         <span class="text-green-400 font-extrabold">おめでとうございます！</span><br>
-        最大割引率 **' . number_format(10, 0) . '%** に到達しました。
+        最大割引率 **' . number_format($maxDiscount, 0) . '%** に到達しました。
     ';
 }
 
 // これ以降はHTMLの描画
 ?>
 
-
+<?php require "review.php"; ?>
