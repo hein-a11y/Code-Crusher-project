@@ -20,4 +20,22 @@ function debug($data){
 function h($string){
     return htmlspecialchars($string);
 }
+
+function game_name($id){
+    $pdo = getPDO();
+    $sql = $pdo->prepare("SELECT game_name FROM gg_game WHERE game_id=?");
+    $sql -> execute([(int)$id]);
+    $gameName = $sql->fetchAll();
+
+    return $gameName[0]['game_name'];
+}
+
+function gadget_name($id){
+    $pdo = getPDO();
+    $sql = $pdo->prepare("SELECT gadget_name FROM gg_gadget WHERE gadget_id=?");
+    $sql -> execute([(int)$id]);
+    $gadgetName = $sql->fetchAll();
+
+    return $gadgetName[0]['gadget_name'];
+}
 ?>

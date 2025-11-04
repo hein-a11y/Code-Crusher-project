@@ -24,8 +24,8 @@ if (empty($_SESSION['customer'])) {
     $_SESSION['customer']['id'] = 'user_' . bin2hex(random_bytes(16));
 }
 //$_SESSION['customer']['id']
-$currentUserId = 4;
-$currentGameId = 1;
+$currentUserId = 1;
+$currentGameId = 2;
 
 // 3. POSTリクエストの処理 (フォームが送信された場合)
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -81,6 +81,7 @@ $reviewCount = count($reviews);
 
 $maxDiscount = 10;
 $discountRate = 0.05;
+$currentReviewTitle = "hidden";
 
 // (C) 次の特典メッセージを生成
 $nextReviewMessageHtml = '';
@@ -88,7 +89,6 @@ if(!empty($premiums)){
     $currentDiscount = $premiums[0]['new_discount'];
     if($premiums[0]['is_active']){
         $currentReviewTitle = '';
-        $defaultReviewTitle = "hidden";
         if ($currentDiscount < 10) {
             $nextDiscountValue = number_format($currentDiscount + $discountRate, 2);
             $neededReviews = ceil(($maxDiscount - $currentDiscount) / $discountRate);
@@ -103,36 +103,14 @@ if(!empty($premiums)){
                 最大割引率 **' . number_format($maxDiscount, 0) . '%** に到達しました。
             ';
         }
-    }else{
-        $currentReviewTitle = "hidden";
-        $defaultReviewTitle = "";
     }
-}else{
-    $currentReviewTitle = "hidden";
-    $defaultReviewTitle = "";
 }
 //D reviews table からgame か　gadget　の名前をほかの表からとってくる処理
 
-function game_name($id){
-    $pdo = getPDO();
-    $sql = $pdo->prepare("SELECT game_name FROM gg_game WHERE game_id=?");
-    $sql -> execute([(int)$id]);
-    $gameName = $sql->fetchAll();
 
-    return $gameName[0]['game_name'];
-}
-
-function gadget_name($id){
-    $pdo = getPDO();
-    $sql = $pdo->prepare("SELECT gadget_name FROM gg_gadget WHERE gadget_id=?");
-    $sql -> execute([(int)$id]);
-    $gadgetName = $sql->fetchAll();
-
-    return $gadgetName[0]['gadget_name'];
-}
 
 //E 今処理しているusernameと処理されているgameかgadgetの名前を取り出す。
-$sql = $pdo->prepare("SELECT * from gg_users as users,gg_game as game where users.user_id = ? and game.game_id = ?");
+$sql = $pdo->prepare("SELECT users.firstname,users.lastname,game.game_name from gg_users as users,gg_game as game where users.user_id = ? and game.game_id = ?");
 $sql -> execute([h($currentUserId),h($currentGameId)]);
 $currentNames = $sql->fetchAll();
 
@@ -208,7 +186,7 @@ $currentProductName = $currentNames[0]['game_name'];
 
     <div class="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
         
-        <header class="mb-8 p-4 bg-[#242424] rounded-xl container-shadow <?php echo $defaultReviewTitle ?>">
+        <header class="mb-8 p-4 bg-[#242424] rounded-xl container-shadow">
             <div class="flex items-center justify-between">
                 <div class="logo">
                     GG STORE
@@ -223,20 +201,6 @@ $currentProductName = $currentNames[0]['game_name'];
         </header>
         
         <div class="<?php echo $currentReviewTitle ?>">
-
-            <header class="mb-8 p-4 bg-[#242424] rounded-xl container-shadow">
-                <div class="flex items-center justify-between">
-                    <div class="logo">
-                        GG STORE
-                    </div>
-                    <p class="text-base text-gray-400 font-medium hidden sm:block">
-                        レビュー特典シミュレーション
-                    </p>
-                </div>
-                <p id="user-id-display" class="mt-2 text-xs text-gray-500 truncate text-right">
-                    ユーザー名: <?php echo htmlspecialchars($currentUserName); ?>様
-                </p>
-            </header>
 
             <div class="container-shadow bg-[#242424] p-6 rounded-2xl mb-8 border-t-8 border-cyan-400">
                 <h2 class="text-xl font-bold text-gray-100 mb-4 flex items-center">
