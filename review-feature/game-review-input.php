@@ -24,7 +24,7 @@ if (empty($_SESSION['customer'])) {
     $_SESSION['customer']['id'] = 'user_' . bin2hex(random_bytes(16));
 }
 //$_SESSION['customer']['id']
-$currentUserId = 1;
+$currentUserId = 4;
 $currentGameId = 1;
 
 // 3. POSTリクエストの処理 (フォームが送信された場合)
@@ -73,27 +73,44 @@ $sql->execute([$currentUserId]);
 $reviews = $sql->fetchAll();
 
 // (B) 割引ステータスを計算
+$sql = $pdo->prepare("SELECT * FROM gg_premium WHERE user_id = ?");
+$sql -> execute([$currentUserId]);
+$premiums = $sql->fetchAll();
+
 $reviewCount = count($reviews);
-$currentDiscount = min($reviewCount * 0.1, 10);
+
 $maxDiscount = 10;
 $discountRate = 0.05;
+
 // (C) 次の特典メッセージを生成
 $nextReviewMessageHtml = '';
-if ($currentDiscount < 10) {
-    $nextDiscountValue = number_format($currentDiscount + $discountRate, 2);
-    $neededReviews = ceil(($maxDiscount - $currentDiscount) / $discountRate);
-    
-    $nextReviewMessageHtml = '
-        <span class="text-cyan-400 font-extrabold">次の割引 (' . $nextDiscountValue . '%)</span> まで **1レビュー**！<br>
-        最大割引率 **' . number_format($maxDiscount, 0) . '%** まであと **' . $neededReviews . 'レビュー**です。
-    ';
-} else {
-    $nextReviewMessageHtml = '
-        <span class="text-green-400 font-extrabold">おめでとうございます！</span><br>
-        最大割引率 **' . number_format($maxDiscount, 0) . '%** に到達しました。
-    ';
+if(!empty($premiums)){
+    $currentDiscount = $premiums[0]['new_discount'];
+    if($premiums[0]['is_active']){
+        $currentReviewTitle = '';
+        $defaultReviewTitle = "hidden";
+        if ($currentDiscount < 10) {
+            $nextDiscountValue = number_format($currentDiscount + $discountRate, 2);
+            $neededReviews = ceil(($maxDiscount - $currentDiscount) / $discountRate);
+        
+            $nextReviewMessageHtml = '
+                <span class="text-cyan-400 font-extrabold">次の割引 (' . $nextDiscountValue . '%)</span> まで **1レビュー**！<br>
+                最大割引率 **' . number_format($maxDiscount, 0) . '%** まであと **' . $neededReviews . 'レビュー**です。
+            ';
+        } else {
+            $nextReviewMessageHtml = '
+                <span class="text-green-400 font-extrabold">おめでとうございます！</span><br>
+                最大割引率 **' . number_format($maxDiscount, 0) . '%** に到達しました。
+            ';
+        }
+    }else{
+        $currentReviewTitle = "hidden";
+        $defaultReviewTitle = "";
+    }
+}else{
+    $currentReviewTitle = "hidden";
+    $defaultReviewTitle = "";
 }
-
 //D reviews table からgame か　gadget　の名前をほかの表からとってくる処理
 
 function game_name($id){
@@ -191,7 +208,7 @@ $currentProductName = $currentNames[0]['game_name'];
 
     <div class="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
         
-        <header class="mb-8 p-4 bg-[#242424] rounded-xl container-shadow">
+        <header class="mb-8 p-4 bg-[#242424] rounded-xl container-shadow <?php echo $defaultReviewTitle ?>">
             <div class="flex items-center justify-between">
                 <div class="logo">
                     GG STORE
@@ -204,46 +221,61 @@ $currentProductName = $currentNames[0]['game_name'];
                 ユーザー名: <?php echo htmlspecialchars($currentUserName); ?>様
             </p>
         </header>
+        
+        <div class="<?php echo $currentReviewTitle ?>">
 
-        <div id="custom-message-container"></div>
+            <header class="mb-8 p-4 bg-[#242424] rounded-xl container-shadow">
+                <div class="flex items-center justify-between">
+                    <div class="logo">
+                        GG STORE
+                    </div>
+                    <p class="text-base text-gray-400 font-medium hidden sm:block">
+                        レビュー特典シミュレーション
+                    </p>
+                </div>
+                <p id="user-id-display" class="mt-2 text-xs text-gray-500 truncate text-right">
+                    ユーザー名: <?php echo htmlspecialchars($currentUserName); ?>様
+                </p>
+            </header>
 
-        <div class="container-shadow bg-[#242424] p-6 rounded-2xl mb-8 border-t-8 border-cyan-400">
-            <h2 class="text-xl font-bold text-gray-100 mb-4 flex items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-cyan-400 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.974 2.887a1 1 0 00-.362 1.114l1.519 4.674c.3.921-.755 1.688-1.539 1.118l-3.974-2.887a1 1 0 00-1.176 0l-3.974 2.887c-.784.57-1.838-.197-1.539-1.118l1.519-4.674a1 1 0 00-.362-1.114L2.016 9.092c-.783-.57-.381-1.81.588-1.81h4.915a1 1 0 00.95-.69l1.519-4.674z" />
-                </svg>
-                あなたの割引レベル
-            </h2>
-            
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
+            <div class="container-shadow bg-[#242424] p-6 rounded-2xl mb-8 border-t-8 border-cyan-400">
+                <h2 class="text-xl font-bold text-gray-100 mb-4 flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-cyan-400 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.974 2.887a1 1 0 00-.362 1.114l1.519 4.674c.3.921-.755 1.688-1.539 1.118l-3.974-2.887a1 1 0 00-1.176 0l-3.974 2.887c-.784.57-1.838-.197-1.539-1.118l1.519-4.674a1 1 0 00-.362-1.114L2.016 9.092c-.783-.57-.381-1.81.588-1.81h4.915a1 1 0 00.95-.69l1.519-4.674z" />
+                    </svg>
+                    あなたの割引レベル
+                </h2>
                 
-                <div class="p-4 bg-[#333333] rounded-lg border-cyan-400 border">
-                    <p class="text-sm text-gray-300 font-medium">総投稿レビュー数</p>
-                    <p class="text-4xl font-extrabold text-cyan-400 mt-1" id="review-count-display">
-                        <?php echo $reviewCount; ?>
-                    </p>
-                    <span class="text-sm text-gray-400">件</span>
-                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
+                    
+                    <div class="p-4 bg-[#333333] rounded-lg border-cyan-400 border">
+                        <p class="text-sm text-gray-300 font-medium">総投稿レビュー数</p>
+                        <p class="text-4xl font-extrabold text-cyan-400 mt-1" id="review-count-display">
+                            <?php echo $reviewCount; ?>
+                        </p>
+                        <span class="text-sm text-gray-400">件</span>
+                    </div>
 
-                <div class="p-4 bg-[#333333] rounded-lg border-green-400 border">
-                    <p class="text-sm text-gray-300 font-medium">現在の割引率</p>
-                    <p class="text-4xl font-extrabold text-green-400 mt-1" id="current-discount-display">
-                        <?php echo number_format($currentDiscount, 2); ?>%
-                    </p>
-                    <span class="text-sm text-gray-400">OFF</span>
-                </div>
+                    <div class="p-4 bg-[#333333] rounded-lg border-green-400 border">
+                        <p class="text-sm text-gray-300 font-medium">現在の割引率</p>
+                        <p class="text-4xl font-extrabold text-green-400 mt-1" id="current-discount-display">
+                            <?php echo number_format($currentDiscount, 2); ?>%
+                        </p>
+                        <span class="text-sm text-gray-400">OFF</span>
+                    </div>
 
-                <div class="p-4 bg-[#333333] rounded-lg border-yellow-400 border col-span-1 sm:col-span-1 flex flex-col justify-center">
-                    <p class="text-sm text-gray-300 font-medium mb-1">達成目標</p>
-                    <p class="text-base font-semibold text-yellow-400" id="next-review-message">
-                        <?php echo $nextReviewMessageHtml; // PHPで生成したHTMLをそのまま出力 ?>
-                    </p>
+                    <div class="p-4 bg-[#333333] rounded-lg border-yellow-400 border col-span-1 sm:col-span-1 flex flex-col justify-center">
+                        <p class="text-sm text-gray-300 font-medium mb-1">達成目標</p>
+                        <p class="text-base font-semibold text-yellow-400" id="next-review-message">
+                            <?php echo $nextReviewMessageHtml; // PHPで生成したHTMLをそのまま出力 ?>
+                        </p>
+                    </div>
                 </div>
+                
+                <p class="text-xs text-gray-500 mt-4 text-right">
+                    割引率: レビュー投稿ごとに<?php echo $discountRate; ?>%上昇 (最大<?php echo number_format($maxDiscount, 2); ?>%)
+                </p>
             </div>
-            
-            <p class="text-xs text-gray-500 mt-4 text-right">
-                割引率: レビュー投稿ごとに<?php echo $discountRate; ?>%上昇 (最大<?php echo number_format($maxDiscount, 2); ?>%)
-            </p>
         </div>
 
         <div class="container-shadow bg-[#242424] p-6 rounded-2xl mb-8">
