@@ -31,26 +31,53 @@ $currentGameId = 1;
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
     // サーバーサイドでの入力値バリデーション
-    
-    $rating = filter_var($_POST['rating'] ?? 0, FILTER_VALIDATE_INT, ["options" => ["min_range" => 1, "max_range" => 5]]);
-    $comment = trim($_POST['comment'] ?? '');
+    // アクションをチェック (投稿 or 削除)
+    $action = $_POST['action'] ?? 'submit'; // デフォルトは 'submit'
 
-    if ($rating !== false && !empty($comment)) {
-        // バリデーション成功
-        try {
-            $sql = "INSERT INTO gg_reviews (user_id, rating, game_id, comment) VALUES (?, ?, ?, ?)";
-            $stmt = $pdo->prepare($sql);
-            $stmt->execute([$currentUserId,$currentGameId, $rating, $comment]);
+    if ($action === 'submit'){
+        $rating = filter_var($_POST['rating'] ?? 0, FILTER_VALIDATE_INT, ["options" => ["min_range" => 1, "max_range" => 5]]);
+        $comment = trim($_POST['comment'] ?? '');
 
-            // 成功メッセージをセッションに保存
-            $_SESSION['message'] = ['text' => 'レビューが正常に投稿されました！', 'type' => 'success'];
+        if ($rating !== false && !empty($comment)) {
+            // バリデーション成功
+            try {
+                $sql = "INSERT INTO gg_reviews (user_id, rating, game_id, comment) VALUES (?, ?, ?, ?)";
+                $stmt = $pdo->prepare($sql);
+                $stmt->execute([$currentUserId,$currentGameId, $rating, $comment]);
 
-        } catch (PDOException $e) {
-            $_SESSION['message'] = ['text' => 'レビューの投稿中にエラーが発生しました。', 'type' => 'error'];
+                // 成功メッセージをセッションに保存
+                $_SESSION['message'] = ['text' => 'レビューが正常に投稿されました！', 'type' => 'success'];
+
+            } catch (PDOException $e) {
+                $_SESSION['message'] = ['text' => 'レビューの投稿中にエラーが発生しました。', 'type' => 'error'];
+            }
+        } else {
+            // バリデーション失敗
+            $_SESSION['message'] = ['text' => '全てのフィールドを正しく入力してください。', 'type' => 'error'];
         }
-    } else {
-        // バリデーション失敗
-        $_SESSION['message'] = ['text' => '全てのフィールドを正しく入力してください。', 'type' => 'error'];
+    }elseif ($action === 'delete') {
+        // --- ★新規: レビュー削除処理 ---
+        $reviewIdToDelete = filter_var($_POST['review_id'] ?? 0, FILTER_VALIDATE_INT);
+
+        if ($reviewIdToDelete > 0) {
+            try {
+                // 必ず自分のレビューであること(userId)を確認してから削除する
+                $sql = "DELETE FROM gg_reviews WHERE review_id = ? AND user_id = ?";
+                $stmt = $pdo->prepare($sql);
+                $stmt->execute([$reviewIdToDelete, $currentUserId]);
+                
+                if ($stmt->rowCount() > 0) {
+                    $_SESSION['message'] = ['text' => 'レビューを削除しました。', 'type' => 'success'];
+                } else {
+                    // 削除されなかった場合 (他人のレビューIDを指定された等)
+                    $_SESSION['message'] = ['text' => '削除に失敗しました（該当のレビューが見つからないか、権限がありません）。', 'type' => 'error'];
+                }
+            } catch (PDOException $e) {
+                $_SESSION['message'] = ['text' => '削除中にデータベースエラーが発生しました。', 'type' => 'error'];
+            }
+        } else {
+            $_SESSION['message'] = ['text' => '無効なリクエストです。', 'type' => 'error'];
+        }
     }
 
     // Post/Redirect/Get (PRG) パターン：二重投稿を防止
