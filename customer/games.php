@@ -16,22 +16,57 @@
     <div class="page-container">
 
         <section class="hero-section">
-            <div class="hero-image-wrapper">
-                <img src="./photos/GOW.jpg" alt="God of War Ragnarok" class="hero-image">
-                <div class="hero-content">
-                    <h1 class="hero-title">God of War</h1>
-                    <button class="hero-button button-glow-purple">
-                        Learn More
-                    </button>
+            
+            <div class="hero-slider-container">
+                
+                <div class="hero-slide active">
+                    <img src="./photos/GOW.jpg" alt="God of War Ragnarok" class="hero-image">
+                    <div class="hero-content">
+                        <h1 class="hero-title">God of War</h1>
+                        <button class="hero-button button-glow-purple">
+                            Learn More
+                        </button>
+                    </div>
+                </div>
+
+                <div class="hero-slide">
+                    <img src="./photos/READ DEAD.jfif" alt="Red Dead Redemption 2" class="hero-image">
+                    <div class="hero-content">
+                        <h1 class="hero-title">Red Dead Redemption 2</h1>
+                        <button class="hero-button button-glow-purple">
+                            Learn More
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="hero-slide">
+                    <img src="./photos/ELDEN RING.jfif" alt="Elden Ring" class="hero-image">
+                    <div class="hero-content">
+                        <h1 class="hero-title">Elden Ring</h1>
+                        <button class="hero-button button-glow-purple">
+                            Learn More
+                        </button>
+                    </div>
+                </div>
+
+                <div class="hero-slide">
+                    <img src="./photos/Assassin’s Creed.jfif" alt="Assassin's Creed" class="hero-image">
+                    <div class="hero-content">
+                        <h1 class="hero-title">Assassin's Creed</h1>
+                        <button class="hero-button button-glow-purple">
+                            Learn More
+                        </button>
+                    </div>
                 </div>
             </div>
+            
             <div class="hero-thumbnails">
-                <img src="https://placehold.co/300x200/2a2a2a/f0f0f0?text=Trailer" alt="Thumbnail 1" class="thumbnail-image">
-                <img src="https://placehold.co/300x200/2a2a2a/f0f0f0?text=Gameplay" alt="Thumbnail 2" class="thumbnail-image">
-                <img src="https://placehold.co/300x200/2a2a2a/f0f0f0?text=Details" alt="Thumbnail 3" class="thumbnail-image">
-                <img src="https://placehold.co/300x200/2a2a2a/f0f0f0?text=More" alt="Thumbnail 4" class="thumbnail-image">
+                <button class="hero-thumb-button active">God of War</button>
+                <button class="hero-thumb-button">Red Dead 2</button>
+                <button class="hero-thumb-button">Elden Ring</button>
+                <button class="hero-thumb-button">Assassin's Creed</button>
             </div>
-        </section>
+            </section>
 
         <section class="games-section">
             <h2 class="section-title">Our Games</h2>
@@ -40,7 +75,7 @@
                 <div id="our-games-slider" class="slider-container">
                     
                     <div class="game-card">
-                        <img src="photos for game page/READ DEAD.jfif" alt="Game 1" class="game-card-image">
+                        <img src="./photos/READ DEAD.jfif" alt="Game 1" class="game-card-image">
                         <div class="game-card-info">
                             <h3 class="game-card-title">Red Dead Redemption 2</h3>
                             <button class="game-card-button">
@@ -50,7 +85,7 @@
                     </div>
 
                     <div class="game-card">
-                        <img src="photos for game page/ELDEN RING.jfif" alt="Game 2" class="game-card-image">
+                        <img src="./photos/ELDEN RING.jfif" alt="Game 2" class="game-card-image">
                         <div class="game-card-info">
                             <h3 class="game-card-title">Elden Ring</h3>
                             <button class="game-card-button">
@@ -60,7 +95,7 @@
                     </div>
 
                     <div class="game-card">
-                        <img src="photos for game page/witcher 3.jfif" alt="Game 3" class="game-card-image">
+                        <img src="./photos/witcher 3.jfif" alt="Game 3" class="game-card-image">
                         <div class="game-card-info">
                             <h3 class="game-card-title">The Witcher 3</h3>
                             <button class="game-card-button">
@@ -70,7 +105,7 @@
                     </div>
 
                     <div class="game-card">
-                        <img src="photos for game page/Assassin’s Creed.jfif" alt="Game 4" class="game-card-image">
+                        <img src="./photos/Assassin’s Creed.jfif" alt="Game 4" class="game-card-image">
                         <div class="game-card-info">
                             <h3 class="game-card-title">Assassin's Creed</h3>
                             <button class="game-card-button">
@@ -80,7 +115,7 @@
                     </div>
 
                     <div class="game-card">
-                        <img src="photos for game page/Dark Souls III .jfif" alt="Game 5" class="game-card-image">
+                        <img src="./photos/Dark Souls III .jfif" alt="Game 5" class="game-card-image">
                         <div class="game-card-info">
                             <h3 class="game-card-title">Dark Souls III</h3>
                             <button class="game-card-button">
@@ -90,7 +125,7 @@
                     </div>
 
                     <div class="game-card">
-                        <img src="photos for game page/RE VILLAGE.jfif" alt="Game 6" class="game-card-image">
+                        <img src="./photos/RE VILLAGE.jfif" alt="Game 6" class="game-card-image">
                         <div class="game-card-info">
                             <h3 class="game-card-title">Resident Evil Village</h3>
                             <button class="game-card-button">
@@ -174,72 +209,7 @@
 
             </div>
         </section>
-
-        <section class="banner-section">
-            <div class="banner-new-games">
-                <img src="https://placehold.co/1200x500/400000/f0f0f0?text=Marvel+Avengers" alt="All New Games" class="banner-image">
-                <div class="banner-content-wrapper-left">
-                    <div class="banner-content-box-red" style="width: 35%;">
-                        <h2 class="banner-title">All New Games</h2>
-                        <p class="banner-text">Check out the latest releases.</p>
-                        <button class="banner-button-white">
-                            See All
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="banner-section">
-            <div class="banner-catalog">
-                <img src="https://placehold.co/1200x500/301040/f0f0f0?text=Catalog+Characters" alt="Explore Catalog" class="banner-image">
-                <div class="banner-content-wrapper-right">
-                    <div class="banner-content-box-right" style="width: 50%;">
-                        <h2 class="banner-title">Explore Our Catalog</h2>
-                        <p class="banner-text-gray">Find your next favorite game.</p>
-                        <button class="banner-button-purple button-glow-purple">
-                            Browse Now
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="bottom-banners-section">
-            
-            <div class="promo-banner">
-                <img src="https://placehold.co/1200x500/403000/f0f0f0?text=Cyberpunk+2077" alt="Cyberpunk 2077" class="promo-image">
-                <div class="promo-content-bottom-left">
-                    <h3 class="promo-title-cyberpunk">Cyberpunk 2077</h3>
-                    <button class="promo-button-yellow">
-                        Get It Now
-                    </button>
-                </div>
-            </div>
-            
-            <div class="promo-banner">
-                <img src="https://placehold.co/1200x500/502000/f0f0f0?text=Grand+Theft+Auto+V" alt="GTA V" class="promo-image">
-                <div class="promo-content-box-orange">
-                    <h3 class="promo-title-gta">Grand Theft Auto V</h3>
-                     <button class="promo-button-black">
-                        Buy Now
-                    </button>
-                </div>
-            </div>
-            
-            <div class="promo-banner">
-                <img src="https://placehold.co/1200x500/202040/f0f0f0?text=Assassin's+Creed" alt="Assassin's Creed" class="promo-image">
-                <div class="promo-content-center-overlay">
-                    <div>
-                        <h3 class="promo-title-ac">Assassin's Creed</h3>
-                        <button class="promo-button-purple button-glow-purple">
-                            Explore Franchise
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </section>
-
+        
         <footer class="page-footer">
             <p class="footer-copyright">&copy; 2025 GameStore. All rights reserved.</p>
             <div class="footer-links">
