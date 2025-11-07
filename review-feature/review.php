@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -71,49 +70,50 @@
                 </p>
             </div>
             <p id="user-id-display" class="mt-2 text-xs text-gray-500 truncate text-right">
-                ユーザーID: <?php echo htmlspecialchars($currentUserId); ?>
+                ユーザー名: <?php echo htmlspecialchars($currentUserName); ?>様
             </p>
         </header>
+        
+        <div class="<?php echo $currentReviewTitle ?>">
 
-        <div id="custom-message-container"></div>
-
-        <div class="container-shadow bg-[#242424] p-6 rounded-2xl mb-8 border-t-8 border-cyan-400">
-            <h2 class="text-xl font-bold text-gray-100 mb-4 flex items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-cyan-400 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.974 2.887a1 1 0 00-.362 1.114l1.519 4.674c.3.921-.755 1.688-1.539 1.118l-3.974-2.887a1 1 0 00-1.176 0l-3.974 2.887c-.784.57-1.838-.197-1.539-1.118l1.519-4.674a1 1 0 00-.362-1.114L2.016 9.092c-.783-.57-.381-1.81.588-1.81h4.915a1 1 0 00.95-.69l1.519-4.674z" />
-                </svg>
-                あなたの割引レベル
-            </h2>
-            
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
+            <div class="container-shadow bg-[#242424] p-6 rounded-2xl mb-8 border-t-8 border-cyan-400">
+                <h2 class="text-xl font-bold text-gray-100 mb-4 flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-cyan-400 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.974 2.887a1 1 0 00-.362 1.114l1.519 4.674c.3.921-.755 1.688-1.539 1.118l-3.974-2.887a1 1 0 00-1.176 0l-3.974 2.887c-.784.57-1.838-.197-1.539-1.118l1.519-4.674a1 1 0 00-.362-1.114L2.016 9.092c-.783-.57-.381-1.81.588-1.81h4.915a1 1 0 00.95-.69l1.519-4.674z" />
+                    </svg>
+                    あなたの割引レベル
+                </h2>
                 
-                <div class="p-4 bg-[#333333] rounded-lg border-cyan-400 border">
-                    <p class="text-sm text-gray-300 font-medium">総投稿レビュー数</p>
-                    <p class="text-4xl font-extrabold text-cyan-400 mt-1" id="review-count-display">
-                        <?php echo $reviewCount; ?>
-                    </p>
-                    <span class="text-sm text-gray-400">件</span>
-                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
+                    
+                    <div class="p-4 bg-[#333333] rounded-lg border-cyan-400 border">
+                        <p class="text-sm text-gray-300 font-medium">総投稿レビュー数</p>
+                        <p class="text-4xl font-extrabold text-cyan-400 mt-1" id="review-count-display">
+                            <?php echo $reviewCount; ?>
+                        </p>
+                        <span class="text-sm text-gray-400">件</span>
+                    </div>
 
-                <div class="p-4 bg-[#333333] rounded-lg border-green-400 border">
-                    <p class="text-sm text-gray-300 font-medium">現在の割引率</p>
-                    <p class="text-4xl font-extrabold text-green-400 mt-1" id="current-discount-display">
-                        <?php echo number_format($currentDiscount, 2); ?>%
-                    </p>
-                    <span class="text-sm text-gray-400">OFF</span>
-                </div>
+                    <div class="p-4 bg-[#333333] rounded-lg border-green-400 border">
+                        <p class="text-sm text-gray-300 font-medium">現在の割引率</p>
+                        <p class="text-4xl font-extrabold text-green-400 mt-1" id="current-discount-display">
+                            <?php echo number_format($currentDiscount, 2); ?>%
+                        </p>
+                        <span class="text-sm text-gray-400">OFF</span>
+                    </div>
 
-                <div class="p-4 bg-[#333333] rounded-lg border-yellow-400 border col-span-1 sm:col-span-1 flex flex-col justify-center">
-                    <p class="text-sm text-gray-300 font-medium mb-1">達成目標</p>
-                    <p class="text-base font-semibold text-yellow-400" id="next-review-message">
-                        <?php echo $nextReviewMessageHtml; // PHPで生成したHTMLをそのまま出力 ?>
-                    </p>
+                    <div class="p-4 bg-[#333333] rounded-lg border-yellow-400 border col-span-1 sm:col-span-1 flex flex-col justify-center">
+                        <p class="text-sm text-gray-300 font-medium mb-1">達成目標</p>
+                        <p class="text-base font-semibold text-yellow-400" id="next-review-message">
+                            <?php echo $nextReviewMessageHtml; // PHPで生成したHTMLをそのまま出力 ?>
+                        </p>
+                    </div>
                 </div>
+                
+                <p class="text-xs text-gray-500 mt-4 text-right">
+                    割引率: レビュー投稿ごとに<?php echo $discountRate; ?>%上昇 (最大<?php echo number_format($maxDiscount, 2); ?>%)
+                </p>
             </div>
-            
-            <p class="text-xs text-gray-500 mt-4 text-right">
-                割引率: レビュー投稿ごとに<?php echo $discountRate; ?>%上昇 (最大<?php echo number_format($maxDiscount, 2); ?>%)
-            </p>
         </div>
 
         <div class="container-shadow bg-[#242424] p-6 rounded-2xl mb-8">
@@ -123,7 +123,7 @@
                 
                 <div class="mb-4">
                     <label for="game-title" class="block text-sm font-bold text-gray-300">ゲーム/ガジェット名 <span class="text-red-400">*</span></label>
-                    <input type="text" id="game-title" name="game-title" required class="mt-1 block w-full rounded-lg bg-[#333333] text-gray-100 border-gray-600 shadow-sm p-3 border focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/50 transition">
+                    <input type="text" id="game-title" name="game-title" value="<?php echo $currentProductName ?>" required class="mt-1 block w-full rounded-lg bg-[#333333] text-gray-100 border-gray-600 shadow-sm p-3 border focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/50 transition" readonly>
                 </div>
 
                 <div class="mb-4">
@@ -170,10 +170,11 @@
                         ?>
                         <div class="review-card bg-[#242424] p-6 rounded-xl border border-gray-700 mb-4">
                             <p class="text-xs text-cyan-400 mb-1 font-medium">
-                                投稿者: <?php echo htmlspecialchars($review['user_id']); ?>
+                                投稿者: <?php echo htmlspecialchars($currentUserName); ?>
                             </p>
+                            <!--  $review['gadget_id'] : $review['game_id']) -->
                             <div class="flex items-start justify-between mb-2">
-                                <h3 class="text-xl font-bold text-gray-100"><?php echo htmlspecialchars($review['game_id']==null ? $review['gadget_id'] : $review['game_id']); ?></h3>
+                                <h3 class="text-xl font-bold text-gray-100"><?php echo htmlspecialchars($review['game_name']==null ? $review['gadget_name'] : $review['game_name']); ?></h3> 
                                 <div class="flex flex-shrink-0 items-center">
                                     <span class="rating-star text-2xl mr-1"><?php echo $stars; ?></span>
                                     <span class="text-sm text-gray-400 font-semibold">(<?php echo htmlspecialchars($review['rating']); ?>/5)</span>

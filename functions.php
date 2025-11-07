@@ -21,21 +21,19 @@ function h($string){
     return htmlspecialchars($string);
 }
 
-function game_name($id){
-    $pdo = getPDO();
-    $sql = $pdo->prepare("SELECT game_name FROM gg_game WHERE game_id=?");
-    $sql -> execute([(int)$id]);
-    $gameName = $sql->fetchAll();
-
-    return $gameName[0]['game_name'];
-}
-
-function gadget_name($id){
-    $pdo = getPDO();
-    $sql = $pdo->prepare("SELECT gadget_name FROM gg_gadget WHERE gadget_id=?");
-    $sql -> execute([(int)$id]);
-    $gadgetName = $sql->fetchAll();
-
-    return $gadgetName[0]['gadget_name'];
+function isActiveMember(PDO $pdo, int $user_id): bool
+{
+    $sql = $pdo->prepare("SELECT 1 FROM gg_premium WHERE user_id = :user_id AND is_active = TRUE LIMIT 1");
+    
+    // Bind the user ID parameter
+    $sql->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+    
+    //  Execute the query
+    $sql->execute();
+    
+    // Check the result
+    // fetchColumn() returns the value of the first column ('1' in this case) if a row is found, 
+    // or FALSE if no rows are found. We cast the result to a boolean.
+    return (bool) $sql->fetchColumn();
 }
 ?>
