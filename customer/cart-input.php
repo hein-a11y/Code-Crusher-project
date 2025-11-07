@@ -15,7 +15,21 @@
     <main class="main-content">
         <div class="cart-container">
             <h1>ショッピングカート</h1> <div class="cart-layout">
+                <?php
+                require '../functions.php';
+
+                $pdo = getPDO();
                 
+                $sql = $pdo -> prepare('SELECT * from gg_user WHERE user_id = ? ');
+                $sql -> execute([$_SESSION['user_id']]);
+
+                $row = $sql->fetch(PDO::FETCH_ASSOC);
+                $user_id = $row['user_id'] ?? '';
+
+                
+
+                
+                ?>
                 <div class="cart-items">
                     <div class="cart-item">
                         <div class="item-image">
@@ -24,7 +38,7 @@
                         <div class="item-details">
                             <div>
                                 <div class="item-name">ゲーミングマウス</div> <div class="item-price">¥8,000</div>
-                            </div>
+                        </div>
                             <div class="item-actions">
                                 <input type="number" class="item-quantity" value="1" min="1">
                                 <a href="#" class="remove-link">削除</a> </div>

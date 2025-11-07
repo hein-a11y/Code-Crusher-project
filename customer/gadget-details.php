@@ -34,13 +34,13 @@
             $sql->execute([$_GET['id']]);
             $row = $sql->fetch(PDO::FETCH_ASSOC);
 
-            $id = h($row['gadget_id']);
-            $name = h($row['gadget_name']);
-            $explanation = h($row['gadget_explanation']);
-            $manufacturer = h($row['manufacturer']);
-            $connectivity_type = h($row['connectivity_type']);
-            $fruitsArray = explode(",", $connectivity_type); //,で分割して配列に変換
-            $price = number_format(h($row['price']));
+            $gadget_id = h($row['gadget_id']);
+            $gadget_name = h($row['gadget_name']);
+            $gadget_explanation = h($row['gadget_explanation']);
+            $gadget_manufacturer = h($row['manufacturer']);
+            $gadget_connectivity_type = h($row['connectivity_type']);
+            $gadget_fruitsArray = explode(",", $connectivity_type); //,で分割して配列に変換
+            $gadget_price = number_format(h($row['price']));
             $images = h($row['images']);
 
             $img_src = "./gadget-images/gadgets-$id" . "_1.jpg";
@@ -57,7 +57,7 @@
             HTML;
 
             for ($i = 1; $i <= $images; $i++) {
-                $img_src = "./gadget-images/gadgets-$id" . "_$i.jpg";
+                $img_src = "./gadget-images/gadgets-$gadget_id" . "_$i.jpg";
                 echo <<< HTML
                     <img class="thumbnail" src="$img_src" alt="サムネイル $i" data-src="$img_src">
                 HTML;
@@ -68,31 +68,36 @@
                 <!-- 商品情報 & アクション -->
                 <div class="product-info">
                     <div>
-                        <span class="brand">$manufacturer</span>
-                        <h1 class="product-name">$name</h1>
+                        <span class="brand">$gadget_manufacturer</span>
+                        <h1 class="product-name">$gadget_name</h1>
                         <div class="price">
-                            ¥$price <span>(税込)</span>
+                            ¥$gadget_price <span>(税込)</span>
                         </div>
                         <div class="features">
                         <!-- 画像のタグを再現 -->
                 HTML;
-                foreach ($fruitsArray as $fruit) {
+                foreach ($gadget_fruitsArray as $fruit) {
                     echo <<< HTML
                             <span class="feature-tag">$fruit</span>
                     HTML;
                 }
-                echo <<< HTML
+            echo <<< HTML
                         </div>
                     </div>
-                    HTML;
-            ?>
                     <!-- アクションボタン -->
                     <div class="actions">
-                        <button class="action-button add-to-cart">カートに入れる</button>
-                        <button class="action-button buy-now">今すぐ購入</button>
+                        <form action="cart-input.php" method="post">
+                            <input type="hidden" name="id" value="{$gadget_id}">
+                            <input type="hidden" name="name" value="{$gadget_name}">
+                            <input type="hidden" name="price" value="{$gadget_price}">
+                            <button type="submit" class="action-button add-to-cart">カートに入れる</button>
+                        </form>
+                        <button type="submit" class="action-button buy-now">今すぐ購入</button>
                     </div>
                 </div>
             </div>
+            HTML;
+            ?>
 
             <!-- 商品説明 -->
             <section class="product-details-section product-description">

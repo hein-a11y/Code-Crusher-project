@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -15,7 +16,7 @@
             --text-color: #e0e0e0;      /* Light grey for readability */
             --text-secondary-color: #a0a0a0; /* Dimmer text */
         }
-
+        
         body {
             background-color: var(--background-color);
             color: var(--text-color);
@@ -273,7 +274,7 @@
                     <button id="btn-en">EN</button>
                     <button id="btn-ja" class="active">JA</button>
                 </div>
-                <span><a href=cart-input.php>🛒</a></span> <span><a href=login-input.php>👤</a></span> 
+                <span><a href=cart-input.php>🛒</a></span> <span><a href=login2.php>👤</a></span> 
             </div>
         </div>
     </header>
