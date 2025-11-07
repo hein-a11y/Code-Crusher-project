@@ -1,90 +1,141 @@
-<?php
-// 本来はセッション確認などの認証処理が入ります
-?>
+<?php require_once '../admin_header.php'; ?>
+<?php require '../functions.php'; ?>
 <!DOCTYPE html>
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GG Store Admin - Dashboard</title>
-    <!-- 共通CSS -->
+    <title>GG Store 管理ダッシュボード</title>
     <link rel="stylesheet" href="./css/admin.css">
-    <!-- Font Awesome (アイコン) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
 </head>
-<body>
+<body class="body-container">
 
-    <div class="admin-container">
-
-        <!-- サイドバー -->
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <h1 class="sidebar-title">GG ADMIN</h1>
+    <div class="main-content">
+        
+        <header class="header">
+            <button id="sidebar-toggle" class="sidebar-toggle-btn">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="header-search">
+                <div class="search-wrapper">
+                    <input type="text" placeholder="注文、商品、またはユーザーを検索..." class="search-input">
+                    <i class="fas fa-search search-icon"></i>
+                </div>
             </div>
             
-            <nav class="sidebar-nav">
-                <a href="admin_dashboard.php" class="sidebar-link active">
-                    <i class="fas fa-chart-line"></i>
-                    Dashboard
-                </a>
-                <a href="admin_add_game.php" class="sidebar-link">
-                    <i class="fas fa-gamepad"></i>
-                    ゲーム追加
-                </a>
-                <a href="admin_add_gadget.php" class="sidebar-link">
-                    <i class="fas fa-mouse"></i>
-                    ガジェット追加
-                </a>
-                <a href="admin_order_list.php" class="sidebar-link">
-                    <i class="fas fa-shopping-cart"></i>
-                    注文リスト
-                </a>
-                <a href="#" class="sidebar-link">
-                    <i class="fas fa-users"></i>
-                    全ユーザー
-                </a>
-                
-                <div class="sidebar-divider">
-                    <a href="#" class="sidebar-link logout">
-                        <i class="fas fa-sign-out-alt"></i>
-                        Sign Out
-                    </a>
+            <div class="header-user-controls">
+                <button class="notification-btn">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge"></span>
+                </button>
+                <div class="user-profile">
+                    <img class="user-avatar" src="https://placehold.co/40x40/00BFFF/121212?text=AD" alt="Admin Avatar">
+                    <span class="user-name">管理者</span>
                 </div>
-            </nav>
-        </aside>
+            </div>
+        </header>
 
-        <!-- メインコンテンツ -->
-        <div class="main-content">
-            
-            <!-- トップヘッダー -->
-            <header class="main-header">
-                <div class="header-search">
-                    <input type="text" placeholder="Search orders, products, or users...">
-                    <!-- <i class="fas fa-search"></i> (実装するならposition:absoluteで) -->
-                </div>
+        <main class="page-content">
+            <div id="sidebar-overlay" class="sidebar-overlay hidden"></div>
+
+            <section id="dashboard-page" class="admin-page">
+                <h2 class="page-title">ダッシュボード概要 (01-08 レイアウトテーマ)</h2>
                 
-                <div class="header-user">
-                    <div class="header-user-avatar">
-                        <img src="https://placehold.co/40x40/00BFFF/121212?text=AD" alt="Admin Avatar">
+                <div class="stats-grid">
+                    <div class="card stat-card">
+                        <div class="stat-card-content">
+                            <div class="stat-card-info">
+                                <p>総収益</p>
+                                <p>¥1,234,567</p>
+                            </div>
+                            <div class="stat-card-icon">
+                                <i class="fas fa-wallet"></i>
+                            </div>
+                        </div>
+                        <p class="stat-card-footer positive">+12% (前月比)</p>
                     </div>
-                    <span>Admin User</span>
+
+                    <div class="card stat-card">
+                        <div class="stat-card-content">
+                            <div class="stat-card-info">
+                                <p>新規注文</p>
+                                <p>452</p>
+                            </div>
+                            <div class="stat-card-icon">
+                                <i class="fas fa-box"></i>
+                            </div>
+                        </div>
+                        <p class="stat-card-footer negative">-5% (前月比)</p>
+                    </div>
+
+                    <div class="card stat-card">
+                        <div class="stat-card-content">
+                            <div class="stat-card-info">
+                                <p>アクティブユーザー</p>
+                                <p>9,871</p>
+                            </div>
+                            <div class="stat-card-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                        </div>
+                        <p class="stat-card-footer positive">+3% (前月比)</p>
+                    </div>
+
+                    <div class="card stat-card">
+                        <div class="stat-card-content">
+                            <div class="stat-card-info">
+                                <p>保留中のレビュー</p>
+                                <p>21</p>
+                            </div>
+                            <div class="stat-card-icon">
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                        <p class="stat-card-footer neutral">要確認</p>
+                    </div>
                 </div>
-            </header>
 
-            <!-- ページコンテンツ -->
-            <main class="page-content">
-                <h2 class="page-title">Dashboard Summary</h2>
-                
-                <p>ここにダッシュボードの統計情報（売上、注文件数など）を表示します。</p>
-                <!-- 
-                    admin.php からのコピー (Tailwindクラスは削除)
-                    統計カードなどをここに配置できます
-                -->
-
-            </main>
-        </div>
+                <div class="card recent-orders-card">
+                    <h3 class="card-title">最近の注文 (注文一覧 18, 19)</h3>
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>注文ID</th>
+                                    <th>商品</th>
+                                    <th>顧客</th>
+                                    <th>ステータス</th>
+                                    <th>合計</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>#98345</td>
+                                    <td>Elden Ring DD</td>
+                                    <td>J. Doe</td>
+                                    <td><span class="status-badge delivered">配送済み</span></td>
+                                    <td>¥8,980</td>
+                                </tr>
+                                <tr>
+                                    <td>#98346</td>
+                                    <td>Pro Gaming Headset</td>
+                                    <td>A. Smith</td>
+                                    <td><span class="status-badge processing">処理中</span></td>
+                                    <td>¥15,000</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="card-footer">
+                        <a href="admin_orders.php" class="view-all-link">すべての注文を表示</a>
+                    </div>
+                </div>
+            </section>
+        </main>
     </div>
 
+    <script src="./js/admin.js"></script>
 </body>
 </html>

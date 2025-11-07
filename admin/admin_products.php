@@ -5,13 +5,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GG Store 管理 - 注文</title>
+    <title>GG Store 管理 - 商品</title>
     <link rel="stylesheet" href="./css/admin.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
 </head>
 <body class="body-container">
-
     <div class="main-content">
         
         <header class="header">
@@ -40,51 +39,45 @@
         <main class="page-content">
             <div id="sidebar-overlay" class="sidebar-overlay hidden"></div>
 
-            <section id="orders-page" class="admin-page">
-                <h2 class="page-title">注文一覧 (18, 19)</h2>
-                
+            <section id="products-page" class="admin-page">
+                <div class="page-header">
+                    <h2 class="page-title">商品管理 (全商品 14, 15)</h2>
+                    <button class="button button-primary">
+                        <i class="fas fa-plus"></i> 新規商品を追加 (12, 13)
+                    </button>
+                </div>
+
                 <div class="card">
                     <div class="table-container">
                         <table class="data-table">
                             <thead>
                                 <tr>
-                                    <th>注文ID</th>
-                                    <th>日付</th>
-                                    <th>顧客</th>
-                                    <th>ステータス</th>
-                                    <th>合計</th>
-                                    <th>追跡 (22, 23)</th>
+                                    <th>商品名</th>
+                                    <th>カテゴリ</th>
+                                    <th>在庫</th>
+                                    <th>価格</th>
+                                    <th>操作</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>#98345</td>
-                                    <td>2024-10-25</td>
-                                    <td>J. Doe</td>
-                                    <td><span class="status-badge delivered">配送済み</span></td>
+                                    <td>Elden Ring (Digital)</td>
+                                    <td>ゲーム</td>
+                                    <td style="color: var(--green);">在庫あり</td>
                                     <td>¥8,980</td>
                                     <td class="table-actions">
-                                        <button onclick="alert('注文 #98345 の追跡情報をシミュレート')"><i class="fas fa-truck"></i></button>
+                                        <button class="edit"><i class="fas fa-edit"></i></button>
+                                        <button class="delete"><i class="fas fa-trash"></i></button>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>#98346</td>
-                                    <td>2024-10-25</td>
-                                    <td>A. Smith</td>
-                                    <td><span class="status-badge processing">処理中</span></td>
-                                    <td>¥15,000</td>
+                                    <td>4K Gaming Monitor</td>
+                                    <td>ガジェット</td>
+                                    <td style="color: var(--red);">在庫なし</td>
+                                    <td>¥75,000</td>
                                     <td class="table-actions">
-                                        <button onclick="alert('注文 #98346 の追跡情報をシミュレート')"><i class="fas fa-truck"></i></button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>#98347</td>
-                                    <td>2024-10-24</td>
-                                    <td>C. Brown</td>
-                                    <td><span class="status-badge shipped">発送済み</span></td>
-                                    <td>¥5,500</td>
-                                    <td class="table-actions">
-                                        <button onclick="alert('注文 #98347 の追跡情報をシミュレート')"><i class="fas fa-truck"></i></button>
+                                        <button class="edit"><i class="fas fa-edit"></i></button>
+                                        <button class="delete"><i class="fas fa-trash"></i></button>
                                     </td>
                                 </tr>
                             </tbody>
