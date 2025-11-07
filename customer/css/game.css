@@ -59,23 +59,44 @@ a {
     margin-bottom: 64px; /* mb-16 */
 }
 
-.hero-image-wrapper {
+.hero-slider-container {
     position: relative;
     border-radius: 8px; /* rounded-lg */
     overflow: hidden;
     box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); /* shadow-2xl */
+    /* アスペクト比 16:9 で高さを確保 */
+    aspect-ratio: 16 / 9;
+}
+
+.hero-slide {
+    /* スライドを重ねて配置 */
+    position: absolute; 
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* フェード切り替えのため opacity を 0 に */
+    opacity: 0;
+    transition: opacity 1.0s ease-in-out; /* 1秒かけてフェード */
+}
+
+/* JSで .active が付いたスライド */
+.hero-slide.active {
+    opacity: 1; /* フェードイン */
+    position: relative; 
 }
 
 .hero-image {
     width: 100%;
-    height: auto;
-    object-fit: cover;
+    height: 100%; 
+    object-fit: cover; /* コンテナ全体を埋める */
 }
 
 .hero-content {
     position: absolute;
     bottom: 40px; /* bottom-10 */
     left: 40px; /* left-10 */
+    z-index: 3; /* 画像より手前に */
 }
 
 .hero-title {
@@ -107,12 +128,50 @@ a {
     background-color: #6b21a8; /* hover:bg-purple-800 */
 }
 
+/* ▼▼▼ 変更箇所 (ここから) ▼▼▼ */
+/* .hero-slider-dots スタイル群を削除 */
+
+/* .hero-thumbnails をボタンコンテナとしてスタイリング */
 .hero-thumbnails {
     display: grid;
-    grid-template-columns: repeat(2, 1fr); /* grid-cols-2 */
-    gap: 16px; /* gap-4 */
-    margin-top: 24px; /* mt-6 */
+    grid-template-columns: repeat(4, 1fr); /* 4列グリッド */
+    gap: 8px; /* ボタン間の隙間 */
+    margin-top: 8px; /* スライドショーのすぐ下 */
 }
+
+/* .thumbnail-image スタイルを削除し、.hero-thumb-button を追加 */
+.hero-thumb-button {
+    background-color: #333; /* 暗いグレーの背景 */
+    color: #e0e0e0; /* 明るいグレーのテキスト */
+    border: 1px solid #444; /* わずかな境界線 */
+    border-radius: 8px; /* rounded-lg */
+    padding: 16px 8px; /* 上下の余白 */
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600; /* font-bold */
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    width: 100%;
+    font-family: inherit;
+    /* テキストが改行しないように */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.hero-thumb-button:hover {
+    background-color: #444; /* ホバーで少し明るく */
+    color: #ffffff;
+}
+
+/* アクティブなスライドに対応するボタンのスタイル */
+.hero-thumb-button.active {
+    background-color: #444; 
+    color: #ffffff; 
+    border-color: #7e22ce; /* 'Learn More'ボタンの色に合わせる */
+    box-shadow: 0 0 10px rgba(126, 34, 206, 0.5); /* 輝き */
+}
+/* ▲▲▲ 変更箇所 (ここまで) ▲▲▲ */
 
 /* md:grid-cols-4 */
 @media (min-width: 768px) {
