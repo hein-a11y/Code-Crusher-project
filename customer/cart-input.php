@@ -26,7 +26,26 @@
                 $row = $sql->fetch(PDO::FETCH_ASSOC);
                 $user_id = $row['user_id'] ?? '';
 
-                
+
+
+                                // 1. カート情報を取得
+                $sql2 = $pdo->prepare("SELECT * FROM gg_carts WHERE user_id = ?");
+                $sql2->execute([$user_id]);
+                $cart_item = $sql2->fetchAll();
+
+                $game_id = [];    // ゲームIDだけ集める配列
+                $gadget_id = []; // ガジェットIDだけ集める配列
+
+                // 2. IDを振り分ける
+                foreach ($cart_item as $item) {
+                    if (!empty($item['game_id'])) {
+                        $game_id[] = $item['game_id'];
+                    } else if (!empty($item['gadget_id'])) {
+                        $gadget_id[] = $item['gadget_id'];
+                    }
+                }
+                // $game_ids は [5, 8] など
+                // $gadget_ids は [3] など
 
                 
                 ?>
