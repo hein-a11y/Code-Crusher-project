@@ -20,8 +20,8 @@
 
                 $pdo = getPDO();
                 
-                $sql = $pdo -> prepare('SELECT * from gg_user WHERE user_id = ? ');
-                $sql -> execute([$_SESSION['user_id']]);
+                $sql = $pdo -> prepare('SELECT * from gg_users WHERE user_id = ? ');
+                $sql -> execute([$_SESSION['customer']['user_id']]);
 
                 $row = $sql->fetch(PDO::FETCH_ASSOC);
                 $user_id = $row['user_id'] ?? '';
@@ -47,7 +47,6 @@
                 // $game_ids は [5, 8] など
                 // $gadget_ids は [3] など
 
-                
                 ?>
                 <div class="cart-items">
                     <div class="cart-item">

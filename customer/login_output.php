@@ -1,5 +1,5 @@
 
-<?php require "function.php"; ?>
+<?php require "../functions.php"; ?>
 <?php
 session_start();
 
@@ -7,30 +7,31 @@ session_start();
 
     unset($_SESSION['customer']);
     $pdo = getPDO();
-    $sql = $pdo->prepare('select * from gg_users where  mailaddress=? and password=?');
+    $sql = $pdo->prepare('select * from gg_users where mailaddress=? and password=?');
     $sql->execute([h($_REQUEST['email']),h($_REQUEST['password'])]);
 
+    
     foreach($sql as $row){
         $_SESSION['customer']=[
             'user_id'        => $row['user_id'],
             'firstname'      => $row['firstname'],
-            'firstname_kana' => $row['firstname_kana']
-            'lastname'       => $row['lastname'],
+            'lastname'       => $row['lastname'], 
+            'postalcode'     => $row['postalcode'],
             'address'        => $row['address'],
-            'login'          => $row["login_name"],
-            'password'       => $row['password']
+            'phone_number'   => $row['phone_number'],
+            'mailadress'     => $row['mailaddress']
         ];
     }
 
     if(isset($_SESSION['customer'])){
-        require 'signIn_input.php';
+        require 'index.php';
         
         echo 'いらっしゃいませ ', $_SESSION['customer']['firstname'], 'さん';
 
     }else {
         echo 'ログイン名またはパスワードが違います。';
     }
-
+// debug($_SESSION);
 
 ?>
 

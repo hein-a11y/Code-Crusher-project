@@ -12,7 +12,7 @@
 <body>
     <main>
         <div class="login-container">
-            <form id="login-form">
+            <form id="login-form" action = "login_output.php" method="post">
                 <h1>ログイン</h1>
 
                 <div class="input-group">

@@ -39,18 +39,18 @@
             $gadget_explanation = h($row['gadget_explanation']);
             $gadget_manufacturer = h($row['manufacturer']);
             $gadget_connectivity_type = h($row['connectivity_type']);
-            $gadget_fruitsArray = explode(",", $connectivity_type); //,で分割して配列に変換
+            $gadget_fruitsArray = explode(",", $gadget_connectivity_type); //,で分割して配列に変換
             $gadget_price = number_format(h($row['price']));
             $images = h($row['images']);
 
-            $img_src = "./gadget-images/gadgets-$id" . "_1.jpg";
+            $img_src = "./gadget-images/gadgets-$gadget_id" . "_1.jpg";
 
             echo <<< HTML
                 <!-- 商品ギャラリー -->
                 <div class="product-gallery">
                     <div class="main-image-wrapper">
                         <!-- メイン画像 -->
-                        <img id="main-image" src="$img_src" alt="$name メイン画像">
+                        <img id="main-image" src="$img_src" alt="$gadget_name メイン画像">
                     </div>
                     <!-- サムネイル -->
                     <div class="thumbnail-container">
