@@ -14,16 +14,19 @@ session_start();
         $_SESSION['customer']=[
             'user_id'        => $row['user_id'],
             'firstname'      => $row['firstname'],
-            'firstname_kana' => $row['firstname_kana']
-            'lastname'       => $row['lastname'],
+            'lastname'       => $row['lastname'], 
+            'postalcode'     => $row['postalcode'],
             'address'        => $row['address'],
-            'login'          => $row["login_name"],
-            'password'       => $row['password']
+            'phone_number'   => $row['phone_number'],
+            'mailadress'     => $row['mailaddress'],
+            
+            
+           
         ];
     }
 
     if(isset($_SESSION['customer'])){
-        require 'signIn_input.php';
+        require 'index.php';
         
         echo 'いらっしゃいませ ', $_SESSION['customer']['firstname'], 'さん';
 
