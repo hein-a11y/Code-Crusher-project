@@ -27,7 +27,7 @@ if (empty($_SESSION['customer'])) {
 }
 //$_SESSION['customer']['id']
 $currentUserId = $_SESSION['customer']['user_id'];
-$currentGameId = 3;
+$currentGameId = 2;
 
 // (B) 割引ステータスを計算
 try{
@@ -46,8 +46,8 @@ if($is_active){
 }else{
     echo "no";
 }
-hasBought($pdo,$currentUserId,$currentGameId,"game_id");
-if($is_active){
+
+if(hasBought($pdo,$currentUserId,$currentGameId,"game_id")){
     echo "yes1";
 }else{
     echo "no1";
@@ -92,10 +92,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }elseif($action === 'delete') {
         // --- ★新規: レビュー削除処理 ---
         $reviewIdToDelete = filter_var($_POST['review_id'] ?? 0, FILTER_VALIDATE_INT);
-        $sql = $pdo->prepare("SELECT user_id,game_id FROM gg_reviews WHERE review_id = ?");
-        $sql ->execute([$reviewIdToDelete]);
+        
         if ($reviewIdToDelete > 0) {
             try {
+                // 買った商品のれーびゅだったら割引を減らす　
+                $sql = $pdo->prepare("SELECT game_id FROM gg_reviews WHERE review_id = ?");
+                $sql->execute([$reviewIdToDelete]);
+                $deletedId = $sql->fetchAll();
+                if($deletedId[0]['game_id']==null){
+                    $deletedProductId = $deletedId[0]['gadget_id'];
+                }else{
+                    $deletedProductId = $deletedId[0]['game_id'];
+                }
+                if(hasBought($pdo,$currentUserId,$deletedProductId,"gadget_id")){
+                    $current_Discount = $premiums[0]['current_discount']-$discountRate;
+                    $new_Discount = $premiums[0]['current_discount'];
+                    $sql = $pdo->prepare("UPDATE gg_premium SET current_discount = ?,new_discount = ? where user_id = ?");
+                    $sql->execute([$current_Discount,$new_Discount,$currentUserId]);
+                }
+
                 // 必ず自分のレビューであること(userId)を確認してから削除する
                 $sql = "DELETE FROM gg_reviews WHERE review_id = ? AND user_id = ?";
                 $stmt = $pdo->prepare($sql);
