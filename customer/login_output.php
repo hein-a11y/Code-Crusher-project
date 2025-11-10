@@ -21,7 +21,7 @@ session_start();
     }
 
     if(isset($_SESSION['customer'])){
-        require './index.php';
+        header("location: game-review-input.php");
         
         echo 'いらっしゃいませ ', $_SESSION['customer']['firstname'], 'さん';
 

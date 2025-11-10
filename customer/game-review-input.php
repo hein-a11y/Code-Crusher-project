@@ -27,7 +27,7 @@ if (empty($_SESSION['customer'])) {
 }
 //$_SESSION['customer']['id']
 $currentUserId = $_SESSION['customer']['user_id'];
-$currentGameId = 2;
+$currentGameId = 3;
 
 // (B) 割引ステータスを計算
 try{
@@ -92,7 +92,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }elseif($action === 'delete') {
         // --- ★新規: レビュー削除処理 ---
         $reviewIdToDelete = filter_var($_POST['review_id'] ?? 0, FILTER_VALIDATE_INT);
-
+        $sql = $pdo->prepare("SELECT user_id,game_id FROM gg_reviews WHERE review_id = ?");
+        $sql ->execute([$reviewIdToDelete]);
         if ($reviewIdToDelete > 0) {
             try {
                 // 必ず自分のレビューであること(userId)を確認してから削除する
