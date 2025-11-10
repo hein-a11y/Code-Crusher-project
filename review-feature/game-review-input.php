@@ -26,7 +26,7 @@ if (empty($_SESSION['customer'])) {
     $_SESSION['customer']['id'] = 'user_' . bin2hex(random_bytes(16));
 }
 //$_SESSION['customer']['id']
-$currentUserId = 4;
+$currentUserId = $_SESSION['customer']['user_id'];
 $currentGameId = 2;
 
 // (B) 割引ステータスを計算
@@ -71,10 +71,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $stmt->execute([$currentUserId,$rating,$currentGameId,$comment]);
 
                 if($is_active && $premiums[0]['current_discount'] < 10.00){
-                    $current_Discount = $premiums[0]['new_discount'];
-                    $new_Discount = $premiums[0]['new_discount'] + $discountRate;
-                    $sql = $pdo->prepare("UPDATE gg_premium SET current_discount = ?,new_discount = ? where user_id = ?");
-                    $sql->execute([$current_Discount,$new_Discount,$currentUserId]);
+                    if(hasBought($pdo,$currentUserId,$currentGameId,"game_id")){
+                        $current_Discount = $premiums[0]['new_discount'];
+                        $new_Discount = $premiums[0]['new_discount'] + $discountRate;
+                        $sql = $pdo->prepare("UPDATE gg_premium SET current_discount = ?,new_discount = ? where user_id = ?");
+                        $sql->execute([$current_Discount,$new_Discount,$currentUserId]);
+                    }
                 }
 
                 // 成功メッセージをセッションに保存
@@ -162,10 +164,10 @@ if(!empty($premiums)){
 }
 
 //E 今処理しているusernameと処理されているgameかgadgetの名前を取り出す。
-$sql = $pdo->prepare("SELECT user.firstname,user.lastname,game.game_name FROM gg_users AS user, gg_game AS game WHERE user.user_id = ? and game.game_id = ? LIMIT 1");
-$sql ->execute([$currentUserId,$currentGameId]);
+$sql = $pdo->prepare("SELECT game.game_name FROM gg_game AS game WHERE game.game_id = ? LIMIT 1");
+$sql ->execute([$currentGameId]);
 $currentProduct = $sql->fetchAll();
-$currentUserName = $currentProduct[0]['firstname'] . " " . $currentProduct[0]['lastname'];
+$currentUserName = $_SESSION['customer']['firstname'] . " " . $_SESSION['customer']['lastname'];
 $currentProductName = $currentProduct[0]['game_name'];
 
 
