@@ -1,135 +1,8 @@
-<?php require "../functions.php"; ?>
-<?php
-// 1. セッション管理の開始
-session_start();
-
-// --- データベース接続設定 ---
-// !!! 注意: ここの値はご自身の環境に合わせて変更してください !!!
-define('DB_HOST', 'localhost');
-define('DB_NAME', 'your_database_name');
-define('DB_USER', 'your_username');
-define('DB_PASS', 'your_password');
-// ------------------------------
-
-// --- 割引率の定数 ---
-define('MAX_DISCOUNT', 10.0);
-define('INCREASE_PER_REVIEW', 0.05);
-
-$pdo = null;
-$message = null; // ユーザーへの通知（投稿成功など）
-
-try {
-    // データベースに接続
-    $pdo = getPDO();
-
-} catch (PDOException $e) {
-    die("データベース接続に失敗しました: " . $e->getMessage());
-}
-
-// 2. ユーザーIDの確認（セッションに無ければ新規作成）
-if (empty($_SESSION['user_id'])) {
-    $_SESSION['user_id'] = 'user_' . bin2hex(random_bytes(16));
-}
-$currentUserId = 1;
-
-
-// 3. POSTリクエストの処理 (フォームが送信された場合)
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
-    // アクションをチェック (投稿 or 削除)
-    $action = $_POST['action'] ?? 'submit'; // デフォルトは 'submit'
-
-    if ($action === 'submit') {
-        // --- レビュー投稿処理 ---
-        $gameTitle = trim($_POST['game-title'] ?? '');
-        $rating = filter_var($_POST['rating'] ?? 0, FILTER_VALIDATE_INT, ["options" => ["min_range" => 1, "max_range" => 5]]);
-        $comment = trim($_POST['comment'] ?? '');
-
-        if (!empty($gameTitle) && $rating !== false && !empty($comment)) {
-            try {
-                $sql = "INSERT INTO reviews (userId, gameTitle, rating, comment) VALUES (?, ?, ?, ?)";
-                $stmt = $pdo->prepare($sql);
-                $stmt->execute([$currentUserId, $gameTitle, $rating, $comment]);
-                $_SESSION['message'] = ['text' => 'レビューが正常に投稿されました！', 'type' => 'success'];
-            } catch (PDOException $e) {
-                $_SESSION['message'] = ['text' => 'レビューの投稿中にエラーが発生しました。', 'type' => 'error'];
-            }
-        } else {
-            $_SESSION['message'] = ['text' => '全てのフィールドを正しく入力してください。', 'type' => 'error'];
-        }
-
-    }elseif ($action === 'delete') {
-        // --- ★新規: レビュー削除処理 ---
-        $reviewIdToDelete = filter_var($_POST['review_id'] ?? 0, FILTER_VALIDATE_INT);
-
-        if ($reviewIdToDelete > 0) {
-            try {
-                // 必ず自分のレビューであること(userId)を確認してから削除する
-                $sql = "DELETE FROM reviews WHERE id = ? AND userId = ?";
-                $stmt = $pdo->prepare($sql);
-                $stmt->execute([$reviewIdToDelete, $currentUserId]);
-
-                if ($stmt->rowCount() > 0) {
-                    $_SESSION['message'] = ['text' => 'レビューを削除しました。', 'type' => 'success'];
-                } else {
-                    // 削除されなかった場合 (他人のレビューIDを指定された等)
-                    $_SESSION['message'] = ['text' => '削除に失敗しました（該当のレビューが見つからないか、権限がありません）。', 'type' => 'error'];
-                }
-            } catch (PDOException $e) {
-                $_SESSION['message'] = ['text' => '削除中にデータベースエラーが発生しました。', 'type' => 'error'];
-            }
-        } else {
-            $_SESSION['message'] = ['text' => '無効なリクエストです。', 'type' => 'error'];
-        }
-    }
-
-    // Post/Redirect/Get (PRG) パターン：二重投稿を防止
-    header("Location: " . $_SERVER['PHP_SELF']);
-    exit;
-}
-
-// 4. GETリクエストの処理 (ページの表示)
-
-// フォーム送信後のメッセージがあれば取得し、セッションから削除
-if (isset($_SESSION['message'])) {
-    $message = $_SESSION['message'];
-    unset($_SESSION['message']);
-}
-
-// (A) 該当ユーザーのレビューをすべて取得
-$sql = "SELECT * FROM gg_reviews WHERE user_id = ? ORDER BY review_date DESC";
-$stmt = $pdo->prepare($sql);
-$stmt->execute([$currentUserId]);
-$reviews = $stmt->fetchAll();
-
-// (B) 割引ステータスを計算
-$reviewCount = count($reviews);
-$currentDiscount = min($reviewCount * INCREASE_PER_REVIEW, MAX_DISCOUNT);
-
-// (C) 次の特典メッセージを生成
-$nextReviewMessageHtml = '';
-if ($currentDiscount < MAX_DISCOUNT) {
-    $nextDiscountValue = number_format($currentDiscount + INCREASE_PER_REVIEW, 2);
-    $neededReviews = ceil((MAX_DISCOUNT - $currentDiscount) / INCREASE_PER_REVIEW);
-    
-    $nextReviewMessageHtml = '
-        <span class="text-cyan-400 font-extrabold">次の割引 (' . $nextDiscountValue . '%)</span> まで **1レビュー**！<br>
-        最大割引率 **' . number_format(MAX_DISCOUNT, 0) . '%** まであと **' . $neededReviews . 'レビュー**です。
-    ';
-} else {
-    $nextReviewMessageHtml = '
-        <span class="text-green-400 font-extrabold">おめでとうございます！</span><br>
-        最大割引率 **' . number_format(MAX_DISCOUNT, 0) . '%** に到達しました。
-    ';
-}
-
-// これ以降はHTMLの描画
-?>
 <!DOCTYPE html>
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale-1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GG store | レビュー特典シミュレーション (PHP版)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -143,6 +16,7 @@ if ($currentDiscount < MAX_DISCOUNT) {
             --text-secondary-color: #a0a0a0; /* Dimmer text */
         }
 
+        /* 1. 全体の背景をダークテーマに変更 */
         body {
             font-family: 'Inter', sans-serif;
             background-color: #1a1a1a; /* ディープチャコール */
@@ -159,6 +33,7 @@ if ($currentDiscount < MAX_DISCOUNT) {
             text-decoration: none;
         }
 
+        /* 2. シャドウをダークモードに適した、控えめな光に変更 */
         .container-shadow {
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4), 0 1px 5px rgba(0, 0, 0, 0.2);
         }
@@ -172,10 +47,10 @@ if ($currentDiscount < MAX_DISCOUNT) {
             border-color: #22d3ee; /* cyan-400 */
         }
         .rating-star {
-            color: #FFC700;
+            color: #FFC700; /* 星の色はコントラストのため維持 */
         }
     </style>
-</head>
+    </head>
 <body class="p-0">
 
     <div id="loading-overlay" class="fixed inset-0 bg-[#1a1a1a] z-50 flex flex-col items-center justify-center">
@@ -195,60 +70,61 @@ if ($currentDiscount < MAX_DISCOUNT) {
                 </p>
             </div>
             <p id="user-id-display" class="mt-2 text-xs text-gray-500 truncate text-right">
-                ユーザーID: <?php echo htmlspecialchars($currentUserId); ?>
+                ユーザー名: <?php echo htmlspecialchars($currentUserName); ?>様
             </p>
         </header>
+        
+        <div class="<?php echo $currentReviewTitle ?>">
 
-        <div id="custom-message-container"></div>
-
-        <div class="container-shadow bg-[#242424] p-6 rounded-2xl mb-8 border-t-8 border-cyan-400">
-            <h2 class="text-xl font-bold text-gray-100 mb-4 flex items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-cyan-400 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.974 2.887a1 1 0 00-.362 1.114l1.519 4.674c.3.921-.755 1.688-1.539 1.118l-3.974-2.887a1 1 0 00-1.176 0l-3.974 2.887c-.784.57-1.838-.197-1.539-1.118l1.519-4.674a1 1 0 00-.362-1.114L2.016 9.092c-.783-.57-.381-1.81.588-1.81h4.915a1 1 0 00.95-.69l1.519-4.674z" />
-                </svg>
-                あなたの割引レベル
-            </h2>
-            
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
+            <div class="container-shadow bg-[#242424] p-6 rounded-2xl mb-8 border-t-8 border-cyan-400">
+                <h2 class="text-xl font-bold text-gray-100 mb-4 flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-cyan-400 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.974 2.887a1 1 0 00-.362 1.114l1.519 4.674c.3.921-.755 1.688-1.539 1.118l-3.974-2.887a1 1 0 00-1.176 0l-3.974 2.887c-.784.57-1.838-.197-1.539-1.118l1.519-4.674a1 1 0 00-.362-1.114L2.016 9.092c-.783-.57-.381-1.81.588-1.81h4.915a1 1 0 00.95-.69l1.519-4.674z" />
+                    </svg>
+                    あなたの割引レベル
+                </h2>
                 
-                <div class="p-4 bg-[#333333] rounded-lg border-cyan-400 border">
-                    <p class="text-sm text-gray-300 font-medium">総投稿レビュー数</p>
-                    <p class="text-4xl font-extrabold text-cyan-400 mt-1" id="review-count-display">
-                        <?php echo $reviewCount; ?>
-                    </p>
-                    <span class="text-sm text-gray-400">件</span>
-                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
+                    
+                    <div class="p-4 bg-[#333333] rounded-lg border-cyan-400 border">
+                        <p class="text-sm text-gray-300 font-medium">総投稿レビュー数</p>
+                        <p class="text-4xl font-extrabold text-cyan-400 mt-1" id="review-count-display">
+                            <?php echo $reviewCount; ?>
+                        </p>
+                        <span class="text-sm text-gray-400">件</span>
+                    </div>
 
-                <div class="p-4 bg-[#333333] rounded-lg border-green-400 border">
-                    <p class="text-sm text-gray-300 font-medium">現在の割引率</p>
-                    <p class="text-4xl font-extrabold text-green-400 mt-1" id="current-discount-display">
-                        <?php echo number_format($currentDiscount, 2); ?>%
-                    </p>
-                    <span class="text-sm text-gray-400">OFF</span>
-                </div>
+                    <div class="p-4 bg-[#333333] rounded-lg border-green-400 border">
+                        <p class="text-sm text-gray-300 font-medium">現在の割引率</p>
+                        <p class="text-4xl font-extrabold text-green-400 mt-1" id="current-discount-display">
+                            <?php echo number_format($currentDiscount, 2); ?>%
+                        </p>
+                        <span class="text-sm text-gray-400">OFF</span>
+                    </div>
 
-                <div class="p-4 bg-[#333333] rounded-lg border-yellow-400 border col-span-1 sm:col-span-1 flex flex-col justify-center">
-                    <p class="text-sm text-gray-300 font-medium mb-1">達成目標</p>
-                    <p class="text-base font-semibold text-yellow-400" id="next-review-message">
-                        <?php echo $nextReviewMessageHtml; ?>
-                    </p>
+                    <div class="p-4 bg-[#333333] rounded-lg border-yellow-400 border col-span-1 sm:col-span-1 flex flex-col justify-center">
+                        <p class="text-sm text-gray-300 font-medium mb-1">達成目標</p>
+                        <p class="text-base font-semibold text-yellow-400" id="next-review-message">
+                            <?php echo $nextReviewMessageHtml; // PHPで生成したHTMLをそのまま出力 ?>
+                        </p>
+                    </div>
                 </div>
+                
+                <p class="text-xs text-gray-500 mt-4 text-right">
+                    割引率: レビュー投稿ごとに<?php echo $discountRate; ?>%上昇 (最大<?php echo number_format($maxDiscount, 2); ?>%)
+                </p>
             </div>
-            
-            <p class="text-xs text-gray-500 mt-4 text-right">
-                割引率: レビュー投稿ごとに<?php echo INCREASE_PER_REVIEW; ?>%上昇 (最大<?php echo number_format(MAX_DISCOUNT, 2); ?>%)
-            </p>
         </div>
 
         <div class="container-shadow bg-[#242424] p-6 rounded-2xl mb-8">
+            <div id="custom-message-container"></div>
             <h2 class="text-2xl font-semibold text-gray-100 mb-4 border-b border-gray-700 pb-2">レビューを投稿する</h2>
             
             <form id="review-form" method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-                <input type="hidden" name="action" value="submit">
-
+                
                 <div class="mb-4">
                     <label for="game-title" class="block text-sm font-bold text-gray-300">ゲーム/ガジェット名 <span class="text-red-400">*</span></label>
-                    <input type="text" id="game-title" name="game-title" required class="mt-1 block w-full rounded-lg bg-[#333333] text-gray-100 border-gray-600 shadow-sm p-3 border focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/50 transition">
+                    <input type="text" id="game-title" name="game-title" value="<?php echo $currentProductName ?>" required class="mt-1 block w-full rounded-lg bg-[#333333] text-gray-100 border-gray-600 shadow-sm p-3 border focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/50 transition" readonly>
                 </div>
 
                 <div class="mb-4">
@@ -282,19 +158,22 @@ if ($currentDiscount < MAX_DISCOUNT) {
                     <p class="text-center text-gray-500 py-4">まだレビューがありません。最初のレビューを投稿しましょう！</p>
                 
                 <?php else: // レビューが1件以上ある場合 ?>
-                    <?php foreach ($reviews as $review): 
+                    <?php foreach ($reviews as $review): // PHPのループでレビューを描画 ?>
+                        <?php
+                        // PHP側でスターと日付を整形
                         $stars = str_repeat('★', $review['rating']) . str_repeat('☆', 5 - $review['rating']);
+                        // DateTimeオブジェクトを使って日付をフォーマット
                         try {
-                            $date = (new DateTime($review['timestamp']))->format('Y/m/d H:i');
+                            $date = (new DateTime($review['review_date']))->format('Y/m/d H:i');
                         } catch (Exception $e) {
                             $date = '日付不明';
                         }
-                    ?>
+                        ?>
                         <div class="review-card relative bg-[#242424] p-6 rounded-xl border border-gray-700 mb-4">
                             
                             <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" class="absolute top-4 right-4 z-10" onsubmit="return confirm('このレビューを本当に削除しますか？');">
                                 <input type="hidden" name="action" value="delete">
-                                <input type="hidden" name="review_id" value="<?php echo $review['id']; ?>">
+                                <input type="hidden" name="review_id" value="<?php echo $review['review_id']; ?>">
                                 <button type="submit" class="p-2 text-gray-500 hover:text-red-400 transition-colors duration-200" aria-label="レビューを削除">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -303,10 +182,11 @@ if ($currentDiscount < MAX_DISCOUNT) {
                             </form>
 
                             <p class="text-xs text-cyan-400 mb-1 font-medium">
-                                投稿者: <?php echo htmlspecialchars($review['userId']); ?>
+                                投稿者: <?php echo htmlspecialchars($currentUserName); ?>
                             </p>
+                            <!--  $review['gadget_id'] : $review['game_id']) -->
                             <div class="flex items-start justify-between mb-2">
-                                <h3 class="text-xl font-bold text-gray-100 pr-10"><?php echo htmlspecialchars($review['gameTitle']); ?></h3>
+                                <h3 class="text-xl font-bold text-gray-100"><?php echo htmlspecialchars($review['game_name']==null ? $review['gadget_name'] : $review['game_name']); ?></h3> 
                                 <div class="flex flex-shrink-0 items-center">
                                     <span class="rating-star text-2xl mr-1"><?php echo $stars; ?></span>
                                     <span class="text-sm text-gray-400 font-semibold">(<?php echo htmlspecialchars($review['rating']); ?>/5)</span>
@@ -317,6 +197,8 @@ if ($currentDiscount < MAX_DISCOUNT) {
                                 投稿日時: <?php echo $date; ?>
                             </p>
                         </div>
+                        
+                        
                     <?php endforeach; ?>
                 <?php endif; ?>
 
