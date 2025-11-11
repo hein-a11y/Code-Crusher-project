@@ -4,6 +4,7 @@
 // 必ずファイルの先頭に記述してください
 session_start();
 
+require "../header.php";
 // --- データベース接続設定 ---
 
 $pdo = null;
