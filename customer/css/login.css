@@ -54,8 +54,7 @@ main {
 /* --- 
  * 入力欄のスタイル
  * --- */
-.input-group input[type="email"],
-.input-group input[type="password"] {
+.input-group input {
     /* ユーザーリクエスト: ログインの記入欄は白 */
     background-color: #ffffff;
     color: #121212; /* 白い背景なので、文字は黒に */

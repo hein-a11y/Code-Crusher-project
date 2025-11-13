@@ -1,3 +1,8 @@
+<?php
+    if(session_status()==PHP_SESSION_NONE){
+        session_start();
+    }
+?>
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -274,8 +279,15 @@
                     <button id="btn-ja" class="active">JA</button>
                 </div>
                 <span><a href=cart-input.php>🛒</a></span>
-                <span><a href="login-input.php">👤</a></span> 
-                <span><a href="logout-input.php">🫂</a></span>
+                <span><a href=
+                <?php 
+                    if(!isset($_SESSION['customer'])){
+                        echo "login-input.php";
+                    }else{
+                        echo "logout-input.php";
+                    }
+                ?>
+                >👤</a></span>
             </div>
         </div>
     </header>

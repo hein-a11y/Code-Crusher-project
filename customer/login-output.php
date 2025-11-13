@@ -4,13 +4,25 @@
 session_start();
 
 // include "connect.php";
+    $login = trim($_REQUEST['login']);
+    $login_type = "";
+    if(filter_var($login, FILTER_VALIDATE_EMAIL)){
+        $login_type = "email";
+    }else{
+        $login_type = "login_name";
+    }
 
     unset($_SESSION['customer']);
     $pdo = getPDO();
-    $sql = $pdo->prepare('select * from gg_users where  mailaddress=? and password=?');
-    $sql->execute([h($_REQUEST['email']),h($_REQUEST['password'])]);
+    if($login_type == "email"){
+        $sql = "select * from gg_users where  mailaddress=? and password=?";
+    }else{
+        $sql = "SELECT FROM gg_users WHERE login_name = ? AND password = ?";
+    }
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([h($login),h($_REQUEST['password'])]);
 
-    foreach($sql as $row){
+    foreach($stmt as $row){
         $_SESSION['customer']=[
             'user_id'        => $row['user_id'],
             'firstname'      => $row['firstname'],
@@ -21,13 +33,12 @@ session_start();
     }
 
     if(isset($_SESSION['customer'])){
-        header("location: game-review-input.php");
+        unset($_SESSION['error_message']);
+        header("location: index.php");
         exit;
-        
-        echo 'いらっしゃいませ ', $_SESSION['customer']['firstname'], 'さん';
 
     }else {
-        echo 'ログイン名またはパスワードが違います。';
+        $_SESSION['error_message'] = 'ログイン名またはパスワードが違います。'
     }
 
 

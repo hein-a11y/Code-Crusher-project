@@ -60,7 +60,7 @@
 
     <div class="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
         
-        <header class="mb-8 p-4 bg-[#242424] rounded-xl container-shadow">
+        <header class="mb-8 p-4 bg-[#242424] rounded-xl container-shadow z-0">
             <div class="flex items-center justify-between">
                 <div class="logo">
                     GG STORE

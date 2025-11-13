@@ -3,7 +3,6 @@
 <?php 
 if(isset($_SESSION['customer'])){
     unset($_SESSION['customer']);
-    echo 'ログアウトしました。';
 
     header("location: index.php");
     exit;
@@ -12,4 +11,4 @@ if(isset($_SESSION['customer'])){
 }
 ?>
 
-<?php require '../header.php'; ?>
+
