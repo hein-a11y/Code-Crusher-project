@@ -69,7 +69,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             try {
                 $sql = "INSERT INTO gg_reviews (user_id, rating, gadget_id, comment) VALUES (?, ?, ?, ?)";
                 $stmt = $pdo->prepare($sql);
-                $stmt->execute([$currentUserId,$rating,$currentGadgetId,$comment]);
+                $stmt->execute([h($currentUserId),h($rating),h($currentGadgetId),h($comment)]);
 
                 if($is_active && $premiums[0]['current_discount'] < 10.00){
                     if(hasBought($pdo,$currentUserId,$currentGadgetId,"gadget_id")){
@@ -192,6 +192,6 @@ $currentProductName = $currentProduct[0]['gadget_name'];
 // これ以降はHTMLの描画
 ?>
 
-<?php require "review.php"; ?>
+<?php require "myreview.php"; ?>
 
 

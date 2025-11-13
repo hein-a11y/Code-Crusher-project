@@ -193,6 +193,6 @@ $currentProductName = $currentProduct[0]['game_name'];
 // これ以降はHTMLの描画
 ?>
 
-<?php require "review.php"; ?>
+<?php require "myreview.php"; ?>
 
 

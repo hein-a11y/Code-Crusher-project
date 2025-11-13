@@ -273,7 +273,9 @@
                     <button id="btn-en">EN</button>
                     <button id="btn-ja" class="active">JA</button>
                 </div>
-                <span><a href=cart-input.php>🛒</a></span> <span><a href=login-input.php>👤</a></span> 
+                <span><a href=cart-input.php>🛒</a></span>
+                <span><a href="login-input.php">👤</a></span> 
+                <span><a href="logout-input.php">🫂</a></span>
             </div>
         </div>
     </header>
