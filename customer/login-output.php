@@ -21,7 +21,8 @@ session_start();
     }
 
     if(isset($_SESSION['customer'])){
-        header("location: gadget-review-input.php");
+        header("location: game-review-input.php");
+        exit;
         
         echo 'いらっしゃいませ ', $_SESSION['customer']['firstname'], 'さん';
 
