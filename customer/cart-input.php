@@ -26,7 +26,7 @@
                 $row = $sql->fetch(PDO::FETCH_ASSOC);
                 $user_id = $row['user_id'] ?? '';
 
-                echo "（デバッグ）このIDでカートを探しています: ";
+                // echo "（デバッグ）このIDでカートを探しています: ";
                 // var_dump($user_id);
 
                                 // 1. カート情報を取得
@@ -46,20 +46,20 @@
                     }
                 }
 
-        //   echo "<pre>"; // var_dumpの結果を読みやすくするためのおまじない
+        //  echo "<pre>"; var_dumpの結果を読みやすくするためのおまじない
 
-        //    echo "カートの中身（全データ）:";
-        //    var_dump($cart_item);
+        //   echo "カートの中身（全データ）:";
+        //   var_dump($cart_item);
           
-        //    echo "集めたゲームID:";
-        //    var_dump($game_id);
+        //   echo "集めたゲームID:";
+        //   var_dump($game_id);
 
-        //    echo "集めたガジェットID:";
-        //    var_dump($gadget_id);
+        //   echo "集めたガジェットID:";
+        //   var_dump($gadget_id);
 
-        //    echo "</pre>";
-        //         //  $game_ids は [5, 8] など
-        //         //  $gadget_ids は [3] など
+        //   echo "</pre>";
+        //   $game_ids は [5, 8] など
+        //   $gadget_ids は [3] など
 
                 ?>
                 <div class="cart-items">

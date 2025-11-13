@@ -86,12 +86,18 @@
                     </div>
                     <!-- アクションボタン -->
                     <div class="actions">
-                        <form action="cart-input.php" method="post">
-                            <input type="hidden" name="id" value="{$gadget_id}">
-                            <input type="hidden" name="name" value="{$gadget_name}">
-                            <input type="hidden" name="price" value="{$gadget_price}">
-                            <button type="submit" class="action-button add-to-cart">カートに入れる</button>
+                        <form action="add_to_cart.php" method="post">
+        
+                        <input type="hidden" name="product_id" value="{$gadget_id}">
+        
+                        <input type="hidden" name="product_type" value="gadget">
+
+                        <input type="hidden" name="name" value="{$gadget_name}">
+                        <input type="hidden" name="price" value="{$gadget_price}">
+
+                        <button type="submit" class="action-button add-to-cart">カートに入れる</button>
                         </form>
+  
                         <button type="submit" class="action-button buy-now">今すぐ購入</button>
                     </div>
                 </div>
