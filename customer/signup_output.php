@@ -6,7 +6,7 @@ require '../functions.php';
 
 
 
- 
+ debug($_REQUEST);
 
 
 $pdo = getPDO();
@@ -19,12 +19,14 @@ if(isset($_SESSION['customer'])){
     $sql = $pdo -> prepare('SELECT * FROM gg_users WHERE login_name = ?');
     $sql->execute([$_REQUEST['login_name']]);
 }
+
 $plain_password = isset($_REQUEST['password']) ? h($_REQUEST['password']) : '';
 $hashed_password = !empty($plain_password) ? password_hash($plain_password, PASSWORD_DEFAULT) : '';
-
+  $address = $_REQUEST['prefecture']." ".$_REQUEST['city']." ".$_REQUEST['address_line1'];
+   $birthday = $_REQUEST['birth_year']."/".$_REQUEST['birth_month']."/".$_REQUEST['birth_day'];
 if(empty($sql->fetchAll())){
     if(isset($_SESSION['customer'])){
-         $address = $_REQUEST['prefecture'].$_REQUEST['city'].$_REQUEST['address_line1'];
+       
         $sql = $pdo->prepare('UPDATE gg_users SET login_name=?, firstname = ?, firstname_kana=?, lastname = ? lastname_kana = ?, postal-code = ?, address = ?, phone_number = ?, mailaddress = ?, password = ?, gender = ?, birthday = ?,WHERE id =?');
         $sql->execute([
              h($_REQUEST['login_name']),
@@ -63,7 +65,7 @@ if(empty($sql->fetchAll())){
     }else{
 
     $postal_code = $_REQUEST['postalcode']; 
-
+    
 // // Regex: Matches 3 digits, followed by a hyphen, followed by 4 digits.
 // $jp_regex = '/^\d{3}-\d{4}$/'; 
 
@@ -73,9 +75,9 @@ if(empty($sql->fetchAll())){
 //     echo "日本の郵便番号として無効です。";
 // }
        
-       $sql = $pdo->prepare('INSERT INTO gg_users VALUES (null,?,?,?,?,?,?,?,?,?,?,?,?)');
+       $sql = $pdo->prepare('INSERT INTO gg_users(user_id, login_name, firstname, firstname_kana, lastname, lastname_kana, postalcode, address, phone_number, mailaddress, password, gender, birthday)  VALUES (null,?,?,?,?,?,?,?,?,?,?,?,?)');
         $sql->execute([
-             h( $_REQUEST['login_name']),
+             h($_REQUEST['login_name']),
              h($_REQUEST['firstname']),
              h($_REQUEST['firstname_kana']),
              h($_REQUEST['lastname']),
@@ -86,7 +88,7 @@ if(empty($sql->fetchAll())){
              h($_REQUEST['mailaddress']),
              h($hashed_password),
              h($_REQUEST['gender']),
-             h($_REQUEST['birthday'])
+             h($birthday)
         ]);
         echo 'お客様の情報登録しました。';
     }
@@ -94,5 +96,5 @@ if(empty($sql->fetchAll())){
     echo "ログイン名がすでに利用されていますので、変更してください。";
 }
 
- require '../footer.php'
+
  ?>

@@ -55,9 +55,9 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="lastname">名 <span class="required-badge">必須</span></label>
+                            <label for="lastname_kana">名 <span class="required-badge">必須</span></label>
                             <div class="form-group-inline">
-                                <input type="text" id="last_name_kana" name="last_name_kana" required placeholder="メイ (例) タロウ">
+                                <input type="text" id="lastname_kana" name="lastname_kana" required placeholder="メイ (例) タロウ">
                             </div>
                         </div>
 
@@ -85,7 +85,12 @@
 
                         <div class="form-group">
                             <label for="phone_number">電話番号 <span class="required-badge">必須</span></label>
-                            <input type="tel" id="phone" name="phone" required placeholder="例) 0312345678">
+                            <input type="tel" id="phone_number" name="phone_number" required placeholder="例) 0312345678" maxlength="11">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="mailaddress">メール<span class="required-badge">必須</span></label>
+                            <input type="email" id="mailaddress" name="mailaddress" required placeholder="例)example@gmail.com ">
                         </div>
                         
                         <div class="form-group">
@@ -100,7 +105,7 @@
                         </div>
                         
                         <div class="form-group">
-                            <label>生年月日 <span class="required-badge">必須</span></label>
+                            <label for="birthday">生年月日 <span class="required-badge">必須</span></label>
                             <div class="form-group-inline date-select">
                                 <select id="birth_year" name="birth_year" required>
                                     <option value="">年</option>
