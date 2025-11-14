@@ -1,11 +1,9 @@
 <?php require "../functions.php" ?>
-
 <?php
 // 1. セッション管理の開始 
 // 必ずファイルの先頭に記述してください
 session_start();
 
-require "../header.php";
 // --- データベース接続設定 ---
 
 $pdo = null;
@@ -98,15 +96,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($reviewIdToDelete > 0) {
             try {
                 // 買った商品のれーびゅだったら割引を減らす　
-                $sql = $pdo->prepare("SELECT game_id FROM gg_reviews WHERE review_id = ?");
+                $sql = $pdo->prepare("SELECT game_id,gadget_id FROM gg_reviews WHERE review_id = ?");
                 $sql->execute([$reviewIdToDelete]);
                 $deletedId = $sql->fetchAll();
                 if($deletedId[0]['game_id']==null){
                     $deletedProductId = $deletedId[0]['gadget_id'];
+                    $deletedProductType = "gadget_id";
                 }else{
                     $deletedProductId = $deletedId[0]['game_id'];
+                    $deletedProductType = "game_id";
                 }
-                if(hasBought($pdo,$currentUserId,$deletedProductId,"gadget_id")){
+                if(hasBought($pdo,$currentUserId,$deletedProductId,$deletedProductType)){
                     $current_Discount = $premiums[0]['current_discount']-$discountRate;
                     $new_Discount = $premiums[0]['current_discount'];
                     $sql = $pdo->prepare("UPDATE gg_premium SET current_discount = ?,new_discount = ? where user_id = ?");
@@ -192,7 +192,7 @@ $currentProductName = $currentProduct[0]['game_name'];
 
 // これ以降はHTMLの描画
 ?>
-
-<?php require "review.php"; ?>
+<?php require "../header.php"; ?>
+<?php require "myreview.php"; ?>
 
 
