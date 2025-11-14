@@ -5,19 +5,17 @@ require '../functions.php';
 // セッションを開始（$_SESSION['user_id'] を使うため）
 session_start();
 
-// ---------------------------------
-// (2) ログインチェック
-// ---------------------------------
+
+//ログインチェック
 // もしセッションに user_id が無ければ（ログインしていないなら）
 if (empty($_SESSION['customer'])) {
     // ログインページに強制的に移動させる
-    header('Location: login-input.php'); // login.phpはご自身の環境に合わせてください
+    header('Location: login-input.php'); 
     exit();
 }
 
-// ---------------------------------
-// (3) 送られてきたデータを変数に入れる
-// ---------------------------------
+
+// 送られてきたデータを変数に入れる
 // ログイン中のユーザーID
 $user_id = $_SESSION['customer']['user_id'];
 
@@ -29,17 +27,15 @@ $product_type = $_POST['product_type'] ?? null;
 // 数量 (今回はシンプルに「1」固定にします)
 $quantity = 1; 
 
-// ---------------------------------
-// (4) データが正しいかチェック
-// ---------------------------------
+
+// データが正しいかチェック
 // product_id が空、または type が 'game' 'gadget' 以外ならエラー
 if (empty($product_id) || !in_array($product_type, ['game', 'gadget'])) {
     die("エラー：不正なリクエストです。");
 }
 
-// ---------------------------------
-// (5) DBにINSERTするための準備
-// ---------------------------------
+
+//DBにINSERTするための準備
 // gg_cartsテーブルの仕様に合わせて、game_idとgadget_idに振り分ける
 $game_id_to_insert = NULL;
 $gadget_id_to_insert = NULL;
@@ -53,9 +49,8 @@ if ($product_type === 'game') {
     $gadget_id_to_insert = h($product_id);
 }
 
-// ---------------------------------
-// (6) データベースに挿入 (INSERT)
-// ---------------------------------
+
+//データベースに挿入
 $pdo = getPDO();
 
 // INSERT文の「準備」
@@ -74,11 +69,10 @@ $sql->execute([
     $quantity
 ]);
 
-// ---------------------------------
-// (7) 終わったらカートページに移動させる
-// ---------------------------------
+
+//終わったらカートページに移動させる
 // このPHPは処理だけを行うので、終わったらカートページに強制的に移動（リダイレクト）させる
-header('Location: cart-input.php'); // cart.php はご自身のカートページのファイル名
+header('Location: cart-input.php'); 
 exit();
 
 ?>
