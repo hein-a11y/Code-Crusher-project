@@ -20,31 +20,33 @@
     <!-- メインコンテンツ -->
     <main class="main-content">
         <div class="container">
-            
-            <!-- パンくずリスト -->
-            <div class="breadcrumb">
-                <a href="./index.php">ホーム</a> &gt; <a href="#">ガジェット</a> &gt; <span>Logicool G PRO X 2 LIGHTSPEED</span>
-            </div>
-
-            <!-- 商品詳細（ギャラリー + 情報） -->
-            <div class="product-detail-container">
             <?php
             $pdo = getPDO();
             $sql = $pdo->prepare('SELECT * FROM gg_gadget WHERE gadget_id = ?');
             $sql->execute([$_GET['id']]);
             $row = $sql->fetch(PDO::FETCH_ASSOC);
 
+
             $gadget_id = h($row['gadget_id']);
             $gadget_name = h($row['gadget_name']);
             $gadget_explanation = h($row['gadget_explanation']);
             $gadget_manufacturer = h($row['manufacturer']);
             $gadget_connectivity_type = h($row['connectivity_type']);
-            $gadget_fruitsArray = explode(",", $connectivity_type); //,で分割して配列に変換
+            $gadget_fruitsArray = explode(",", $gadget_connectivity_type); //,で分割して配列に変換
             $gadget_price = number_format(h($row['price']));
             $gadget_images = h($row['images']);
 
             $img_src = "./gadget-images/gadgets-$gadget_id" . "_1.jpg";
+            ?>
+            <!-- パンくずリスト -->
+            <div class="breadcrumb">
+                <a href="./index.php">ホーム</a> &gt; <a href="#">ガジェット</a> &gt; <span><?= $gadget_name ?></span>
+            </div>
 
+            <!-- 商品詳細（ギャラリー + 情報） -->
+            <div class="product-detail-container">
+
+            <?php
             echo <<< HTML
                 <!-- 商品ギャラリー -->
                 <div class="product-gallery">

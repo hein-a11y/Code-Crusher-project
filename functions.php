@@ -1,7 +1,7 @@
 <?php
 function getPDO() {
     // データベースの設定
-    $host = 'localhost';
+    $host = '192.168.25.128';
     $dbname = 'gg_store';
     $id = 'crushers';
     $password = 'crushggs@2025';
@@ -12,5 +12,11 @@ function getPDO() {
 
 function h($string) {
     return htmlspecialchars($string);
+}
+
+function debug($data){
+    echo '<pre>';
+    print_r($data);
+    echo '</pre>';
 }
 ?>

@@ -1,6 +1,5 @@
 <?php require_once '../admin_header.php'; ?>
 <?php require '../functions.php'; ?>
-<body class="body-container">
 
     <div class="main-content">
         
@@ -15,16 +14,6 @@
                 </div>
             </div>
             
-            <div class="header-user-controls">
-                <button class="notification-btn">
-                    <i class="fas fa-bell"></i>
-                    <span class="notification-badge"></span>
-                </button>
-                <div class="user-profile">
-                    <img class="user-avatar" src="https://placehold.co/40x40/00BFFF/121212?text=AD" alt="Admin Avatar">
-                    <span class="user-name">管理者</span>
-                </div>
-            </div>
         </header>
 
         <main class="page-content">
@@ -84,7 +73,5 @@
             </section>
         </main>
     </div>
-
-    <script src="./js/admin.js"></script>
 </body>
 </html>

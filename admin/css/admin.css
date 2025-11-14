@@ -1,8 +1,8 @@
 /*
- * ========================================
- * GG STORE ADMIN - 共通スタイルシート
- * ========================================
- */
+* ========================================
+* GG STORE ADMIN - 共通スタイルシート
+* ========================================
+*/
 
 /* --- 1. グローバル変数と基本設定 --- */
 :root {
@@ -96,6 +96,7 @@ a:hover {
     padding: 0.5rem; /* p-2 */
     border-radius: 0.25rem;
     color: var(--text-primary);
+    display: none; /* ▼ 追記: デフォルトで非表示 */
 }
 .sidebar-close-btn:hover {
     color: var(--red);
@@ -165,6 +166,7 @@ a:hover {
     font-size: 1.25rem; /* text-xl */
     padding: 0.5rem; /* p-2 */
     border-radius: 0.25rem;
+    display: none; /* ▼ 追記: デフォルトで非表示 */
 }
 .sidebar-toggle-btn:hover {
     color: var(--accent-blue);
