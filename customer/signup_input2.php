@@ -63,7 +63,7 @@
 
                         <div class="form-group">
                             <label for="postal-code">郵便番号</label>
-                            <input type="text" id="postal-code" name="postalcode" class="postal-code" placeholder="例: 100-0001" maxlength="8">
+                            <input type="text" id="postal-code" name="postalcode" class="postal-code" placeholder="例: 100-0001" maxlength="7">
                             <div id="error-message" class="message"></div>
                             <small>ハイフンなしで入力してください</small>
                         </div>
@@ -85,7 +85,7 @@
 
                         <div class="form-group">
                             <label for="phone_number">電話番号 <span class="required-badge">必須</span></label>
-                            <input type="tel" id="phone_number" name="phone_number" required placeholder="例) 0312345678" maxlength="11">
+                            <input type="tel" id="phone_number" name="phone_number" pattern="[0-9]*" required placeholder="例) 02012345678" maxlength="11">
                         </div>
 
                         <div class="form-group">
@@ -108,13 +108,13 @@
                             <label for="birthday">生年月日 <span class="required-badge">必須</span></label>
                             <div class="form-group-inline date-select">
                                 <select id="birth_year" name="birth_year" required>
-                                    <option value="">年</option>
+                                    <option value="calender">年</option>
                                     </select>
                                 <select id="birth_month" name="birth_month" required>
-                                    <option value="">月</option>
+                                    <option value="calender">月</option>
                                     </select>
                                 <select id="birth_day" name="birth_day" required>
-                                    <option value="">日</option>
+                                    <option value="calender">日</option>
                                     </select>
                             </div>
                         </div>
