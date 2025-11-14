@@ -1,14 +1,14 @@
 // load時、年月変更時に実行する
-  window.onload = function(){
-    $set_year();
-    $set_month();
-    $set_day();
-    yearSelect.addEventListener('change', yearSelect.value);
-    monthSelect.addEventListener('change', monthSelect.value);
+//  window.onload = function(){
+    // $set_year();
+    // $set_month();
+    // $set_day();
+    // yearSelect.addEventListener('change', yearSelect.value);
+    // monthSelect.addEventListener('change', monthSelect.value);
 
     // select_year.addEventListener('change',$set_day)
     // select_month.addEventListener('change',$set_day)
-  }
+//  }
 
 // DOMが完全に読み込まれてからスクリプトを実行
 document.addEventListener("DOMContentLoaded", function() {
@@ -148,7 +148,14 @@ function populateDateDropdowns() {
         option.textContent = i + "月";
         monthSelect.appendChild(option);
     }
-    function updateDayDropdown() {
+
+    console.log(yearSelect.value);
+
+    // yearSelect.addEventListener('change', yearSelect.value);
+    // monthSelect.addEventListener('change', monthSelect.value);
+}
+
+const updateDayDropdown = (() => {
     const yearSelect = document.getElementById("birth_year");
     const monthSelect = document.getElementById("birth_month");
     const daySelect = document.getElementById("birth_day");
@@ -159,27 +166,21 @@ function populateDateDropdowns() {
     if (isNaN(selectedYear) || isNaN(selectedMonth)) {
         return;
     }
-   
+
 
     // 日 (1-31) 
     // ※ 月によって日数を変える（うるう年対応）のは複雑になるため、
     //   ここでは簡易的に31日まで生成します。
     // if(yearSelect.value !== '' &&  monthSelect.value !== ''){
-        const last_day = new Date(yearSelect.value,monthSelect.value,0).getDate();
-
-        for (let i = 1; i <= last_day; i++) {
-            const option = document.createElement("option");
-            option.value = i;
-            option.textContent = i + "日";
-            daySelect.appendChild(option);
-        }
+    const last_day = new Date(yearSelect.value,monthSelect.value,0).getDate();
+    daySelect.textContent = '';
+    for (let i = 1; i <= last_day; i++) {
+        const option = document.createElement("option");
+        option.value = i;
+        option.textContent = i + "日";
+        daySelect.appendChild(option);
     }
-
-    console.log(yearSelect.value);
-
-    // yearSelect.addEventListener('change', yearSelect.value);
-    // monthSelect.addEventListener('change', monthSelect.value);
-}
+});
 
 // (A) 有効期限プルダウンを生成する関数 (ここから追記)
 /**
