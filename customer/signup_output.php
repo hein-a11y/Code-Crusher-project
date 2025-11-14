@@ -68,6 +68,13 @@ if (ctype_digit($phone_numbers)) {
     // You would typically re-display the form with this error.
 }
 
+$raw_postal_code = isset($_REQUEST['postalcode']) ? $_REQUEST['postalcode'] : '';
+$clean_postal_code = preg_replace('/\D/', '', $raw_postal_code);
+if (strlen($clean_postal_code) === 7) {
+    $formatted_postal_code = substr($clean_postal_code, 0, 3) . '-' . substr($clean_postal_code, 3);
+}
+
+
   $address = $_REQUEST['prefecture']." ".$_REQUEST['city']." ".$_REQUEST['address_line1'];
    $birthday = $_REQUEST['birth_year']."/".$_REQUEST['birth_month']."/".$_REQUEST['birth_day'];
 if(empty($sql->fetchAll())){
@@ -128,7 +135,7 @@ if(empty($sql->fetchAll())){
              h($_REQUEST['firstname_kana']),
              h($_REQUEST['lastname']),
              h($_REQUEST['lastname_kana']),
-             h($postal_code),
+             h($clean_postal_code),
              h($address),
              h($phone_numbers),
              h($_REQUEST['mailaddress']),

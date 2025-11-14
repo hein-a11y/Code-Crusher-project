@@ -96,7 +96,7 @@
                         <div class="form-group">
                             <label for="password">パスワード <span class="required-badge">必須</span></label>
                             <input type="password" id="password" name="password" required>
-                            <small>半角英数記号8文字以上で入力してください</small>
+                            <small>パスワードには、大文字、小文字、数字、特殊文字を組み合わせる必要があります。</small>
                         </div>
 
                         <div class="form-group">
@@ -108,13 +108,13 @@
                             <label for="birthday">生年月日 <span class="required-badge">必須</span></label>
                             <div class="form-group-inline date-select">
                                 <select id="birth_year" name="birth_year" required>
-                                    <option value="calender">年</option>
+                                    <option value="">年</option>
                                     </select>
                                 <select id="birth_month" name="birth_month" required>
-                                    <option value="calender">月</option>
+                                    <option value="">月</option>
                                     </select>
                                 <select id="birth_day" name="birth_day" required>
-                                    <option value="calender">日</option>
+                                    <option value="">日</option>
                                     </select>
                             </div>
                         </div>
