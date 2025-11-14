@@ -38,7 +38,7 @@
 
                 <div class="input-group">
                 <label for="login">メールアドレスかログイン名</label>
-                <input type="text" id="login" name="login" placeholder="email@example.com" required>
+                <input type="text" class="loginInput" name="login" placeholder="Username or Email" required>
                 </div>
 
                 <div class="input-group">
@@ -62,7 +62,7 @@
         </div>
     </main>
     
-    <script src="script.js"></script>
+ 
     
 </body>
 </html>

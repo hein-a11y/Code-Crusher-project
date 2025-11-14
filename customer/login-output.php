@@ -12,15 +12,17 @@ session_start();
         $login_type = "login_name";
     }
 
+    $login_password = $_REQUEST['password'];
+
     unset($_SESSION['customer']);
     $pdo = getPDO();
     if($login_type == "email"){
-        $sql = "select * from gg_users where  mailaddress=? and password=?";
+        $sql = "select * from gg_users where  mailaddress=? limit 1";
     }else{
-        $sql = "SELECT FROM gg_users WHERE login_name = ? AND password = ?";
+        $sql = "SELECT * FROM gg_users WHERE login_name = ? limit 1";
     }
     $stmt = $pdo->prepare($sql);
-    $stmt->execute([h($login),h($_REQUEST['password'])]);
+    $stmt->execute([h($login)]);
 
     foreach($stmt as $row){
         $_SESSION['customer']=[
@@ -30,15 +32,17 @@ session_start();
             'address'        => $row['address'],
             'login'          => $row["login_name"]
         ];
+        $stored_hash = $row['password'];
     }
 
-    if(isset($_SESSION['customer'])){
+    if(isset($_SESSION['customer']) && password_verify($login_password, $stored_hash)){
         unset($_SESSION['error_message']);
         header("location: index.php");
         exit;
 
     }else {
-        $_SESSION['error_message'] = 'ログイン名またはパスワードが違います。'
+        unset($_SESSION['customer']);
+        $_SESSION['error_message'] = 'ログイン名またはパスワードが違います。';
     }
 
 
