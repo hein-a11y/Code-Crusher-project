@@ -19,6 +19,7 @@ if(isset($_SESSION['customer'])){
     $sql->execute([$_REQUEST['login_name']]);
 }
 
+// (password)
 $plain_password = isset($_REQUEST['password']) ? h($_REQUEST['password']) : '';
 $confirm_password = isset($_REQUEST['confirm_password']) ? h($_REQUEST['confirm_password']) : '';
 $hashed_password = '';
@@ -56,6 +57,11 @@ if (!empty($error)) {
 }
 
 
+
+
+
+
+// (phone)
 $phone_numbers = $_POST['phone_number']; // Assuming input from a form
 
 if (ctype_digit($phone_numbers)) {
@@ -68,11 +74,27 @@ if (ctype_digit($phone_numbers)) {
     // You would typically re-display the form with this error.
 }
 
+
+
+
+// (postal code)
 $raw_postal_code = isset($_REQUEST['postalcode']) ? $_REQUEST['postalcode'] : '';
 $clean_postal_code = preg_replace('/\D/', '', $raw_postal_code);
 if (strlen($clean_postal_code) === 7) {
     $formatted_postal_code = substr($clean_postal_code, 0, 3) . '-' . substr($clean_postal_code, 3);
 }
+
+
+
+// (katakana)
+$firstname_kana = isset($_REQUEST['firstname_kana']) ? $_REQUEST['firstname_kana'] : '';
+$lastname_kana = isset($_REQUEST['lastname_kana']) ? $_REQUEST['lastname_kana'] : '';
+$katakana_regex = '/^[\p{Katakana}ー\s]+$/u';
+if (!preg_match($katakana_regex, $firstname_kana) || !preg_match($katakana_regex, $lastname_kana)) {
+    $kana_error = "フリガナ (firstname_kana および lastname_kana) には、全角**カタカナ**のみを使用してください。";
+}
+
+
 
 
   $address = $_REQUEST['prefecture']." ".$_REQUEST['city']." ".$_REQUEST['address_line1'];
@@ -117,7 +139,7 @@ if(empty($sql->fetchAll())){
         echo 'お客様の情報変更しました。';
     }else{
 
-    $postal_code = $_REQUEST['postalcode']; 
+    // $postal_code = $_REQUEST['postalcode']; 
     
 // // Regex: Matches 3 digits, followed by a hyphen, followed by 4 digits.
 // $jp_regex = '/^\d{3}-\d{4}$/'; 
@@ -132,10 +154,10 @@ if(empty($sql->fetchAll())){
         $sql->execute([
              h($_REQUEST['login_name']),
              h($_REQUEST['firstname']),
-             h($_REQUEST['firstname_kana']),
+             h($firstname_kana),
              h($_REQUEST['lastname']),
-             h($_REQUEST['lastname_kana']),
-             h($clean_postal_code),
+             h($lastname_kana),
+             h($formatted_postal_code),
              h($address),
              h($phone_numbers),
              h($_REQUEST['mailaddress']),
