@@ -42,7 +42,9 @@ session_start();
 
     }else {
         unset($_SESSION['customer']);
-        $_SESSION['error_message'] = 'ログイン名またはパスワードが違います。';
+        $_SESSION['error_message'] = "ログイン名またはパスワードが違います。";
+        header("location: login-input.php");
+        exit;
     }
 
 
