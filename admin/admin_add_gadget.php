@@ -1,6 +1,43 @@
 <?php require_once '../admin_header.php'; ?>
 <?php require '../functions.php'; ?>
 
+    <style>
+        /* Chrome, Safari, Edge, Opera で数値入力の矢印を消す */
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        /* Firefox で数値入力の矢印を消す */
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+
+        /* スペック入力行のレイアウト */
+        .spec-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+            align-items: center;
+        }
+        
+        /* 削除ボタンのスタイル調整 */
+        .remove-spec-btn {
+            color: var(--red);
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            background-color: rgba(248, 113, 113, 0.1);
+            transition: background-color 0.3s;
+        }
+        .remove-spec-btn:hover {
+            background-color: rgba(248, 113, 113, 0.2);
+        }
+    </style>
 
     <div class="main-content">
         
@@ -14,7 +51,6 @@
                     <i class="fas fa-search search-icon"></i>
                 </div>
             </div>
-            
         </header>
 
         <main class="page-content">
@@ -67,10 +103,24 @@
                         </div>
                         
                         <div class="form-group">
-                            <label for="connectivity_type" class="form-label">接続タイプ (コンマ区切り)</label>
-                            <input type="text" id="connectivity_type" name="connectivity_type" class="form-input" placeholder="例: 無線 (LightSpeed),有線 (USB-C)">
+                            <label class="form-label">スペック情報</label>
+                            
+                            <div id="specs-container">
+                                <div class="spec-row">
+                                    <input type="text" name="spec_name[]" class="form-input" placeholder="項目名 (例: 重さ)" style="flex: 2;">
+                                    <input type="text" name="spec_value[]" class="form-input" placeholder="値 (例: 63)" style="flex: 2;">
+                                    <input type="text" name="spec_unit[]" class="form-input" placeholder="単位 (例: g)" style="flex: 1;">
+                                    <div style="width: 30px;"></div> 
+                                </div>
+                            </div>
+
+                            <button type="button" id="add-spec-btn" class="button button-secondary" style="width: 100%; margin-top: 10px; border-style: dashed;">
+                                <i class="fas fa-plus"></i> スペックを追加
+                            </button>
                         </div>
-                    </div> <div class="card">
+                        </div> 
+                    
+                    <div class="card">
                         <button type="submit" class="button button-primary" style="width: 100%;">
                             <i class="fas fa-save"></i> ガジェットを登録する
                         </button>
@@ -80,5 +130,7 @@
             </section>
         </main>
     </div>
+
+    <script src="./js/admin_add_gadget.js"></script>
 </body>
 </html>

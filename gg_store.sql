@@ -942,6 +942,39 @@ ALTER TABLE `gg_views`
   ADD CONSTRAINT `fk_views_user` FOREIGN KEY (`user_id`) REFERENCES `gg_users` (`user_id`);
 COMMIT;
 
+--
+-- テーブルの制約 `gg_gadget_category_specs`
+--
+CREATE VIEW
+	gg_gadget_category_specs
+AS
+SELECT 
+    gg_gadget.gadget_id, 
+    gg_category.category_id ,
+    gg_specifications.spec_id, 
+    gg_gadget.manufacturer,
+    gg_gadget.gadget_name,
+    gg_gadget.price,
+    gg_category.category_name,
+    gg_specifications.spec_name, 
+    gg_gadget_specs.spec_value,
+    gg_specifications.unit,
+    gg_gadget.stock
+FROM
+	gg_gadget
+INNER JOIN
+	gg_gadget_specs
+ON
+	gg_gadget.gadget_id = gg_gadget_specs.gadget_id
+INNER JOIN
+	gg_category
+ON
+	gg_gadget.category_id = gg_category.category_id
+INNER JOIN
+	gg_specifications
+ON
+	gg_gadget_specs.gadget_spec_id = gg_specifications.spec_id;
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
