@@ -38,6 +38,7 @@ try {
     // 実行
     $sql->execute([
         $cart_id_to_delete,
+        
         $user_id
     ]);
 

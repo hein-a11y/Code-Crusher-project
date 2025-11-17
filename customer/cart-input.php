@@ -109,13 +109,6 @@ if (!empty($gadget_id)) {
 
 
 
-// ---------------------------------
-
-// 4. HTMLとして表示（ループ処理）
-
-// ---------------------------------
-
-
 
 // 合計金額を計算するための変数を0で用意
 
@@ -152,6 +145,13 @@ foreach ($cart_item as $item) {
         // (G) 合計金額に加算
         $total_price += $subtotal;
 
+
+        $raw_price = $product_info['price'];
+
+        // gg_cartsテーブルの主キー(cart_id)を $item から取得
+        // （あなたの var_dump (image_ca5a83.png) から 'cart_id' と特定）
+        $cart_row_id = h($item['cart_id']);
+
         // (H) ★★★ ヒアドキュメント修正 ★★★
 
         // 関数呼び出しの結果を、先に変数に格納する
@@ -161,16 +161,11 @@ foreach ($cart_item as $item) {
         $display_quantity = h($item['quantity']);
 
         // TODO: $image_path もここで設定する
-
         $image_path = "https://via.placeholder.com/100x100/333/808080?text=Item"; // TODO: 画像パス
 
 
 
-        // ヒアドキュメントでHTMLを出力
-
-        // {$変数名} の形で変数を埋め込む
-
-        // (H) ★★★ ヒアドキュメント修正 ★★★
+        
 
         // 関数呼び出しの結果を、先に変数に格納する
 
@@ -211,7 +206,7 @@ foreach ($cart_item as $item) {
 
                     <input type="number" class="item-quantity" value="{$display_quantity}" min="1">
 
-                    <a href="delete-cart.php" class="remove-link">削除</a>
+                    <a href="delete-cart.php" class="remove-link" data-cart-id="{$cart_row_id}">削除</a>
 
                 </div>
 
