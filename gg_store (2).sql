@@ -1,15 +1,17 @@
-CREATE USER 'crushers'@'localhost' identified by 'crushggs@2025';		
+drop database if exists gg_store;
+create database gg_store default character set utf8 collate utf8_general_ci;
+drop user if exists 'crushers'@'localhost';
+create user 'crushers'@'localhost' identified by 'crushggs@2025';
 GRANT ALL ON gg_store.* to 'crushers'@'localhost';		
-
-create database gg_store;
 use gg_store;
+
 
 -- phpMyAdmin SQL Dump
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
 -- ホスト: 127.0.0.1
--- 生成日時: 2025-10-27 04:23:55
+-- 生成日時: 2025-11-07 05:44:10
 -- サーバのバージョン： 10.4.32-MariaDB
 -- PHP のバージョン: 8.2.12
 
@@ -37,7 +39,8 @@ CREATE TABLE `compatibility_rules` (
   `rule_id` int(11) NOT NULL,
   `platform_id` int(11) NOT NULL,
   `genre_id` int(11) DEFAULT NULL,
-  `recommend_category_id` int(11) NOT NULL
+  `recommend_category_id` int(11) NOT NULL,
+  `platform_genre_key` varchar(100) GENERATED ALWAYS AS (concat(`platform_id`,':',coalesce(cast(`genre_id` as char charset utf8mb4),'GENERAL'))) STORED
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
@@ -50,6 +53,18 @@ INSERT INTO `compatibility_rules` (`rule_id`, `platform_id`, `genre_id`, `recomm
 (3, 2, 3, 1),
 (4, 6, NULL, 5),
 (5, 1, NULL, 1);
+
+-- --------------------------------------------------------
+
+--
+-- ビュー用の代替構造 `database_check_constraints`
+-- (実際のビューを参照するには下にあります)
+--
+CREATE TABLE `database_check_constraints` (
+`table_name` varchar(64)
+,`constraint_name` varchar(64)
+,`check_clause` longtext
+);
 
 -- --------------------------------------------------------
 
@@ -93,7 +108,8 @@ CREATE TABLE `gg_carts` (
   `gadget_id` int(11) DEFAULT NULL,
   `quantity` int(11) NOT NULL,
   `creation_date` datetime NOT NULL DEFAULT current_timestamp(),
-  `update_date` datetime DEFAULT NULL ON UPDATE current_timestamp()
+  `update_date` datetime DEFAULT NULL ON UPDATE current_timestamp(),
+  `cart_item_key` varchar(255) GENERATED ALWAYS AS (concat(coalesce(concat('U:',`user_id`),concat('S:',`session_id`)),':',coalesce(concat('G:',`game_id`),concat('D:',`gadget_id`)))) STORED
 ) ;
 
 --
@@ -101,11 +117,11 @@ CREATE TABLE `gg_carts` (
 --
 
 INSERT INTO `gg_carts` (`cart_id`, `user_id`, `session_id`, `game_id`, `gadget_id`, `quantity`, `creation_date`, `update_date`) VALUES
-(1, 1, NULL, 1, NULL, 1, '2025-10-27 11:46:37', NULL),
-(2, 1, NULL, NULL, 3, 1, '2025-10-27 11:46:37', NULL),
-(3, 2, NULL, 3, NULL, 2, '2025-10-27 11:46:37', NULL),
-(4, NULL, 'abc123xyz789_guest_session_id', NULL, 1, 1, '2025-10-27 11:46:37', NULL),
-(5, NULL, 'efg456hij000_another_session', 3, NULL, 1, '2025-10-27 11:46:37', NULL);
+(1, 1, NULL, 1, NULL, 1, '2025-11-06 12:11:39', NULL),
+(2, 1, NULL, NULL, 3, 1, '2025-11-06 12:11:39', NULL),
+(3, 2, NULL, 3, NULL, 2, '2025-11-06 12:11:39', NULL),
+(4, NULL, 'abc123xyz789_guest_session_id', NULL, 1, 1, '2025-11-06 12:11:39', NULL),
+(5, NULL, 'efg456hij000_another_session', 3, NULL, 1, '2025-11-06 12:11:39', NULL);
 
 -- --------------------------------------------------------
 
@@ -199,7 +215,8 @@ CREATE TABLE `gg_favorite` (
   `user_id` int(11) NOT NULL,
   `game_id` int(11) DEFAULT NULL,
   `gadget_id` int(11) DEFAULT NULL,
-  `favorite_date` datetime NOT NULL DEFAULT current_timestamp()
+  `favorite_date` datetime NOT NULL DEFAULT current_timestamp(),
+  `user_product_key` varchar(100) GENERATED ALWAYS AS (concat(`user_id`,':',coalesce(concat('game:',`game_id`),concat('gadget:',`gadget_id`)))) STORED
 ) ;
 
 --
@@ -207,12 +224,12 @@ CREATE TABLE `gg_favorite` (
 --
 
 INSERT INTO `gg_favorite` (`favorite_id`, `user_id`, `game_id`, `gadget_id`, `favorite_date`) VALUES
-(1, 1, 1, NULL, '2025-10-27 11:57:40'),
-(2, 1, NULL, 1, '2025-10-27 11:57:40'),
-(3, 2, 3, NULL, '2025-10-27 11:57:40'),
-(4, 2, 6, NULL, '2025-10-27 11:57:40'),
-(5, 3, NULL, 2, '2025-10-27 11:57:40'),
-(6, 3, 1, NULL, '2025-10-27 11:57:40');
+(1, 1, 1, NULL, '2025-11-06 12:20:59'),
+(2, 1, NULL, 1, '2025-11-06 12:20:59'),
+(3, 2, 3, NULL, '2025-11-06 12:20:59'),
+(4, 2, 6, NULL, '2025-11-06 12:20:59'),
+(5, 3, NULL, 2, '2025-11-06 12:20:59'),
+(6, 3, 1, NULL, '2025-11-06 12:20:59');
 
 -- --------------------------------------------------------
 
@@ -228,7 +245,6 @@ CREATE TABLE `gg_gadget` (
   `manufacturer` varchar(100) NOT NULL,
   `connectivity_type` varchar(50) DEFAULT NULL,
   `price` decimal(10,2) NOT NULL,
-  `images` int NOT NULL,
   `stock` int(11) NOT NULL,
   `Sales_Status` int(11) NOT NULL,
   `created_time` datetime NOT NULL DEFAULT current_timestamp(),
@@ -246,10 +262,40 @@ INSERT INTO `gg_gadget` (`gadget_id`, `category_id`, `gadget_name`, `gadget_expl
 (4, 5, 'Xbox Elite ワイヤレス コントローラー シリーズ 2', '交換可能なスティックや背面パドルを備えた、プロ仕様のカスタマイズ可能なコントローラー。', 'Microsoft', '無線 (Bluetooth + USB-C)', 19980.00, 20, 1, '2025-10-27 11:36:32', NULL),
 (5, 7, 'Shure MV7', 'ポッドキャストや配信に最適なダイナミックマイク。USBとXLRの両方に対応し、クリアな音質を提供。', 'Shure', '有線 (USB / XLR)', 31000.00, 10, 1, '2025-10-27 11:36:32', NULL),
 (6, 2, 'ZOWIE EC2-C', 'eスポーツ、特にFPSプレイヤーに人気の有線ゲーミングマウス。エルゴノミクスデザインが特徴。', 'BenQ ZOWIE', '有線 (USB)', 8800.00, 0, 0, '2025-10-27 11:36:32', NULL),
-(null, 2, 'Logicool G PRO X 2 LIGHTSPEED', '初のグラフェンドライバー「PRO-Gグラフェンドライバー」搭載、「PRO X 2 LIGHTSPEED ワイヤレスゲーミングヘッドセット」に保証期間1年間のAmazon.co.jp限定モデルが登場！
+(7, 2, 'Logicool G PRO X 2 LIGHTSPEED', '初のグラフェンドライバー「PRO-Gグラフェンドライバー」搭載、「PRO X 2 LIGHTSPEED ワイヤレスゲーミングヘッドセット」に保証期間1年間のAmazon.co.jp限定モデルが登場！
 PRO-Gグラフェンドライバー搭載で複数の音を認知。安定した高音質を楽しむことができます。最大連続使用時間50時間、前機種に比べ2倍を超える電池寿命に向上しました。
 さらに25gの軽量化も実現し、より長時間のプレイでも疲れにくくなりました。
 ', 'Logicool', 'Bluetooth, LIGHTSPEED, ワイヤレス, 有線', 32500, 41, 1, now(), NULL);
+
+-- --------------------------------------------------------
+
+--
+-- テーブルの構造 `gg_gadget_specs`
+--
+
+CREATE TABLE `gg_gadget_specs` (
+  `gadget_spec_id` int(11) NOT NULL,
+  `gadget_id` int(11) NOT NULL,
+  `spec_id` int(11) NOT NULL,
+  `spec_value` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- テーブルのデータのダンプ `gg_gadget_specs`
+--
+
+INSERT INTO `gg_gadget_specs` (`gadget_spec_id`, `gadget_id`, `spec_id`, `spec_value`) VALUES
+(1, 1, 6, '63'),
+(2, 1, 8, 'HERO 25K'),
+(3, 1, 9, '100 - 25,600'),
+(4, 1, 11, '70'),
+(5, 1, 13, '2'),
+(6, 2, 6, '262'),
+(7, 2, 12, '1.8'),
+(8, 2, 13, '2'),
+(9, 3, 10, 'OmniPoint'),
+(10, 3, 12, '2.0'),
+(11, 3, 13, '1');
 
 -- --------------------------------------------------------
 
@@ -316,6 +362,41 @@ INSERT INTO `gg_game_genres` (`game_id`, `genre_id`) VALUES
 -- --------------------------------------------------------
 
 --
+-- テーブルの構造 `gg_game_requirements`
+--
+
+CREATE TABLE `gg_game_requirements` (
+  `game_req_id` int(11) NOT NULL,
+  `game_id` int(11) NOT NULL,
+  `spec_id` int(11) NOT NULL,
+  `spec_value` varchar(255) NOT NULL,
+  `type` varchar(10) NOT NULL
+) ;
+
+--
+-- テーブルのデータのダンプ `gg_game_requirements`
+--
+
+INSERT INTO `gg_game_requirements` (`game_req_id`, `game_id`, `spec_id`, `spec_value`, `type`) VALUES
+(1, 2, 1, 'Windows 10 64-bit', 'MIN'),
+(2, 2, 3, '8', 'MIN'),
+(3, 2, 2, 'Intel Core i5-3570K or AMD FX-8310', 'MIN'),
+(4, 2, 4, '70', 'MIN'),
+(5, 2, 5, '12', 'MIN'),
+(6, 2, 1, 'Windows 10 64-bit', 'REC'),
+(7, 2, 3, '12', 'REC'),
+(8, 2, 2, 'Intel Core i7-6700 or AMD Ryzen 5 1600', 'REC'),
+(9, 2, 4, '70 (SSD Recommended)', 'REC'),
+(10, 2, 5, '12', 'REC'),
+(11, 5, 1, 'Windows Vista or greater', 'MIN'),
+(12, 5, 3, '2', 'MIN'),
+(13, 5, 2, '2.0 GHz', 'MIN'),
+(14, 5, 4, '1', 'MIN'),
+(15, 5, 5, '10', 'MIN');
+
+-- --------------------------------------------------------
+
+--
 -- テーブルの構造 `gg_genres`
 --
 
@@ -362,14 +443,21 @@ CREATE TABLE `gg_media` (
 --
 
 INSERT INTO `gg_media` (`media_id`, `game_id`, `gadget_id`, `url`, `type`, `is_primary`) VALUES
-(1, 1, NULL, 'https://example.com/images/elden_ring_cover.jpg', 'image', 1),
-(2, 1, NULL, 'https://example.com/images/elden_ring_screenshot_01.jpg', 'image', 0),
-(3, 1, NULL, 'https://www.youtube.com/watch?v=E3Huy2cdih0', 'video', 0),
-(4, 3, NULL, 'https://example.com/images/animal_crossing_cover.jpg', 'image', 1),
-(5, 6, NULL, 'https://example.com/images/zelda_totk_cover.jpg', 'image', 1),
-(6, NULL, 1, 'https://example.com/images/logicool_gprox_main.jpg', 'image', 1),
-(7, NULL, 1, 'https://example.com/images/logicool_gprox_angle.jpg', 'image', 0),
-(8, NULL, 2, 'https://example.com/images/razer_blackshark_v2.jpg', 'image', 1);
+(1, NULL, 1, 'gadget-images/gadgets-1_1.jpg', 'image', 1),
+(2, NULL, 2, 'gadget-images/gadgets-2_1.jpg', 'image', 1),
+(3, NULL, 3, 'gadget-images/gadgets-3_1.jpg', 'image', 1),
+(4, NULL, 4, 'gadget-images/gadgets-4_1.jpg', 'image', 1),
+(5, NULL, 5, 'gadget-images/gadgets-5_1.jpg', 'image', 1),
+(6, NULL, 6, 'gadget-images/gadgets-6_1.jpg', 'image', 1),
+(7, NULL, 7, 'gadget-images/gadgets-7_1.jpg', 'image', 1),
+(8, NULL, 7, 'gadget-images/gadgets-7_2.jpg', 'image', 0),
+(9, NULL, 7, 'gadget-images/gadgets-7_3.jpg', 'image', 0),
+(10, NULL, 7, 'gadget-images/gadgets-7_4.jpg', 'image', 0),
+(11, NULL, 7, 'gadget-images/gadgets-7_5.jpg', 'image', 0),
+(12, NULL, 7, 'gadget-images/gadgets-7_6.jpg', 'image', 0),
+(13, NULL, 7, 'gadget-images/gadgets-7_7.jpg', 'image', 0),
+(14, NULL, 7, 'gadget-images/gadgets-7_8.jpg', 'image', 0);
+
 
 -- --------------------------------------------------------
 
@@ -504,7 +592,8 @@ CREATE TABLE `gg_reviews` (
   `game_id` int(11) DEFAULT NULL,
   `gadget_id` int(11) DEFAULT NULL,
   `comment` text DEFAULT NULL,
-  `review_date` datetime NOT NULL DEFAULT current_timestamp()
+  `review_date` datetime NOT NULL DEFAULT current_timestamp(),
+  `user_product_key` varchar(100) GENERATED ALWAYS AS (concat(`user_id`,':',coalesce(concat('game:',`game_id`),concat('gadget:',`gadget_id`)))) STORED
 ) ;
 
 --
@@ -516,7 +605,54 @@ INSERT INTO `gg_reviews` (`review_id`, `user_id`, `rating`, `game_id`, `gadget_i
 (2, 2, 4, 3, NULL, '毎日少しずつプレイするのが楽しい。癒やされます。ただ、もう少しイベントが多いと嬉しい。', '2024-05-20 18:45:00'),
 (3, 3, 5, NULL, 2, 'FPSゲームで使用。足音が非常によく聞こえる。マイクの音質もクリアで、仲間からも好評。', '2024-09-01 12:00:00'),
 (4, 1, 4, NULL, 1, '本当に軽い。ワイヤレスで遅延も感じない。ただし、価格が少し高いので星4つ。', '2024-10-10 21:00:00'),
-(5, 2, 3, 2, NULL, 'アップデートでかなり良くなったと聞いて購入。世界観は好きだが、まだバグが残っている。', '2024-10-25 14:15:00');
+(5, 2, 3, 2, NULL, 'アップデートでかなり良くなったと聞いて購入。世界観は好きだが、まだバグが残っている。', '2024-10-25 14:15:00'),
+(6, 4, 2, 2, NULL, 'too much lags', '2025-11-04 14:06:12'),
+(8, 1, 4, 2, NULL, 'cool game it was fantastic.', '2025-11-04 17:20:35');
+
+-- --------------------------------------------------------
+
+--
+-- テーブルの構造 `gg_specifications`
+--
+
+CREATE TABLE `gg_specifications` (
+  `spec_id` int(11) NOT NULL,
+  `spec_name` varchar(100) NOT NULL,
+  `unit` varchar(10) DEFAULT NULL,
+  `product_type` varchar(10) NOT NULL
+) ;
+
+--
+-- テーブルのデータのダンプ `gg_specifications`
+--
+
+INSERT INTO `gg_specifications` (`spec_id`, `spec_name`, `unit`, `product_type`) VALUES
+(1, 'Minimum OS', NULL, 'GAME'),
+(2, 'Recommended CPU', NULL, 'GAME'),
+(3, 'Minimum RAM', 'GB', 'GAME'),
+(4, 'Storage Space', 'GB', 'GAME'),
+(5, 'DirectX Version', NULL, 'GAME'),
+(6, 'Weight', 'g', 'GADGET'),
+(7, 'Dimensions', 'mm', 'GADGET'),
+(8, 'Sensor Type', NULL, 'GADGET'),
+(9, 'DPI', NULL, 'GADGET'),
+(10, 'Key Switch Type', NULL, 'GADGET'),
+(11, 'Battery Life', 'hours', 'GADGET'),
+(12, 'Cable Length', 'm', 'GADGET'),
+(13, 'Warranty', 'years', 'BOTH');
+
+-- --------------------------------------------------------
+
+--
+-- ビュー用の代替構造 `gg_unique_constraints`
+-- (実際のビューを参照するには下にあります)
+--
+CREATE TABLE `gg_unique_constraints` (
+`table_name` varchar(64)
+,`constraint_name` varchar(64)
+,`constraint_type` varchar(64)
+,`constrained_columns` mediumtext
+);
 
 -- --------------------------------------------------------
 
@@ -580,6 +716,50 @@ INSERT INTO `gg_views` (`view_id`, `user_id`, `game_id`, `gadget_id`, `view_time
 (5, 2, 3, NULL, '2024-10-27 08:45:00', 2005),
 (6, 1, 1, NULL, '2024-10-27 09:00:00', NULL);
 
+-- --------------------------------------------------------
+
+--
+-- ビュー用の代替構造 `review_game_gadget`
+-- (実際のビューを参照するには下にあります)
+--
+CREATE TABLE `review_game_gadget` (
+`review_id` int(11)
+,`firstname` varchar(100)
+,`lastname` varchar(100)
+,`game_name` varchar(255)
+,`gadget_name` varchar(255)
+,`rating` int(11)
+,`comment` text
+,`review_date` datetime
+);
+
+-- --------------------------------------------------------
+
+--
+-- ビュー用の構造 `database_check_constraints`
+--
+DROP TABLE IF EXISTS `database_check_constraints`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `database_check_constraints`  AS SELECT `information_schema`.`check_constraints`.`TABLE_NAME` AS `table_name`, `information_schema`.`check_constraints`.`CONSTRAINT_NAME` AS `constraint_name`, `information_schema`.`check_constraints`.`CHECK_CLAUSE` AS `check_clause` FROM `information_schema`.`check_constraints` WHERE `information_schema`.`check_constraints`.`CONSTRAINT_SCHEMA` = 'gg_store' ;
+
+-- --------------------------------------------------------
+
+--
+-- ビュー用の構造 `gg_unique_constraints`
+--
+DROP TABLE IF EXISTS `gg_unique_constraints`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `gg_unique_constraints`  AS SELECT `tc`.`TABLE_NAME` AS `table_name`, `tc`.`CONSTRAINT_NAME` AS `constraint_name`, `tc`.`CONSTRAINT_TYPE` AS `constraint_type`, group_concat(`kcu`.`COLUMN_NAME` order by `kcu`.`ORDINAL_POSITION` ASC separator ',') AS `constrained_columns` FROM (`information_schema`.`table_constraints` `tc` join `information_schema`.`key_column_usage` `kcu` on(`tc`.`CONSTRAINT_NAME` = `kcu`.`CONSTRAINT_NAME` and `tc`.`TABLE_SCHEMA` = `kcu`.`TABLE_SCHEMA`)) WHERE `tc`.`CONSTRAINT_SCHEMA` = 'gg_store' AND `tc`.`CONSTRAINT_TYPE` in ('UNIQUE','PRIMARY KEY') GROUP BY `tc`.`TABLE_NAME`, `tc`.`CONSTRAINT_NAME`, `tc`.`CONSTRAINT_TYPE` ORDER BY `tc`.`TABLE_NAME` ASC, `tc`.`CONSTRAINT_TYPE` ASC ;
+
+-- --------------------------------------------------------
+
+--
+-- ビュー用の構造 `review_game_gadget`
+--
+DROP TABLE IF EXISTS `review_game_gadget`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `review_game_gadget`  AS SELECT `review`.`review_id` AS `review_id`, `user`.`firstname` AS `firstname`, `user`.`lastname` AS `lastname`, `game`.`game_name` AS `game_name`, `gadget`.`gadget_name` AS `gadget_name`, `review`.`rating` AS `rating`, `review`.`comment` AS `comment`, `review`.`review_date` AS `review_date` FROM (((`gg_reviews` `review` join `gg_users` `user` on(`review`.`user_id` = `user`.`user_id`)) left join `gg_game` `game` on(`review`.`game_id` = `game`.`game_id`)) left join `gg_gadget` `gadget` on(`review`.`gadget_id` = `gadget`.`gadget_id`)) ;
+
 --
 -- ダンプしたテーブルのインデックス
 --
@@ -589,7 +769,8 @@ INSERT INTO `gg_views` (`view_id`, `user_id`, `game_id`, `gadget_id`, `view_time
 --
 ALTER TABLE `compatibility_rules`
   ADD PRIMARY KEY (`rule_id`),
-  ADD UNIQUE KEY `uk_platform_genre` (`platform_id`,`genre_id`),
+  ADD UNIQUE KEY `platform_genre_key` (`platform_genre_key`),
+  ADD KEY `fk_compatibility_platform` (`platform_id`),
   ADD KEY `fk_compatibility_genre` (`genre_id`),
   ADD KEY `fk_compatibility_category` (`recommend_category_id`);
 
@@ -606,7 +787,8 @@ ALTER TABLE `gg_admins`
 --
 ALTER TABLE `gg_carts`
   ADD PRIMARY KEY (`cart_id`),
-  ADD UNIQUE KEY `uk_user_cart_item` (`user_id`,`session_id`,`game_id`,`gadget_id`),
+  ADD UNIQUE KEY `cart_item_key` (`cart_item_key`),
+  ADD KEY `fk_carts_user` (`user_id`),
   ADD KEY `fk_carts_game` (`game_id`),
   ADD KEY `fk_carts_gadget` (`gadget_id`);
 
@@ -638,7 +820,8 @@ ALTER TABLE `gg_detail_orders`
 --
 ALTER TABLE `gg_favorite`
   ADD PRIMARY KEY (`favorite_id`),
-  ADD UNIQUE KEY `uk_user_favorite` (`user_id`,`game_id`,`gadget_id`),
+  ADD UNIQUE KEY `user_product_key` (`user_product_key`),
+  ADD KEY `fk_favorite_user` (`user_id`),
   ADD KEY `fk_favorite_game` (`game_id`),
   ADD KEY `fk_favorite_gadget` (`gadget_id`);
 
@@ -648,6 +831,14 @@ ALTER TABLE `gg_favorite`
 ALTER TABLE `gg_gadget`
   ADD PRIMARY KEY (`gadget_id`),
   ADD KEY `fk_gadget_category` (`category_id`);
+
+--
+-- テーブルのインデックス `gg_gadget_specs`
+--
+ALTER TABLE `gg_gadget_specs`
+  ADD PRIMARY KEY (`gadget_spec_id`),
+  ADD UNIQUE KEY `uk_gadget_spec` (`gadget_id`,`spec_id`),
+  ADD KEY `fk_gadget_spec_name` (`spec_id`);
 
 --
 -- テーブルのインデックス `gg_game`
@@ -662,6 +853,14 @@ ALTER TABLE `gg_game`
 ALTER TABLE `gg_game_genres`
   ADD PRIMARY KEY (`game_id`,`genre_id`),
   ADD KEY `fk_gamegenre_genre` (`genre_id`);
+
+--
+-- テーブルのインデックス `gg_game_requirements`
+--
+ALTER TABLE `gg_game_requirements`
+  ADD PRIMARY KEY (`game_req_id`),
+  ADD UNIQUE KEY `uk_game_req` (`game_id`,`spec_id`,`type`),
+  ADD KEY `fk_game_req_spec_name` (`spec_id`);
 
 --
 -- テーブルのインデックス `gg_genres`
@@ -717,9 +916,17 @@ ALTER TABLE `gg_premium`
 --
 ALTER TABLE `gg_reviews`
   ADD PRIMARY KEY (`review_id`),
-  ADD UNIQUE KEY `uk_user_product_review` (`user_id`,`game_id`,`gadget_id`),
+  ADD UNIQUE KEY `user_product_key` (`user_product_key`),
+  ADD KEY `fk_reviews_user` (`user_id`),
   ADD KEY `fk_reviews_game` (`game_id`),
   ADD KEY `fk_reviews_gadget` (`gadget_id`);
+
+--
+-- テーブルのインデックス `gg_specifications`
+--
+ALTER TABLE `gg_specifications`
+  ADD PRIMARY KEY (`spec_id`),
+  ADD UNIQUE KEY `uk_spec_name` (`spec_name`);
 
 --
 -- テーブルのインデックス `gg_users`
@@ -746,7 +953,7 @@ ALTER TABLE `gg_views`
 -- テーブルの AUTO_INCREMENT `compatibility_rules`
 --
 ALTER TABLE `compatibility_rules`
-  MODIFY `rule_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `rule_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- テーブルの AUTO_INCREMENT `gg_admins`
@@ -791,10 +998,22 @@ ALTER TABLE `gg_gadget`
   MODIFY `gadget_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
+-- テーブルの AUTO_INCREMENT `gg_gadget_specs`
+--
+ALTER TABLE `gg_gadget_specs`
+  MODIFY `gadget_spec_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
+--
 -- テーブルの AUTO_INCREMENT `gg_game`
 --
 ALTER TABLE `gg_game`
   MODIFY `game_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- テーブルの AUTO_INCREMENT `gg_game_requirements`
+--
+ALTER TABLE `gg_game_requirements`
+  MODIFY `game_req_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- テーブルの AUTO_INCREMENT `gg_media`
@@ -819,6 +1038,12 @@ ALTER TABLE `gg_point_transactions`
 --
 ALTER TABLE `gg_reviews`
   MODIFY `review_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- テーブルの AUTO_INCREMENT `gg_specifications`
+--
+ALTER TABLE `gg_specifications`
+  MODIFY `spec_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- テーブルの AUTO_INCREMENT `gg_users`
@@ -881,6 +1106,13 @@ ALTER TABLE `gg_gadget`
   ADD CONSTRAINT `fk_gadget_category` FOREIGN KEY (`category_id`) REFERENCES `gg_category` (`category_id`);
 
 --
+-- テーブルの制約 `gg_gadget_specs`
+--
+ALTER TABLE `gg_gadget_specs`
+  ADD CONSTRAINT `fk_gadget_spec_accessory` FOREIGN KEY (`gadget_id`) REFERENCES `gg_gadget` (`gadget_id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_gadget_spec_name` FOREIGN KEY (`spec_id`) REFERENCES `gg_specifications` (`spec_id`);
+
+--
 -- テーブルの制約 `gg_game`
 --
 ALTER TABLE `gg_game`
@@ -892,6 +1124,13 @@ ALTER TABLE `gg_game`
 ALTER TABLE `gg_game_genres`
   ADD CONSTRAINT `fk_gamegenre_game` FOREIGN KEY (`game_id`) REFERENCES `gg_game` (`game_id`),
   ADD CONSTRAINT `fk_gamegenre_genre` FOREIGN KEY (`genre_id`) REFERENCES `gg_genres` (`genre_id`);
+
+--
+-- テーブルの制約 `gg_game_requirements`
+--
+ALTER TABLE `gg_game_requirements`
+  ADD CONSTRAINT `fk_game_req_game` FOREIGN KEY (`game_id`) REFERENCES `gg_game` (`game_id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_game_req_spec_name` FOREIGN KEY (`spec_id`) REFERENCES `gg_specifications` (`spec_id`);
 
 --
 -- テーブルの制約 `gg_media`
@@ -941,6 +1180,36 @@ ALTER TABLE `gg_views`
   ADD CONSTRAINT `fk_views_game` FOREIGN KEY (`game_id`) REFERENCES `gg_game` (`game_id`),
   ADD CONSTRAINT `fk_views_user` FOREIGN KEY (`user_id`) REFERENCES `gg_users` (`user_id`);
 COMMIT;
+
+CREATE VIEW
+	gg_gadget_category_specs
+AS
+SELECT 
+    gg_gadget.gadget_id, 
+    gg_category.category_id ,
+    gg_specifications.spec_id, 
+    gg_gadget.manufacturer,
+    gg_gadget.gadget_name,
+    gg_gadget.price,
+    gg_category.category_name,
+    gg_specifications.spec_name, 
+    gg_gadget_specs.spec_value,
+    gg_specifications.unit,
+    gg_gadget.stock
+FROM
+	gg_gadget
+INNER JOIN
+	gg_gadget_specs
+ON
+	gg_gadget.gadget_id = gg_gadget_specs.gadget_id
+INNER JOIN
+	gg_category
+ON
+	gg_gadget.category_id = gg_category.category_id
+INNER JOIN
+	gg_specifications
+ON
+	gg_gadget_specs.spec_id = gg_specifications.spec_id;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

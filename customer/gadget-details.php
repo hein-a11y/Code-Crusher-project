@@ -1,5 +1,4 @@
 <?php require_once '../header.php'; ?>
-<?php require '../functions.php'; ?>
 
 <!DOCTYPE html>
 <html lang="ja">
@@ -26,7 +25,6 @@
             $sql->execute([$_GET['id']]);
             $row = $sql->fetch(PDO::FETCH_ASSOC);
 
-
             $gadget_id = h($row['gadget_id']);
             $gadget_name = h($row['gadget_name']);
             $gadget_explanation = h($row['gadget_explanation']);
@@ -34,13 +32,24 @@
             $gadget_connectivity_type = h($row['connectivity_type']);
             $gadget_fruitsArray = explode(",", $gadget_connectivity_type); //,で分割して配列に変換
             $gadget_price = number_format(h($row['price']));
-            $gadget_images = h($row['images']);
 
-            $img_src = "./gadget-images/gadgets-$gadget_id" . "_1.jpg";
+            $sql = $pdo->prepare('SELECT gg_media.url,gg_media.is_primary FROM gg_media WHERE gg_media.gadget_id = ?');
+            $sql->execute([$gadget_id]);
+
+            $main_img = "";
+            $img_src = [];
+            foreach ($sql as $media) {
+                if ($media['is_primary'] == 1) {
+                    $main_img = h($media['url']);
+                } else {
+                    $img_src[] = h($media['url']);
+                }
+            }
+
             ?>
             <!-- パンくずリスト -->
             <div class="breadcrumb">
-                <a href="./index.php">ホーム</a> &gt; <a href="#">ガジェット</a> &gt; <span><?= $gadget_name ?></span>
+                <a href="./index.php">ホーム</a> &gt; <a href="./GADGETS.php">ガジェット</a> &gt; <span><?= $gadget_name ?></span>
             </div>
 
             <!-- 商品詳細（ギャラリー + 情報） -->
@@ -52,16 +61,16 @@
                 <div class="product-gallery">
                     <div class="main-image-wrapper">
                         <!-- メイン画像 -->
-                        <img id="main-image" src="$img_src" alt="$gadget_name メイン画像">
+                        <img id="main-image" src="$main_img" alt="$gadget_name メイン画像">
                     </div>
                     <!-- サムネイル -->
                     <div class="thumbnail-container">
+                        <img class="thumbnail" src="$main_img" alt="サムネイル" data-src="$main_img">
             HTML;
-
-            for ($i = 1; $i <= $gadget_images; $i++) {
-                $img_src = "./gadget-images/gadgets-$gadget_id" . "_$i.jpg";
+            
+            foreach ($img_src as $sub_img) {
                 echo <<< HTML
-                    <img class="thumbnail" src="$img_src" alt="サムネイル $i" data-src="$img_src">
+                    <img class="thumbnail" src="$sub_img" alt="サムネイル" data-src="$sub_img">
                 HTML;
             }
             echo <<< HTML

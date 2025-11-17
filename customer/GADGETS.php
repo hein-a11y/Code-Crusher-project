@@ -35,30 +35,18 @@
 
                     $sql = $pdo->prepare('SELECT gg_media.url,gg_media.is_primary FROM gg_media WHERE gg_media.gadget_id = ?');
                     $sql->execute([$id]);
-                    $medias = $sql->fetchAll(PDO::FETCH_ASSOC);
 
-                    // $sql = $pdo->prepare('SELECT gg_media.is_primary FROM gg_media INNER JOIN gg_gadget ON gg_media.media_id = gg_gadget.gadget_id WHERE gg_gadget.gadget_id = ?');
-                    // $sql->execute([$id]);
-                    // $is_primary = $sql->fetchAll(PDO::FETCH_ASSOC);
-
-                    // for ($i = 0; $i < count($url); $i++) {
-                    //     if ($is_primary[$i]['is_primary'] == 1) {
-                    //         $img_src = h($url[$i]['url']);
-                    //         break;
-                    //     } else {
-                    //         $img_src = h($url[0]['url']);
-                    //     }
-                    // }
                     $main_img = "";
-                    foreach ($medias as $media) {
+                    $img_src = [];
+                    foreach ($sql as $media) {
                         if ($media['is_primary'] == 1) {
                             $main_img = h($media['url']);
                             break;
                         } else {
-                            $img_src = h($media['url']);
+                            $img_src[] = h($media['url']);
                         }
                     }
-                    debug($main_img);
+
                     echo <<< HTML
                     <div class="product-card">
                         <a href="./gadget-details.php?name={$name}&keyword={$keyword}&id={$id}">
