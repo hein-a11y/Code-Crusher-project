@@ -1,4 +1,8 @@
-<?php session_start(); ?>
+<?php
+    if(session_status()==PHP_SESSION_NONE){
+        session_start();
+    }
+?>
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -212,7 +216,7 @@
                 <ul>
                     <li><a href="index.php" data-i18n="nav.home"></a></li>
                     <li><a href="games.php" data-i18n="nav.games"></a></li>
-                    <li><a href="gadgets.php" data-i18n="nav.gadgets"></a></li>
+                    <li><a href="GADGETS.php" data-i18n="nav.gadgets"></a></li>
                     <li><a href="review-input.php" data-i18n="nav.reviews"></a></li>
                     <li><a href="help-input.php" data-i18n="nav.help"></a></li>
                 </ul>
@@ -234,6 +238,69 @@
                 <span><a href=cart-input.php>🛒</a></span> <span><a href=login2.php>👤</a></span> 
             </div>
         </div>
+
+         <script>
+                    async function searchUsers() {
+                        const keyword = document.getElementById('searchInput').value;
+                        const resultsDiv = document.getElementById('results'); // 結果表示エリア
+                        
+                        // URLパラメータを作成
+                        const params = new URLSearchParams({
+                            keyword: keyword
+                        });
+                        
+                        try {
+                            // PHPファイル（search_users.php）にリクエスト
+                            const response = await fetch(`../search.php?${params}`);
+                            
+                            if (!response.ok) {
+                                throw new Error(`HTTP error! status: ${response.status}`);
+                            }
+                            
+                            const result = await response.json(); // PHPからのJSON応答
+                            
+                            // PHPから返された 'status' に応じて処理を分岐
+                            
+                            switch (result.status) {
+                                case 'redirect':
+                                    // リダイレクト指示があった場合
+                                    if (result.method === 'GET') {
+                                        // GETならそのままページ遷移
+                                        window.location.href = result.action;
+                                    } else {
+                                        // POSTならフォームを作成して送信
+                                        const form = document.createElement('form');
+                                        form.method = result.method;
+                                        form.action = result.action;
+                                        document.body.appendChild(form);
+                                        form.submit();
+                                    }
+                                    break;
+                                
+                        case 'error':
+                            // 'error' (キーワードなし等) メッセージをアラートで表示
+                            alert(result.message);
+                            break;
+
+                        default:
+                            // PHPが 'success' や予期しないstatusを返した場合
+                            alert('予期しない応答がありました。');
+                    }
+                    
+                } catch (error) {
+                    // fetch失敗やJSONパース失敗の場合
+                    alert(`エラー: ${error.message}`);
+                }
+                    }
+
+                    // (ボタンクリックとEnterキーのイベントリスナーはそのまま)
+                    document.getElementById('searchButton').addEventListener('click', searchUsers);
+                    document.getElementById('searchInput').addEventListener('keydown', (event) => {
+                        if (event.key === 'Enter') {
+                            searchUsers();
+                        }
+                    });
+                </script>
     </header>
 
     <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
@@ -249,3 +316,4 @@
 
     
     </body>
+   

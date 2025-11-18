@@ -1,4 +1,6 @@
-<?php require_once '../header.php'; ?>
+<?php 
+session_start();
+require_once '../header.php';?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,6 +17,7 @@
             <h1>ショッピングカート</h1> <div class="cart-layout">
                 <?php
                 require '../functions.php';
+                
 
                 $pdo = getPDO();
 
