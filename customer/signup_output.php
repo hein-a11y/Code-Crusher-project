@@ -81,9 +81,10 @@ if (ctype_digit($phone_numbers)) {
 $raw_postal_code = isset($_REQUEST['postalcode']) ? $_REQUEST['postalcode'] : '';
 $clean_postal_code = preg_replace('/\D/', '', $raw_postal_code);
 if (strlen($clean_postal_code) === 7) {
-    $formatted_postal_code = substr($clean_postal_code, 0, 3) . '-' . substr($clean_postal_code, 3);
+    $formatted_postal_code = substr($clean_postal_code, 0, 3) . '-' . substr($clean_postal_code, 3, 4);
 }
-
+echo "<p>郵便番号 : {$formatted_postal_code}</p>";
+debug($formatted_postal_code);
 
 
 // (katakana)
@@ -93,7 +94,7 @@ $katakana_regex = '/^[\p{Katakana}ー\s]+$/u';
 if (!preg_match($katakana_regex, $firstname_kana) || !preg_match($katakana_regex, $lastname_kana)) {
     $kana_error = "フリガナ (firstname_kana および lastname_kana) には、全角**カタカナ**のみを使用してください。";
 }
-
+debug($kana_error);
 
 
 

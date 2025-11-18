@@ -1,15 +1,3 @@
-// load時、年月変更時に実行する
-  window.onload = function(){
-    $set_year();
-    $set_month();
-    $set_day();
-    yearSelect.addEventListener('change', yearSelect.value);
-    monthSelect.addEventListener('change', monthSelect.value);
-
-    // select_year.addEventListener('change',$set_day)
-    // select_month.addEventListener('change',$set_day)
-  }
-
 // DOMが完全に読み込まれてからスクリプトを実行
 document.addEventListener("DOMContentLoaded", function() {
 
@@ -23,9 +11,6 @@ document.addEventListener("DOMContentLoaded", function() {
     yearSelect.addEventListener('change', updateDayDropdown);
     monthSelect.addEventListener('change', updateDayDropdown);
 
-    // (B) 有効期限のプルダウンを動的に生成 (ここを追記)
-    populateExpiryDropdowns();  
-
     // --- 2. フォームの送信イベントを監視 ---
     const form = document.getElementById("registration-form");
     form.addEventListener("submit", function(event) {
@@ -38,8 +23,8 @@ document.addEventListener("DOMContentLoaded", function() {
             // バリデーションが成功した場合
             alert("ご登録内容を送信します。\n(実際にはここで確認画面へ遷移します)");
             
-            // 実際の送信処理 (今回はコメントアウト)
-            // form.submit();
+            // 実際の送信処理
+            form.submit();
         } else {
             // バリデーションが失敗した場合
             alert("入力内容にエラーがあります。\n必須項目をご確認ください。");
@@ -80,6 +65,21 @@ function validateForm() {
         showError(password, "パスワードが一致しません。");
         showError(passwordConfirm, "パスワードが一致しません。");
     }
+    const firstname_kana = document.getElementById("firstname_kana");
+    const normalizedFirstValue = firstname_kana.normalize('NFKC');
+    
+    const katakanaRegex = /^[\u30A0-\u30FF]+$/;
+    if (!katakanaRegex.test(normalizedFirstValue)){
+        isValid = false;
+        showError(firstname_kana,"フリガナ (firstname_kana) には、全角**カタカナ**のみを使用してください。");
+    }
+
+    const lastname_kana = document.getElementById("lastname_kana");
+    const normalizedLastValue = lastname_kana.normalize('NFKC');
+    if (!katakanaRegex.test(normalizedLastValue)){
+        isValid = false;
+        showError(lastname_kana,"フリガナ (lastname_kana) には、全角**カタカナ**のみを使用してください。");
+    }
     
     // --- C. 利用規約の同意チェックボックス ---
     const termsAgree = document.getElementById("terms_agree");
@@ -97,15 +97,18 @@ function validateForm() {
  * @param {string} message - エラーメッセージ (現在は未使用だが拡張用)
  */
 function showError(field, message) {
+    
     if (field.type === "checkbox") {
         // チェックボックスは親ラベルの色を変える
         const label = field.closest("label");
         if(label) {
             label.classList.add("input-error");
+            
         }
     } else {
         // 通常の入力欄は枠線を赤くする
         field.classList.add("input-error");
+        
     }
 }
 
@@ -148,7 +151,13 @@ function populateDateDropdowns() {
         option.textContent = i + "月";
         monthSelect.appendChild(option);
     }
-    function updateDayDropdown() {
+
+
+    // yearSelect.addEventListener('change', yearSelect.value);
+    // monthSelect.addEventListener('change', monthSelect.value);
+}
+
+const updateDayDropdown = (() => {
     const yearSelect = document.getElementById("birth_year");
     const monthSelect = document.getElementById("birth_month");
     const daySelect = document.getElementById("birth_day");
@@ -159,54 +168,19 @@ function populateDateDropdowns() {
     if (isNaN(selectedYear) || isNaN(selectedMonth)) {
         return;
     }
-   
+
 
     // 日 (1-31) 
     // ※ 月によって日数を変える（うるう年対応）のは複雑になるため、
     //   ここでは簡易的に31日まで生成します。
     // if(yearSelect.value !== '' &&  monthSelect.value !== ''){
-        const last_day = new Date(yearSelect.value,monthSelect.value,0).getDate();
-
-        for (let i = 1; i <= last_day; i++) {
-            const option = document.createElement("option");
-            option.value = i;
-            option.textContent = i + "日";
-            daySelect.appendChild(option);
-        }
-    }
-
-    console.log(yearSelect.value);
-
-    // yearSelect.addEventListener('change', yearSelect.value);
-    // monthSelect.addEventListener('change', monthSelect.value);
-}
-
-// (A) 有効期限プルダウンを生成する関数 (ここから追記)
-/**
- * クレジットカード有効期限のプルダウンメニューを動的に生成する関数
- */
-function populateExpiryDropdowns() {
-    const monthSelect = document.getElementById("expiry_month");
-    const yearSelect = document.getElementById("expiry_year");
-
-    const currentYear = new Date().getFullYear();
-    const currentMonth = new Date().getMonth() + 1; // getMonth()は0始まり
-
-    // 月 (1-12)
-    for (let i = 1; i <= 12; i++) {
+    const last_day = new Date(yearSelect.value,monthSelect.value,0).getDate();
+    daySelect.textContent = '';
+    for (let i = 1; i <= last_day; i++) {
         const option = document.createElement("option");
-        const monthValue = i < 10 ? '0' + i : i; // '01', '02'...
-        option.value = monthValue;
-        option.textContent = monthValue;
-        monthSelect.appendChild(option);
+        option.value = i;
+        option.textContent = i + "日";
+        daySelect.appendChild(option);
     }
+});
 
-    // 年 (今年から15年後まで)
-    for (let i = 0; i <= 15; i++) {
-        const year = currentYear + i;
-        const option = document.createElement("option");
-        option.value = year;
-        option.textContent = year;
-        yearSelect.appendChild(option);
-    }
-}

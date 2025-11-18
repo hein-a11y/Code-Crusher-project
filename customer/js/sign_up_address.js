@@ -5,7 +5,7 @@ function fetchAddress() {
     const prefectureInput = document.getElementById('prefecture');
     const cityInput = document.getElementById('city');
     const address_line1Input = document.getElementById('address_line1');
-    const address_line2Input = document.getElementById('address_line2');
+    // const address_line2Input = document.getElementById('address_line2');
     
     const errorMessage = document.getElementById('error-message');
 
@@ -15,7 +15,7 @@ function fetchAddress() {
     prefectureInput.value = '';
     cityInput.value = '';
     address_line1Input.value = '';
-    address_line2Input.value = '';
+    // address_line2Input.value = '';
 
     const url = `https://zipcloud.ibsnet.co.jp/api/search?zipcode=${postalCode}`;
 

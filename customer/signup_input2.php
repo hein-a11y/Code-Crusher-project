@@ -6,8 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/sign_up.css">
-    <script src="./js/sign_up_address.js" defer></script>
-    <script src="./js/sign_up.js" defer></script>
+    
     <title>新規会員登録</title>
 </head>
 <body>
@@ -33,64 +32,67 @@
 
                         <div class="form-group">
                             <label for="login_name">名前 <span class="required-badge">必須</span></label>
-                            <input type="text" id="login_name" name="login_name">
+                            <input type="text" id="login_name" name="login_name" value="山田太郎">
                         </div>
 
                         <div class="form-group">
                             <label for="firstname">苗字 <span class="required-badge">必須</span></label>
-                            <input type="text" id="firstname" name="firstname" required placeholder="姓 (例) 山田">
+                            <input type="text" id="firstname" name="firstname" required placeholder="姓 (例) 山田" value="山田">
                         </div>
 
                         <div class="form-group">
                             <label for="firstname_kana">苗字(フリガナ)<span class="required-badge">必須</span></label>
                             <div class="form-group-inline">
-                                <input type="text" id="firstname_kana" name="firstname_kana" required placeholder="セイ (例) ヤマダ">
+                                <input type="text" id="firstname_kana" name="firstname_kana" required placeholder="セイ (例) ヤマダ"  value="ヤマダ"><br>
+                                
                             </div>
+                              <small>カタカナのみで入力する必要があります</small>
                         </div>
                         
                         <div class="form-group">
                             <label for="lastname">名 <span class="required-badge">必須</span></label>
                             <div class="form-group-inline">
-                                <input type="text" id="lastname" name="lastname" required placeholder="名 (例) 太郎">
+                                <input type="text" id="lastname" name="lastname" required placeholder="名 (例) 太郎" value="太郎">
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="lastname_kana">名 <span class="required-badge">必須</span></label>
                             <div class="form-group-inline">
-                                <input type="text" id="lastname_kana" name="lastname_kana" required placeholder="メイ (例) タロウ">
+                                <input type="text" id="lastname_kana" name="lastname_kana" required placeholder="メイ (例) タロウ" value="タロウ"><br>
                             </div>
+                             <small>カタカナのみで入力する必要があります</small>
                         </div>
 
                         <div class="form-group">
                             <label for="postal-code">郵便番号</label>
-                            <input type="text" id="postal-code" name="postalcode" class="postal-code" placeholder="例: 100-0001" maxlength="7">
+                            <input type="text" id="postal-code" name="postalcode" class="postal-code" placeholder="例: 100-0001" maxlength="7" value="5450042">
                             <div id="error-message" class="message"></div>
                             <small>ハイフンなしで入力してください</small>
                         </div>
                         
                         <div class="form-group">
                             <label for="prefecture">都道府県 <span class="required-badge">必須</span></label>
-                                <input type="text" id="prefecture" name="prefecture" required placeholder="例) 〇〇県">
+                                <input type="text" id="prefecture" name="prefecture" required placeholder="例) 〇〇県" value="大阪府">
                         </div>
 
                         <div class="form-group">
                             <label for="city">市区町村 <span class="required-badge">必須</span></label>
-                            <input type="text" id="city" name="city" required placeholder="例) 〇〇区九条北">
+                            <input type="text" id="city" name="city" required placeholder="例) 〇〇区九条北" value="大阪市阿倍野区丸山通">
                         </div>
                         
                         <div class="form-group">
                             <label for="address_line1">番地 <span class="required-badge">必須</span></label>
-                            <input type="text" id="address_line1" name="address_line1" required placeholder="例) 1-13-12">
+                            <input type="text" id="address_line1" name="address_line1" required placeholder="例) 1-13-12" value="1-6-3">
                         </div>
 
                         <div class="form-group">
                             <label for="phone_number">電話番号 <span class="required-badge">必須</span></label>
-                            <input type="tel" id="phone_number" name="phone_number" pattern="[0-9]*" required placeholder="例) 02012345678" maxlength="11">
+                            <input type="tel" id="phone_number" name="phone_number" pattern="[0-9]*" required placeholder="例) 02012345678" maxlength="11" value="02012345678">
                         </div>
 
                         <div class="form-group">
                             <label for="mailaddress">メール<span class="required-badge">必須</span></label>
-                            <input type="email" id="mailaddress" name="mailaddress" required placeholder="例)example@gmail.com ">
+                            <input type="email" id="mailaddress" name="mailaddress" required placeholder="例)example@gmail.com " value="example@gmail.com">
                         </div>
                         
                         <div class="form-group">
@@ -209,6 +211,7 @@
         </footer>
 
     </div>
-
+    <script src="./js/sign_up_address.js" defer></script>
+    <script src="./js/sign_up.js" defer></script>
 </body>
 </html>
