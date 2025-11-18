@@ -154,61 +154,7 @@
         
                 
             
-        <script type="text/javascript">
-       
-
-        $(document).ready(function(){
-            // --- i18next Initialization ---
-            i18next
-                .use(i18nextBrowserLanguageDetector)
-                .init({
-                    resources,
-                    fallbackLng: 'ja',
-                    debug: false,
-                    interpolation: { escapeValue: false }
-                }, function(err, t) {
-                    // Init jquery-i18next
-                    jqueryI18next.init(i18next, $, { useOptionsAttr: true });
-                    
-                    // Initial translation
-                    updateLanguageUI(i18next.language);
-
-                    // Initialize Slick Carousel AFTER content is translated
-                    initializeSlick();
-                });
-
-            // --- Event Handlers ---
-            $('#btn-en').on('click', () => changeLang('en'));
-            $('#btn-ja').on('click', () => changeLang('ja'));
-            $('.hamburger-menu').on('click', () => $('.nav-container').toggleClass('active'));
-            
-            // --- Functions ---
-            function changeLang(lang) {
-                i18next.changeLanguage(lang, () => updateLanguageUI(lang));
-            }
-
-            function updateLanguageUI(lang) {
-                $('html').attr('lang', lang);
-                $('.lang-switcher button').removeClass('active');
-                $(`#btn-${lang}`).addClass('active');
-                $('body').localize();
-            }
-            
-            function initializeSlick() {
-                $('.main-game-slider').slick({
-                    dots: true, infinite: true, speed: 500, slidesToShow: 1, adaptiveHeight: true, autoplay: true, autoplaySpeed: 4000, arrows: true
-                });
-
-                $('.card-slider').slick({
-                    dots: true, infinite: false, speed: 300, slidesToShow: 3, slidesToScroll: 1,
-                    responsive: [
-                        { breakpoint: 1024, settings: { slidesToShow: 2, slidesToScroll: 1, infinite: true, dots: true } },
-                        { breakpoint: 768, settings: { slidesToShow: 1, slidesToScroll: 1 } }
-                    ]
-                });
-            }
-        });
-    </script>
+        
     
 </body>
 </html>

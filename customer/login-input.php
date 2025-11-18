@@ -24,7 +24,16 @@
 <body>
     <main>
         <div class="login-container">
-            <form id="login-form" action = "login_output.php" method="post">
+            <?php 
+                if($is_error){
+                    echo <<< HTML
+                        <div class="error-popup">
+                         {$error_message};
+                        </div> 
+                    HTML;   
+                }
+            ?>
+            <form id="login-form" action="login-output.php" method="post">
                 <h1>ログイン</h1>
 
                 <div class="input-group">
