@@ -301,6 +301,23 @@
                         }
                     });
                 </script>
+
+                <div class="lang-switcher">
+                    <button id="btn-en">EN</button>
+                    <button id="btn-ja" class="active">JA</button>
+                </div>
+                <span><a href=cart-input.php>🛒</a></span>
+                <span><a href=
+                <?php 
+                    if(!isset($_SESSION['customer'])){
+                        echo "login-input.php";
+                    }else{
+                        echo "logout-input.php";
+                    }
+                ?>
+                >👤</a></span>
+            </div>
+        </div>
     </header>
 
     <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
