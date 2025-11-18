@@ -28,9 +28,9 @@
                 if($is_error){
                     echo <<< HTML
                         <div class="error-popup">
-                         {$error_message};
+                         {$error_message}
                         </div> 
-                    HTML;   
+                    HTML;  
                 }
             ?>
             <form id="login-form" action="login-output.php" method="post">

@@ -236,16 +236,22 @@
                     <button id="btn-en">EN</button>
                     <button id="btn-ja" class="active">JA</button>
                 </div>
-                <span><a href=cart-input.php>🛒</a></span>
-                <span><a href=
+                
+                
                 <?php 
                     if(!isset($_SESSION['customer'])){
-                        echo "login-input.php";
+                        echo <<< HTML
+                            <span><a href="login-input.php">🛒</a></span>
+                            <span><a href="login-input.php">👤</a></span>
+                        HTML;
                     }else{
-                        echo "logout-input.php";
+                        echo <<< HTML
+                            <span><a href="cart-input.php">🛒</a></span>
+                            <span><a href="login-output.php">👤</a></span>
+                        HTML;
                     }
                 ?>
-                >👤</a></span>
+                
             </div>
         </div>
     </header>
