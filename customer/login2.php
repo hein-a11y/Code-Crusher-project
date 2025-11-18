@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -30,6 +31,7 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
+            max-width: 100%;
         }
 
         .line{
@@ -70,11 +72,11 @@
             gap: 1.5rem;
         }
 
-        /*main {
+        /* main {
             max-width: 1200px;
             margin: 2rem auto;
             padding: 0 2rem;
-        }*/
+        } */
 
         /* --- 
          * ログインフォームのコンテナ

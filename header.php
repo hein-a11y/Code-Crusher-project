@@ -1,8 +1,8 @@
-<?php
+ <?php
     if(session_status()==PHP_SESSION_NONE){
         session_start();
     }
-?>
+?> 
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -40,6 +40,10 @@
             border-bottom: 1px solid #333;
             position: relative;
             z-index: 100;
+
+            position: sticky;
+            top: 0;
+            
         }      
 
         .logo {
@@ -53,7 +57,7 @@
         .logo2 {
             text-decoration: none;
             color: #00bfff; 
-            }
+            } 
 
         .logo2:hover {
             color: #00bfff; 
@@ -113,10 +117,13 @@
             align-items: center;
             overflow: hidden;
             border-radius: 3px;
+            background-color:
         }
 
         
-
+        span a{
+            text-decoration: none;
+        }
        
 
         .search-button {
@@ -154,6 +161,12 @@
             background-color: #f2f2f2;
             font-size: 1em;
             outline: none;
+
+            background-color: #333;
+            border: 1px solid #555;
+            color: var(--text-color);
+            padding: 0.5rem;
+            border-radius: 5px;
         }
 
         .hamburger-menu {
@@ -302,6 +315,7 @@
                     });
                 </script>
     </header>
+    <script type="text/javascript" src="./js/home.js" defer></script>
 
     <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="https://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
@@ -311,7 +325,61 @@
     <script src="https://cdn.jsdelivr.net/npm/jquery-i18next@1.2.1/jquery-i18next.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/i18next-browser-languagedetector@6.1.3/i18nextBrowserLanguageDetector.min.js"></script>
 
+<script type="text/javascript">
+       
 
+        $(document).ready(function(){
+            // --- i18next Initialization ---
+            i18next
+                .use(i18nextBrowserLanguageDetector)
+                .init({
+                    resources,
+                    fallbackLng: 'ja',
+                    debug: false,
+                    interpolation: { escapeValue: false }
+                }, function(err, t) {
+                    // Init jquery-i18next
+                    jqueryI18next.init(i18next, $, { useOptionsAttr: true });
+                    
+                    // Initial translation
+                    updateLanguageUI(i18next.language);
+
+                    // Initialize Slick Carousel AFTER content is translated
+                    initializeSlick();
+                });
+
+            // --- Event Handlers ---
+            $('#btn-en').on('click', () => changeLang('en'));
+            $('#btn-ja').on('click', () => changeLang('ja'));
+            $('.hamburger-menu').on('click', () => $('.nav-container').toggleClass('active'));
+            
+            // --- Functions ---
+            function changeLang(lang) {
+                i18next.changeLanguage(lang, () => updateLanguageUI(lang));
+            }
+
+            function updateLanguageUI(lang) {
+                $('html').attr('lang', lang);
+                $('.lang-switcher button').removeClass('active');
+                $(`#btn-${lang}`).addClass('active');
+                $('body').localize();
+            }
+            
+            function initializeSlick() {
+                $('.main-game-slider').slick({
+                    dots: true, infinite: true, speed: 500, slidesToShow: 1, adaptiveHeight: true, autoplay: true, autoplaySpeed: 4000, arrows: true
+                });
+
+                $('.card-slider').slick({
+                    dots: true, infinite: false, speed: 300, slidesToShow: 3, slidesToScroll: 1,
+                    responsive: [
+                        { breakpoint: 1024, settings: { slidesToShow: 2, slidesToScroll: 1, infinite: true, dots: true } },
+                        { breakpoint: 768, settings: { slidesToShow: 1, slidesToScroll: 1 } }
+                    ]
+                });
+            }
+        });
+    </script>
 
 
     
