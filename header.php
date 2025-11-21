@@ -247,7 +247,7 @@
                     }else{
                         echo <<< HTML
                             <span><a href="cart-input.php">🛒</a></span>
-                            <span><a href="login-output.php">👤</a></span>
+                            <span><a href="logout-input.php">👤</a></span>
                         HTML;
                     }
                 ?>
