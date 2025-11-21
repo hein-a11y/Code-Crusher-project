@@ -66,17 +66,15 @@ function validateForm() {
         showError(passwordConfirm, "パスワードが一致しません。");
     }
     const firstname_kana = document.getElementById("firstname_kana");
-    const normalizedFirstValue = firstname_kana.normalize('NFKC');
     
     const katakanaRegex = /^[\u30A0-\u30FF]+$/;
-    if (!katakanaRegex.test(normalizedFirstValue)){
+    if (!katakanaRegex.test(firstname_kana.value)){
         isValid = false;
         showError(firstname_kana,"フリガナ (firstname_kana) には、全角**カタカナ**のみを使用してください。");
     }
 
     const lastname_kana = document.getElementById("lastname_kana");
-    const normalizedLastValue = lastname_kana.normalize('NFKC');
-    if (!katakanaRegex.test(normalizedLastValue)){
+    if (!katakanaRegex.test(lastname_kana.value)){
         isValid = false;
         showError(lastname_kana,"フリガナ (lastname_kana) には、全角**カタカナ**のみを使用してください。");
     }

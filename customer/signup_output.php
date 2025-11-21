@@ -21,7 +21,12 @@ if(isset($_SESSION['customer'])){
 
 // (password)
 $plain_password = isset($_REQUEST['password']) ? h($_REQUEST['password']) : '';
-$confirm_password = isset($_REQUEST['confirm_password']) ? h($_REQUEST['confirm_password']) : '';
+$confirm_password = isset($_REQUEST['password_confirm']) ? h($_REQUEST['password_confirm']) : '';
+
+debug($plain_password);
+debug($confirm_password);
+
+
 $hashed_password = '';
 $error='';
 $min_length = 10;
@@ -30,21 +35,13 @@ if($plain_password === $confirm_password){
 
     if (strlen($plain_password) < $min_length) {
         $error = "パスワードは少なくとも {$min_length} 文字の長さにする必要があります。";
-    }elseif (!preg_match($complexity_regex, $plain_password)) {
+    }
+    
+    if (!preg_match($complexity_regex, $plain_password)) {
         $error = "パスワードには、大文字、小文字、数字、特殊文字を組み合わせる必要があります。";
     }else {
-        // Success: Passwords match and pass all validation checks!
-        
-        // 3. Hash the password securely for storage
         $hashed_password = password_hash($plain_password, PASSWORD_DEFAULT);
-        
-        // Output for demonstration (in a real app, you'd redirect or process silently)
-        echo "<h2>成功！パスワードをハッシュ化しました.</h2>";
-        echo "<p>パスワードの確認に成功しました。このハッシュを保存する準備ができました。:</p>";
-        echo "<pre>{$hashed_password}</pre>";
-        echo "<p>検証成功: " . (password_verify($plain_password, $hashed_password) ? 'Yes' : 'No') . "</p>";
-
-    } 
+    }
 }else {
     // Failure: Passwords do not match
     $error = "パスワードと確認パスワードが一致しません.";
@@ -94,7 +91,7 @@ $katakana_regex = '/^[\p{Katakana}ー\s]+$/u';
 if (!preg_match($katakana_regex, $firstname_kana) || !preg_match($katakana_regex, $lastname_kana)) {
     $kana_error = "フリガナ (firstname_kana および lastname_kana) には、全角**カタカナ**のみを使用してください。";
 }
-debug($kana_error);
+
 
 
 
