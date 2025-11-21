@@ -17,7 +17,20 @@
             display: flex;
             gap: 10px;
             margin-bottom: 10px;
-            align-items: flex-start; /* 上揃えに変更（その他入力欄が出た時のため） */
+            align-items: flex-start; /* 上揃えに変更 */
+        }
+
+        /* スペック名入力部分のラッパー（セレクトボックス＋その他入力） */
+        .spec-input-wrapper {
+            flex: 2; /* flex-grow-2 相当 */
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        /* その他入力欄（初期非表示） */
+        .spec-custom-input {
+            display: none;
         }
 
         /* フレックスボックスの比率調整用クラス */
@@ -146,12 +159,13 @@
                             </div>
                         </div>
                         
-                            <div class="form-group">
-                                <label class="form-label">スペック情報</label>
-                                
-                                <div id="specs-container">
-                                    <div class="spec-row">
-                                        <select name="spec_name[]" class="form-select flex-grow-2 spec-select">
+                        <div class="form-group">
+                            <label class="form-label">スペック情報</label>
+                            
+                            <div id="specs-container">
+                                <div class="spec-row">
+                                    <div class="spec-input-wrapper">
+                                        <select name="spec_name[]" class="form-select spec-select" style="width: 100%;">
                                             <option value="" data-unit="">項目を選択...</option>
                                             <?php
                                             $pdo = getPDO();
@@ -166,19 +180,22 @@
                                                 HTML;
                                             }
                                             ?>
+                                            <option value="other" data-unit="">その他</option>
                                         </select>
-
-                                        <input type="text" name="spec_value[]" class="form-input flex-grow-2" placeholder="値 (例: 63)">
-                                        <input type="text" name="spec_unit[]" class="form-input flex-grow-1 spec-unit" placeholder="単位 (例: g)">
-                                        <div class="spacer-icon"></div> 
+                                        <input type="text" name="spec_custom_name[]" class="form-input spec-custom-input" placeholder="項目名を入力">
                                     </div>
-                                </div>
 
-                                <button type="button" id="add-spec-btn" class="button button-secondary button-dashed">
-                                    <i class="fas fa-plus"></i> スペックを追加
-                                </button>
+                                    <input type="text" name="spec_value[]" class="form-input flex-grow-2" placeholder="値 (例: 63)">
+                                    <input type="text" name="spec_unit[]" class="form-input flex-grow-1 spec-unit" placeholder="単位 (例: g)">
+                                    <div class="spacer-icon"></div> 
+                                </div>
                             </div>
-                        </div> 
+
+                            <button type="button" id="add-spec-btn" class="button button-secondary button-dashed">
+                                <i class="fas fa-plus"></i> スペックを追加
+                            </button>
+                        </div>
+                    </div> 
                     
                     <div class="card">
                         <button type="submit" class="button button-primary button-full">
