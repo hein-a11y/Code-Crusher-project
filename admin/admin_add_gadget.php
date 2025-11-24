@@ -82,6 +82,95 @@
             display: none;    /* 初期状態は非表示 */
             margin-top: 10px; /* 上部に余白 */
         }
+
+/* --- 画像アップロードグリッドのスタイル (新規追加) --- */
+        .image-grid {
+            display: grid;
+            /* PC画面で横4列くらいになるよう調整、スマホでは縮小 */
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 20px;
+            margin-top: 10px;
+        }
+
+        .image-slot {
+            aspect-ratio: 1 / 1; /* 正方形 */
+            background-color: #ebf0f3; /* 画像に近い薄い色 */
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            overflow: visible; /* メイン画像のラベルを外に出すため */
+        }
+
+        .image-slot:hover {
+            background-color: #dbe4e9;
+        }
+
+        .image-slot.dragover {
+            background-color: rgba(0, 191, 255, 0.2);
+            border-color: var(--accent-blue);
+        }
+
+        /* アップロード前のプレースホルダー */
+        .slot-placeholder {
+            text-align: center;
+            color: #555;
+            font-size: 13px;
+            font-weight: bold;
+            pointer-events: none; /* クリックを親のdivに透過 */
+        }
+        .slot-placeholder i {
+            font-size: 28px;
+            margin-bottom: 8px;
+            display: block;
+            color: #333;
+        }
+
+        /* 画像表示時 */
+        .image-slot img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 3px;
+        }
+
+        /* 削除ボタン */
+        .slot-delete-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            width: 24px;
+            height: 24px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 14px;
+            z-index: 10;
+        }
+        .slot-delete-btn:hover {
+            background-color: #ff4444;
+        }
+
+        /* メイン画像のラベル */
+        .main-image-label {
+            position: absolute;
+            bottom: -25px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-primary);
+            font-weight: bold;
+        }
     </style>
 
     <div class="main-content">
@@ -104,7 +193,7 @@
             <section id="add-gadget-page" class="admin-page">
                 <h2 class="page-title">新規ガジェット追加</h2>
                 
-                <form action="./gadget-insert.php" method="POST">
+                <form action="./gadget-insert.php" method="POST" enctype="multipart/form-data">
                     <div class="card">
                         <h3 class="card-title">ガジェット情報</h3>
                         
@@ -157,6 +246,18 @@
                                 <label for="stock" class="form-label">在庫数</label>
                                 <input type="number" id="stock" name="stock" class="form-input" required placeholder="例: 50">
                             </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">商品画像 (最大9枚)</label>
+                            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 10px;">
+                                複数のファイルをアップロード または以下で1点以上のファイルをドラッグアンドドロップします。
+                            </p>
+                            
+                            <input type="file" id="gadget_images" name="gadget_images[]" multiple accept="image/*" style="display:none;">
+                            
+                            <div id="image-grid-container" class="image-grid">
+                                </div>
                         </div>
                         
                         <div class="form-group">

@@ -102,4 +102,124 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+
+    // ==========================================
+    //  1. 画像アップロード処理 (グリッド形式)
+    // ==========================================
+    const fileInput = document.getElementById('gadget_images');
+    const gridContainer = document.getElementById('image-grid-container');
+    const dataTransfer = new DataTransfer(); // ファイル管理用
+    const MAX_IMAGES = 9;
+
+    if (gridContainer && fileInput) {
+        
+        // 初期描画
+        renderGrid();
+
+        // ファイル選択後の処理
+        fileInput.addEventListener('change', () => {
+            handleFiles(fileInput.files);
+        });
+
+        // ファイル追加処理
+        function handleFiles(files) {
+            for (let i = 0; i < files.length; i++) {
+                // 最大枚数チェック
+                if (dataTransfer.items.length >= MAX_IMAGES) break;
+                
+                const file = files[i];
+                // 画像のみ許可
+                if (!file.type.startsWith('image/')) continue;
+                
+                dataTransfer.items.add(file);
+            }
+            // inputを更新して再描画
+            fileInput.files = dataTransfer.files;
+            renderGrid();
+        }
+
+        // ファイル削除処理
+        window.removeFileAtIndex = function(index) {
+            const newDataTransfer = new DataTransfer();
+            const currentFiles = dataTransfer.files;
+
+            for (let i = 0; i < currentFiles.length; i++) {
+                if (i !== index) {
+                    newDataTransfer.items.add(currentFiles[i]);
+                }
+            }
+            // データ更新
+            dataTransfer.items.clear();
+            for (let i = 0; i < newDataTransfer.files.length; i++) {
+                dataTransfer.items.add(newDataTransfer.files[i]);
+            }
+            
+            fileInput.files = dataTransfer.files;
+            renderGrid();
+        };
+
+        // グリッド描画関数 (常に9枠表示)
+        function renderGrid() {
+            gridContainer.innerHTML = '';
+            const files = dataTransfer.files;
+
+            for (let i = 0; i < MAX_IMAGES; i++) {
+                const slot = document.createElement('div');
+                slot.className = 'image-slot';
+                
+                // ファイルが存在する場合（プレビュー表示）
+                if (files[i]) {
+                    const img = document.createElement('img');
+                    img.src = URL.createObjectURL(files[i]);
+                    
+                    const deleteBtn = document.createElement('div');
+                    deleteBtn.className = 'slot-delete-btn';
+                    deleteBtn.innerHTML = '<i class="fas fa-times"></i>';
+                    deleteBtn.onclick = (e) => {
+                        e.stopPropagation(); // 親のクリックイベントを止める
+                        removeFileAtIndex(i);
+                    };
+
+                    slot.appendChild(img);
+                    slot.appendChild(deleteBtn);
+                } 
+                // ファイルがない場合（アップロードボタン表示）
+                else {
+                    slot.innerHTML = `
+                        <div class="slot-placeholder">
+                            <i class="fas fa-camera"></i>
+                            <span>アップロードする</span>
+                        </div>
+                    `;
+                    
+                    // クリックでファイル選択
+                    slot.addEventListener('click', () => fileInput.click());
+
+                    // ドラッグ＆ドロップイベント
+                    slot.addEventListener('dragover', (e) => {
+                        e.preventDefault();
+                        slot.classList.add('dragover');
+                    });
+                    slot.addEventListener('dragleave', () => {
+                        slot.classList.remove('dragover');
+                    });
+                    slot.addEventListener('drop', (e) => {
+                        e.preventDefault();
+                        slot.classList.remove('dragover');
+                        handleFiles(e.dataTransfer.files);
+                    });
+                }
+
+                // 1つ目の枠には「メイン画像」ラベルを表示
+                if (i === 0) {
+                    const label = document.createElement('div');
+                    label.className = 'main-image-label';
+                    label.innerText = 'メイン画像';
+                    slot.appendChild(label);
+                }
+
+                gridContainer.appendChild(slot);
+            }
+        }
+    }
 });
