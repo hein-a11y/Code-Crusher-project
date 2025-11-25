@@ -13,7 +13,7 @@
 <body>
     <div class="container"> 
         <main>
-            <div class="game-grid">
+            <div class="swiper game-slider relative group">
                 <?php
 
                 $pdo = getPDO();
@@ -36,12 +36,12 @@
                     
                     echo <<< HTML
                     <div class="product-card">
-                        <a href="./gadget-details.php?name={$name}&keyword={$keyword}&id={$id}">
+                        <a href="./game-products.php?name={$name}&keyword={$keyword}&id={$id}">
                             <img src="$img_src" alt="商品画像">
-                                <div class="product-info">
-                                    <p class="product-brand">{$manufacturer}</p>
-                                    <h2 class="product-title">{$name}</h2>
-                                    <p class="product-price">¥{$price_number_format} <span class="price-tax">(税込)</span></p>
+                                <div class="game-info">
+                                    <p class="game-company">{$manufacturer}</p>
+                                    <h2 class="game-title">{$name}</h2>
+                                    <p class="game-price">¥{$price_number_format} <span class="price-tax">(税込)</span></p>
                                     <ul class="product-features"><li>{$connectivity}</li></ul>
                                 </div>
                         </a>
@@ -49,7 +49,9 @@
                     
                     HTML;
                 }
-                ?>
+
+    
+             ?>
             </div>
         </main>
     </div>

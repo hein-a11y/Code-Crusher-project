@@ -1,6 +1,3 @@
-<?php require '../header.php';
-    require '../functions.php';
-?>
 <!DOCTYPE html>
 <html lang="en" class="h-full">
 <head>
@@ -299,7 +296,7 @@
     <div id="content-wrap">
         
         <!-- Mock Header -->
-        <!-- <nav class="glass-nav fixed w-full z-50 transition-all duration-300">
+        <nav class="glass-nav fixed w-full z-50 transition-all duration-300">
             <div class="container mx-auto px-6 py-4 flex justify-between items-center">
                 <div class="flex items-center gap-2">
                     <i data-lucide="gamepad-2" class="text-indigo-500 w-8 h-8"></i>
@@ -320,7 +317,7 @@
                     <button class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-full text-xs font-bold transition-all shadow-lg shadow-indigo-500/30 hover:shadow-indigo-500/50">SIGN IN</button>
                 </div>
             </div>
-        </nav> -->
+        </nav>
 
         <main class="flex-grow">
             <!-- Hero Section -->
@@ -377,7 +374,7 @@
                                 </a>
                             </div>
                         </div>
-                    </div> 
+                    </div>
                     <!-- Custom Pagination Container -->
                     <div class="hero-pagination"></div>
                 </div>
@@ -456,73 +453,40 @@
 
             <section class="py-20 px-4 container mx-auto space-y-16 relative z-10">
 
-                <!-- ALL GAMES -->
+                <!-- New Releases -->
                 <div>
                     <div class="flex justify-between items-end mb-8 px-4">
-                        <h2 class="text-3xl font-bold flex items-center gap-2 text-white"><i data-lucide="sparkles" class="text-yellow-400 shadow-yellow-400/50 drop-shadow-lg"></i> ALL GAMES</h2>
+                        <h2 class="text-3xl font-bold flex items-center gap-2 text-white"><i data-lucide="sparkles" class="text-yellow-400 shadow-yellow-400/50 drop-shadow-lg"></i> New Releases</h2>
                         <a href="#" class="text-indigo-400 hover:text-white text-sm font-semibold transition-colors flex items-center gap-1 hover:translate-x-1 transform duration-300">View All <i data-lucide="arrow-right" class="w-4 h-4"></i></a>
                     </div>
                     
                     <div class="swiper game-slider relative group">
                         <div class="swiper-wrapper">
                             <!-- Game Card 1 -->
-                             <?php 
-
-                                $pdo = getPDO();
-
-                                    if (isset($_GET['keyword'])) {
-                                        $sql = $pdo->prepare('SELECT * FROM gg_game WHERE game_name LIKE ?');
-                                        $sql->execute(['%' . $_GET['keyword'] . '%']);
-                                    } else {
-                                        $sql = $pdo->query('SELECT * FROM gg_game');
-                                    }
-                                    
-                                    foreach ($sql as $row) {
-                                        $id = h($row['game_id']);
-                                        $name = h($row['game_name']);
-                                        $manufacturer = h($row['manufacturer']);
-                                        $connectivity = h($row['game_type']);
-                                        $price_number_format = number_format(h($row['price']));
-                                        $keyword = $_GET['keyword'] ?? '';
-                                        $img_src = "./game-images/game-$id" . "_1.jpg";
-                                        
-                                        $sql_genres = $pdo->prepare('SELECT game_gen.game_id,gen.genre_name FROM gg_game_genres AS game_gen INNER JOIN gg_genres AS gen ON game_gen.genre_id = gen.genre_id WHERE game_gen.game_id = ?');
-                                        $sql_genres->execute([$id]);
-
-                                        echo <<< HTML
-                                        <div class="swiper-slide glass-card rounded-xl overflow-hidden shadow-lg group/card cursor-pointer">
-                                            <div class="relative h-48 overflow-hidden">
-                                                <img src="../customer/photos/CP.png" class="w-full h-full object-cover transition-transform duration-500 group-hover/card:scale-110">
-                                                <div class="absolute top-2 right-2 bg-black/80 text-white text-xs font-bold px-2 py-1 rounded border border-white/20">-10%</div>
-                                            </div>
-                                            <div class="p-6">
-                                                <h3 class="text-xl font-bold mb-1 group-hover/card:text-indigo-400 transition-colors">{$name}</h3>
-                                                <div class="flex gap-2 mb-3">
-                                        HTML;
-                                        foreach($sql_genres as $genre){
-                                            echo "<span class='text-[10px] bg-indigo-900/50 text-indigo-200 px-2 py-0.5 rounded border border-indigo-500/30'>{$genre['genre_name']}</span>";
-                                        }
-                                        echo <<< HTML
-                                                </div>
-                                                <div class="flex justify-between items-center mt-4">
-                                                    <div class="flex flex-col">
-                                                        <span class="text-xs text-gray-400 line-through">$price_number_format</span>
-                                                    </div>
-                                                    <button class="bg-indigo-600 hover:bg-indigo-500 text-white p-2 rounded-lg transition duration-300 shadow-lg shadow-indigo-500/20">
-                                                        <i data-lucide="plus" class="w-5 h-5"></i>
-                                                    </button>
-                                                </div>
-                                            </div>
+                            <div class="swiper-slide glass-card rounded-xl overflow-hidden shadow-lg group/card cursor-pointer">
+                                <div class="relative h-48 overflow-hidden">
+                                    <img src="https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover transition-transform duration-500 group-hover/card:scale-110">
+                                    <div class="absolute top-2 right-2 bg-black/80 text-white text-xs font-bold px-2 py-1 rounded border border-white/20">-10%</div>
+                                </div>
+                                <div class="p-6">
+                                    <h3 class="text-xl font-bold mb-1 group-hover/card:text-indigo-400 transition-colors">Cybernetic Dawn</h3>
+                                    <div class="flex gap-2 mb-3">
+                                        <span class="text-[10px] bg-indigo-900/50 text-indigo-200 px-2 py-0.5 rounded border border-indigo-500/30">RPG</span>
+                                        <span class="text-[10px] bg-indigo-900/50 text-indigo-200 px-2 py-0.5 rounded border border-indigo-500/30">Sci-Fi</span>
+                                    </div>
+                                    <div class="flex justify-between items-center mt-4">
+                                        <div class="flex flex-col">
+                                            <span class="text-xs text-gray-400 line-through">$69.99</span>
+                                            <span class="text-lg font-bold text-white">$59.99</span>
                                         </div>
-                                        
-                                        HTML;
-                                    }
-
-
-                             ?>
-                            
+                                        <button class="bg-indigo-600 hover:bg-indigo-500 text-white p-2 rounded-lg transition duration-300 shadow-lg shadow-indigo-500/20">
+                                            <i data-lucide="plus" class="w-5 h-5"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
                             <!-- Game Card 2 -->
-                            <!-- <div class="swiper-slide glass-card rounded-xl overflow-hidden shadow-lg group/card cursor-pointer">
+                            <div class="swiper-slide glass-card rounded-xl overflow-hidden shadow-lg group/card cursor-pointer">
                                 <div class="relative h-48 overflow-hidden">
                                     <img src="https://images.unsplash.com/photo-1614680376573-df3480f0c6ff?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover transition-transform duration-500 group-hover/card:scale-110">
                                 </div>
@@ -538,9 +502,9 @@
                                         </button>
                                     </div>
                                 </div>
-                            </div> -->
+                            </div>
                             <!-- Game Card 3 -->
-                            <!-- <div class="swiper-slide glass-card rounded-xl overflow-hidden shadow-lg group/card cursor-pointer">
+                            <div class="swiper-slide glass-card rounded-xl overflow-hidden shadow-lg group/card cursor-pointer">
                                 <div class="relative h-48 overflow-hidden">
                                     <img src="https://images.unsplash.com/photo-1627856014759-2a01d6e270b7?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover transition-transform duration-500 group-hover/card:scale-110">
                                 </div>
@@ -556,9 +520,9 @@
                                         </button>
                                     </div>
                                 </div>
-                            </div> -->
+                            </div>
                             <!-- Game Card 4 -->
-                            <!-- <div class="swiper-slide glass-card rounded-xl overflow-hidden shadow-lg group/card cursor-pointer">
+                            <div class="swiper-slide glass-card rounded-xl overflow-hidden shadow-lg group/card cursor-pointer">
                                 <div class="relative h-48 overflow-hidden">
                                     <img src="https://images.unsplash.com/photo-1551103782-8ab07afd45c1?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover transition-transform duration-500 group-hover/card:scale-110">
                                     <div class="absolute top-2 right-2 bg-indigo-600 text-white text-xs font-bold px-2 py-1 rounded border border-white/20">HOT</div>
@@ -575,9 +539,9 @@
                                         </button>
                                     </div>
                                 </div>
-                            </div> -->
+                            </div>
                             <!-- Game Card 5 -->
-                            <!-- <div class="swiper-slide glass-card rounded-xl overflow-hidden shadow-lg group/card cursor-pointer">
+                            <div class="swiper-slide glass-card rounded-xl overflow-hidden shadow-lg group/card cursor-pointer">
                                 <div class="relative h-48 overflow-hidden">
                                     <img src="https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover transition-transform duration-500 group-hover/card:scale-110">
                                 </div>
@@ -593,9 +557,9 @@
                                         </button>
                                     </div>
                                 </div>
-                            </div> -->
+                            </div>
                             <!-- Game Card 6 -->
-                            <!-- <div class="swiper-slide glass-card rounded-xl overflow-hidden shadow-lg group/card cursor-pointer">
+                            <div class="swiper-slide glass-card rounded-xl overflow-hidden shadow-lg group/card cursor-pointer">
                                 <div class="relative h-48 overflow-hidden">
                                     <img src="https://images.unsplash.com/photo-1612287230217-969d698f8413?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover transition-transform duration-500 group-hover/card:scale-110">
                                 </div>
@@ -611,9 +575,9 @@
                                         </button>
                                     </div>
                                 </div>
-                            </div> -->
+                            </div>
                             <!-- Game Card 7 -->
-                            <!-- <div class="swiper-slide glass-card rounded-xl overflow-hidden shadow-lg group/card cursor-pointer">
+                            <div class="swiper-slide glass-card rounded-xl overflow-hidden shadow-lg group/card cursor-pointer">
                                 <div class="relative h-48 overflow-hidden">
                                     <img src="https://images.unsplash.com/photo-1542831371-29b0f74f9713?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover transition-transform duration-500 group-hover/card:scale-110">
                                 </div>
@@ -629,9 +593,9 @@
                                         </button>
                                     </div>
                                 </div>
-                            </div> -->
+                            </div>
                              <!-- Game Card 8 -->
-                             <!-- <div class="swiper-slide glass-card rounded-xl overflow-hidden shadow-lg group/card cursor-pointer">
+                             <div class="swiper-slide glass-card rounded-xl overflow-hidden shadow-lg group/card cursor-pointer">
                                 <div class="relative h-48 overflow-hidden">
                                     <img src="https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover transition-transform duration-500 group-hover/card:scale-110">
                                 </div>
@@ -647,9 +611,9 @@
                                         </button>
                                     </div>
                                 </div>
-                            </div> -->
+                            </div>
                              <!-- Game Card 9 -->
-                             <!-- <div class="swiper-slide glass-card rounded-xl overflow-hidden shadow-lg group/card cursor-pointer">
+                             <div class="swiper-slide glass-card rounded-xl overflow-hidden shadow-lg group/card cursor-pointer">
                                 <div class="relative h-48 overflow-hidden">
                                     <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover transition-transform duration-500 group-hover/card:scale-110">
                                 </div>
@@ -665,9 +629,9 @@
                                         </button>
                                     </div>
                                 </div>
-                            </div> -->
+                            </div>
                              <!-- Game Card 10 -->
-                             <!-- <div class="swiper-slide glass-card rounded-xl overflow-hidden shadow-lg group/card cursor-pointer">
+                             <div class="swiper-slide glass-card rounded-xl overflow-hidden shadow-lg group/card cursor-pointer">
                                 <div class="relative h-48 overflow-hidden">
                                     <img src="https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover transition-transform duration-500 group-hover/card:scale-110">
                                 </div>
@@ -683,7 +647,7 @@
                                         </button>
                                     </div>
                                 </div>
-                            </div> -->
+                            </div>
                         </div>
                         <button class="swiper-button-prev absolute top-1/2 -translate-y-1/2 left-0 z-10 glass-card p-2 rounded-full text-indigo-200 hover:text-white hover:bg-indigo-600/50 transition-all duration-300 opacity-0 group-hover:opacity-100 disabled:opacity-0 disabled:cursor-not-allowed">
                         </button>
