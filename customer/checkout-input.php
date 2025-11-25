@@ -7,8 +7,12 @@
 </head>
 <body>
     <style>
+        body{
+            background-color:#6A3300;
+        }
         h1{
             text-align:center;
+            font-size:1000px;
             
         }
     </style>
