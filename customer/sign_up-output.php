@@ -32,7 +32,7 @@ debug($confirm_password);
 $hashed_password = '';
 $error_password='';
 $min_length = 8;
-$complexity_regex = "/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z\d]).{" . $min_length . ",}$/";
+$complexity_regex = '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/';
 if($plain_password === $confirm_password){
 
     if (strlen($plain_password) < $min_length) {
@@ -41,6 +41,7 @@ if($plain_password === $confirm_password){
     
     if (!preg_match($complexity_regex, $plain_password)) {
         $error_password = "パスワードには、大文字、小文字、数字、特殊文字を組み合わせる必要があります。";
+        
     }else {
         $hashed_password = password_hash($plain_password, PASSWORD_DEFAULT);
     }
@@ -99,7 +100,7 @@ if (!preg_match($katakana_regex, $firstname_kana) || !preg_match($katakana_regex
 
   $address = $_REQUEST['prefecture']." ".$_REQUEST['city']." ".$_REQUEST['address_line1'];
    $birthday = $_REQUEST['birth_year']."/".$_REQUEST['birth_month']."/".$_REQUEST['birth_day'];
-if(empty($signUpInfo['login_name']) && empty($signUpInfo['mailaddress'])){
+if(empty($signUpInfo['login_name']) && empty($signUpInfo['mailaddress']) && !empty($hashed_password)){
     // if(isset($_SESSION['customer'])){
        
     //     $sql = $pdo->prepare('UPDATE gg_users SET login_name=?, firstname = ?, firstname_kana=?, lastname = ? lastname_kana = ?, postalcode = ?, address = ?, phone_number = ?, mailaddress = ?, gender = ?, birthday = ? WHERE id =?');

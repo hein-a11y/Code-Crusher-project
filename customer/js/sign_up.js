@@ -59,11 +59,17 @@ function validateForm() {
     // --- B. パスワードの一致をチェック ---
     const password = document.getElementById("password");
     const passwordConfirm = document.getElementById("password_confirm");
-    
+    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
     if (password.value && passwordConfirm.value && password.value !== passwordConfirm.value) {
         isValid = false;
         showError(password,'password_no_match', "パスワードが一致しません。");
         showError(passwordConfirm,'password_no_match', "パスワードが一致しません。");
+    }
+
+    if(password.value && passwordConfirm.value && validatePassword(password.value) == false){
+        isValid = false;
+        showError(password,'password_not_ideal', "パスワードがよくないです。");
     }
     const firstname_kana = document.getElementById("firstname_kana");
     
@@ -87,6 +93,19 @@ function validateForm() {
     }
 
     return isValid;
+}
+
+function validatePassword(password) {
+    // Regex pattern
+    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+    if (regex.test(password)) {
+        console.log("Valid password.");
+        return true;
+    } else {
+        console.log("Invalid password.");
+        return false;
+    }
 }
 
 /**
