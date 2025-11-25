@@ -104,6 +104,7 @@ debug($_SESSION['customer']);
                         
                         <div class="form-group">
                             <label for="password">パスワード <span class="required-badge">必須</span></label>
+                            <small id="password_not_ideal" style="color: red;"></small>
                             <input type="password" id="password" name="password" required>
                             <small>パスワードには、大文字、小文字、数字、特殊文字を組み合わせの<b style="color: red;">（8）</b>桁必要があります。</small>
                         </div>
