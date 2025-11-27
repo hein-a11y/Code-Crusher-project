@@ -29,8 +29,7 @@
             $gadget_name = h($row['gadget_name']);
             $gadget_explanation = h($row['gadget_explanation']);
             $gadget_manufacturer = h($row['manufacturer']);
-            $gadget_connectivity_type = h($row['connectivity_type']);
-            $gadget_fruitsArray = explode(",", $gadget_connectivity_type); //,で分割して配列に変換
+            // connectivity_type の取得と配列化の処理を削除しました
             $gadget_price = number_format(h($row['price']));
 
             $sql = $pdo->prepare('SELECT gg_media.url,gg_media.is_primary FROM gg_media WHERE gg_media.gadget_id = ?');
@@ -57,13 +56,10 @@
 
             <?php
             echo <<< HTML
-                <!-- 商品ギャラリー -->
                 <div class="product-gallery">
                     <div class="main-image-wrapper">
-                        <!-- メイン画像 -->
                         <img id="main-image" src="$main_img" alt="$gadget_name メイン画像">
                     </div>
-                    <!-- サムネイル -->
                     <div class="thumbnail-container">
                         <img class="thumbnail" src="$main_img" alt="サムネイル" data-src="$main_img">
             HTML;
@@ -76,7 +72,6 @@
             echo <<< HTML
                     </div>
                 </div>
-                <!-- 商品情報 & アクション -->
                 <div class="product-info">
                     <div>
                         <span class="brand">$gadget_manufacturer</span>
@@ -84,18 +79,7 @@
                         <div class="price">
                             ¥$gadget_price <span>(税込)</span>
                         </div>
-                        <div class="features">
-                        <!-- 画像のタグを再現 -->
-                HTML;
-                foreach ($gadget_fruitsArray as $fruit) {
-                    echo <<< HTML
-                            <span class="feature-tag">$fruit</span>
-                    HTML;
-                }
-                echo <<< HTML
                         </div>
-                    </div>
-                    <!-- アクションボタン -->
                     <div class="actions">
                         <form action="cart-input.php" method="post">
                             <input type="hidden" name="id" value="{$gadget_id}">

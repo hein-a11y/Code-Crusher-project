@@ -29,7 +29,6 @@
                     $id = h($row['gadget_id']);
                     $name = h($row['gadget_name']);
                     $manufacturer = h($row['manufacturer']);
-                    $connectivity = h($row['connectivity_type']);
                     $price_number_format = number_format(h($row['price']));
                     $keyword = $_GET['keyword'] ?? '';
 
@@ -55,7 +54,6 @@
                                     <p class="product-brand">{$manufacturer}</p>
                                     <h2 class="product-title">{$name}</h2>
                                     <p class="product-price">¥{$price_number_format} <span class="price-tax">(税込)</span></p>
-                                    <ul class="product-features"><li>{$connectivity}</li></ul>
                                 </div>
                         </a>
                     </div>
@@ -69,5 +67,3 @@
 
 </body>
 </html>
-
-<a href="./gadget-images/gadgets-1_1.jpg"></a>

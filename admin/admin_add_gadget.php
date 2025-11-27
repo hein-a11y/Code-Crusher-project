@@ -1,8 +1,9 @@
 <?php require_once '../admin_header.php'; ?>
 <?php require '../functions.php'; ?>
 
-    <style>
-        /* --- 数値入力の矢印（スピナー）を非表示にする設定 --- */
+<style>
+        /* --- 基本設定 --- */
+        /* 数値入力の矢印（スピナー）を非表示 */
         input::-webkit-outer-spin-button,
         input::-webkit-inner-spin-button {
             -webkit-appearance: none;
@@ -17,34 +18,25 @@
             display: flex;
             gap: 10px;
             margin-bottom: 10px;
-            align-items: flex-start; /* 上揃えに変更 */
+            align-items: flex-start;
         }
-
-        /* スペック名入力部分のラッパー（セレクトボックス＋その他入力） */
         .spec-input-wrapper {
-            flex: 2; /* flex-grow-2 相当 */
+            flex: 2;
             display: flex;
             flex-direction: column;
             gap: 5px;
         }
-
-        /* その他入力欄（初期非表示） */
+        /* 「その他」選択時の入力欄（初期非表示） */
         .spec-custom-input {
             display: none;
         }
+        
+        /* 幅調整用クラス */
+        .flex-grow-2 { flex: 2; }
+        .flex-grow-1 { flex: 1; }
+        .spacer-icon { width: 30px; }
 
-        /* フレックスボックスの比率調整用クラス */
-        .flex-grow-2 {
-            flex: 2;
-        }
-        .flex-grow-1 {
-            flex: 1;
-        }
-        .spacer-icon {
-            width: 30px; /* 削除ボタンと同じ幅のスペーサー */
-        }
-
-        /* --- ボタン類の追加スタイル --- */
+        /* --- ボタン類のスタイル --- */
         .remove-spec-btn {
             color: var(--red);
             width: 30px;
@@ -57,43 +49,42 @@
             transition: background-color 0.3s;
             cursor: pointer;
             border: none;
-            margin-top: 8px; /* セレクトボックスの高さに合わせる微調整 */
+            margin-top: 8px;
         }
         .remove-spec-btn:hover {
             background-color: rgba(248, 113, 113, 0.2);
         }
-
-        /* 点線ボーダーの追加ボタン */
         .button-dashed {
             width: 100%;
             margin-top: 10px;
             border-style: dashed;
             border-width: 1px;
-            border-color: var(--border-color); /* admin.cssの変数を参照 */
+            border-color: var(--border-color);
         }
+        .button-full { width: 100%; }
 
-        /* 全幅ボタン */
-        .button-full {
-            width: 100%;
-        }
-
-        /* --- 新規カテゴリ入力エリア --- */
+        /* --- カテゴリ「その他」入力欄 --- */
         #new_category_wrapper {
-            display: none;    /* 初期状態は非表示 */
-            margin-top: 10px; /* 上部に余白 */
+            display: none;
+            margin-top: 10px;
         }
 
-/* --- 画像アップロードグリッドのスタイル (新規追加) --- */
+        /* --- 画像アップロードエリアのスタイル --- */
+        .form-help-text {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+        }
+
         .image-grid {
             display: grid;
-            /* PC画面で横4列くらいになるよう調整、スマホでは縮小 */
             grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
             gap: 20px;
             margin-top: 10px;
         }
 
         .image-slot {
-            aspect-ratio: 1 / 1; /* 正方形 */
+            aspect-ratio: 1 / 1;
             background-color: #ebf0f3; /* 画像に近い薄い色 */
             border: 1px solid #ccc;
             border-radius: 4px;
@@ -103,40 +94,37 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: background-color 0.2s;
-            overflow: visible; /* メイン画像のラベルを外に出すため */
+            transition: background-color 0.2s, border-color 0.2s;
+            overflow: visible;
         }
-
         .image-slot:hover {
             background-color: #dbe4e9;
         }
-
         .image-slot.dragover {
             background-color: rgba(0, 191, 255, 0.2);
             border-color: var(--accent-blue);
         }
 
-        /* アップロード前のプレースホルダー */
+        .image-slot img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 3px;
+        }
+
+        /* プレースホルダー（カメラアイコン等） */
         .slot-placeholder {
             text-align: center;
             color: #555;
             font-size: 13px;
             font-weight: bold;
-            pointer-events: none; /* クリックを親のdivに透過 */
+            pointer-events: none;
         }
         .slot-placeholder i {
             font-size: 28px;
             margin-bottom: 8px;
             display: block;
             color: #333;
-        }
-
-        /* 画像表示時 */
-        .image-slot img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 3px;
         }
 
         /* 削除ボタン */
@@ -155,12 +143,13 @@
             cursor: pointer;
             font-size: 14px;
             z-index: 10;
+            transition: background-color 0.2s;
         }
         .slot-delete-btn:hover {
             background-color: #ff4444;
         }
 
-        /* メイン画像のラベル */
+        /* メイン画像ラベル */
         .main-image-label {
             position: absolute;
             bottom: -25px;
@@ -250,8 +239,8 @@
                         
                         <div class="form-group">
                             <label class="form-label">商品画像 (最大9枚)</label>
-                            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 10px;">
-                                複数のファイルをアップロード または以下で1点以上のファイルをドラッグアンドドロップします。
+                            <p class="form-help-text">
+                                複数のファイルをアップロード、または以下で1点以上のファイルをドラッグアンドドロップします。
                             </p>
                             
                             <input type="file" id="gadget_images" name="gadget_images[]" multiple accept="image/*" style="display:none;">

@@ -139,7 +139,6 @@ CREATE TABLE `gg_category` (
 --
 
 INSERT INTO `gg_category` (`category_id`, `category_name`) VALUES
-(10, 'その他'),
 (8, 'ウェブカメラ'),
 (9, 'キャプチャーボード'),
 (3, 'ゲーミングキーボード'),
@@ -243,7 +242,6 @@ CREATE TABLE `gg_gadget` (
   `gadget_name` varchar(255) NOT NULL,
   `gadget_explanation` text NOT NULL,
   `manufacturer` varchar(100) NOT NULL,
-  `connectivity_type` varchar(50) DEFAULT NULL,
   `price` decimal(10,2) NOT NULL,
   `stock` int(11) NOT NULL,
   `Sales_Status` int(11) NOT NULL,
@@ -255,17 +253,17 @@ CREATE TABLE `gg_gadget` (
 -- テーブルのデータのダンプ `gg_gadget`
 --
 
-INSERT INTO `gg_gadget` (`gadget_id`, `category_id`, `gadget_name`, `gadget_explanation`, `manufacturer`, `connectivity_type`, `price`, `stock`, `Sales_Status`, `created_time`, `updated_time`) VALUES
-(1, 2, 'Logicool G Pro X Superlight', 'プロ仕様の超軽量ワイヤレスゲーミングマウス。HERO 25Kセンサーを搭載し、高精度なトラッキングを実現。', 'Logicool', '無線 (LightSpeed)', 17800.00, 30, 1, '2025-10-27 11:36:32', NULL),
-(2, 1, 'Razer BlackShark V2', 'eスポーツ向けの有線ゲーミングヘッドセット。優れた遮音性とマイク品質、THX Spatial Audioに対応。', 'Razer', '有線 (3.5mm + USB)', 11800.00, 45, 1, '2025-10-27 11:36:32', NULL),
-(3, 3, 'SteelSeries Apex Pro TKL', 'テンキーレスのメカニカルキーボード。アクチュエーションポイントを調整可能なOmniPointスイッチを搭載。', 'SteelSeries', '有線 (USB-C)', 25000.00, 15, 1, '2025-10-27 11:36:32', NULL),
-(4, 5, 'Xbox Elite ワイヤレス コントローラー シリーズ 2', '交換可能なスティックや背面パドルを備えた、プロ仕様のカスタマイズ可能なコントローラー。', 'Microsoft', '無線 (Bluetooth + USB-C)', 19980.00, 20, 1, '2025-10-27 11:36:32', NULL),
-(5, 7, 'Shure MV7', 'ポッドキャストや配信に最適なダイナミックマイク。USBとXLRの両方に対応し、クリアな音質を提供。', 'Shure', '有線 (USB / XLR)', 31000.00, 10, 1, '2025-10-27 11:36:32', NULL),
-(6, 2, 'ZOWIE EC2-C', 'eスポーツ、特にFPSプレイヤーに人気の有線ゲーミングマウス。エルゴノミクスデザインが特徴。', 'BenQ ZOWIE', '有線 (USB)', 8800.00, 0, 0, '2025-10-27 11:36:32', NULL),
+INSERT INTO `gg_gadget` (`gadget_id`, `category_id`, `gadget_name`, `gadget_explanation`, `manufacturer`, `price`, `stock`, `Sales_Status`, `created_time`, `updated_time`) VALUES
+(1, 2, 'Logicool G Pro X Superlight', 'プロ仕様の超軽量ワイヤレスゲーミングマウス。HERO 25Kセンサーを搭載し、高精度なトラッキングを実現。', 'Logicool', 17800.00, 30, 1, '2025-10-27 11:36:32', NULL),
+(2, 1, 'Razer BlackShark V2', 'eスポーツ向けの有線ゲーミングヘッドセット。優れた遮音性とマイク品質、THX Spatial Audioに対応。', 'Razer', 11800.00, 45, 1, '2025-10-27 11:36:32', NULL),
+(3, 3, 'SteelSeries Apex Pro TKL', 'テンキーレスのメカニカルキーボード。アクチュエーションポイントを調整可能なOmniPointスイッチを搭載。', 'SteelSeries', 25000.00, 15, 1, '2025-10-27 11:36:32', NULL),
+(4, 5, 'Xbox Elite ワイヤレス コントローラー シリーズ 2', '交換可能なスティックや背面パドルを備えた、プロ仕様のカスタマイズ可能なコントローラー。', 'Microsoft', 19980.00, 20, 1, '2025-10-27 11:36:32', NULL),
+(5, 7, 'Shure MV7', 'ポッドキャストや配信に最適なダイナミックマイク。USBとXLRの両方に対応し、クリアな音質を提供。', 'Shure', 31000.00, 10, 1, '2025-10-27 11:36:32', NULL),
+(6, 2, 'ZOWIE EC2-C', 'eスポーツ、特にFPSプレイヤーに人気の有線ゲーミングマウス。エルゴノミクスデザインが特徴。', 'BenQ ZOWIE', 8800.00, 0, 0, '2025-10-27 11:36:32', NULL),
 (7, 2, 'Logicool G PRO X 2 LIGHTSPEED', '初のグラフェンドライバー「PRO-Gグラフェンドライバー」搭載、「PRO X 2 LIGHTSPEED ワイヤレスゲーミングヘッドセット」に保証期間1年間のAmazon.co.jp限定モデルが登場！
 PRO-Gグラフェンドライバー搭載で複数の音を認知。安定した高音質を楽しむことができます。最大連続使用時間50時間、前機種に比べ2倍を超える電池寿命に向上しました。
 さらに25gの軽量化も実現し、より長時間のプレイでも疲れにくくなりました。
-', 'Logicool', 'Bluetooth, LIGHTSPEED, ワイヤレス, 有線', 32500, 41, 1, now(), NULL);
+', 'Logicool', 32500, 41, 1, now(), NULL);
 
 -- --------------------------------------------------------
 
@@ -1210,6 +1208,45 @@ INNER JOIN
 	gg_specifications
 ON
 	gg_gadget_specs.spec_id = gg_specifications.spec_id;
+
+
+CREATE VIEW
+	gadget_insert
+AS
+SELECT 
+    gg_gadget.gadget_id, 
+    gg_category.category_id ,
+    gg_specifications.spec_id, 
+    gg_media.media_id,
+    gg_gadget.manufacturer,
+    gg_gadget.gadget_name,
+    gg_gadget.price,
+    gg_category.category_name,
+    gg_specifications.spec_name, 
+    gg_gadget_specs.spec_value,
+    gg_specifications.unit,
+    gg_gadget.stock,
+    gg_media.url,
+    gg_media.is_primary,
+    gg_gadget.created_time
+FROM
+	gg_gadget
+INNER JOIN
+	gg_gadget_specs
+ON
+	gg_gadget.gadget_id = gg_gadget_specs.gadget_id
+INNER JOIN
+	gg_category
+ON
+	gg_gadget.category_id = gg_category.category_id
+INNER JOIN
+	gg_specifications
+ON
+	gg_gadget_specs.spec_id = gg_specifications.spec_id
+INNER JOIN
+	gg_media
+ON
+	gg_gadget.gadget_id = gg_media.gadget_id;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
