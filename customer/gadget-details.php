@@ -1,6 +1,5 @@
 <?php require_once '../header.php'; ?>
-<?php require '../functions.php'; ?>
-
+<?php require "../functions.php" ?>
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -20,14 +19,6 @@
     <!-- メインコンテンツ -->
     <main class="main-content">
         <div class="container">
-            
-            <!-- パンくずリスト -->
-            <div class="breadcrumb">
-                <a href="./index.php">ホーム</a> &gt; <a href="#">ガジェット</a> &gt; <span>Logicool G PRO X 2 LIGHTSPEED</span>
-            </div>
-
-            <!-- 商品詳細（ギャラリー + 情報） -->
-            <div class="product-detail-container">
             <?php
             $pdo = getPDO();
             $sql = $pdo->prepare('SELECT * FROM gg_gadget WHERE gadget_id = ?');
@@ -38,34 +29,49 @@
             $gadget_name = h($row['gadget_name']);
             $gadget_explanation = h($row['gadget_explanation']);
             $gadget_manufacturer = h($row['manufacturer']);
-            $gadget_connectivity_type = h($row['connectivity_type']);
-            $gadget_fruitsArray = explode(",", $gadget_connectivity_type); //,で分割して配列に変換
+            // connectivity_type の取得と配列化の処理を削除しました
             $gadget_price = number_format(h($row['price']));
-            $images = h($row['images']);
 
-            $img_src = "./gadget-images/gadgets-$gadget_id" . "_1.jpg";
+            $sql = $pdo->prepare('SELECT gg_media.url,gg_media.is_primary FROM gg_media WHERE gg_media.gadget_id = ?');
+            $sql->execute([$gadget_id]);
 
+            $main_img = "";
+            $img_src = [];
+            foreach ($sql as $media) {
+                if ($media['is_primary'] == 1) {
+                    $main_img = h($media['url']);
+                } else {
+                    $img_src[] = h($media['url']);
+                }
+            }
+
+            ?>
+            <!-- パンくずリスト -->
+            <div class="breadcrumb">
+                <a href="./index.php">ホーム</a> &gt; <a href="./GADGETS.php">ガジェット</a> &gt; <span><?= $gadget_name ?></span>
+            </div>
+
+            <!-- 商品詳細（ギャラリー + 情報） -->
+            <div class="product-detail-container">
+
+            <?php
             echo <<< HTML
-                <!-- 商品ギャラリー -->
                 <div class="product-gallery">
                     <div class="main-image-wrapper">
-                        <!-- メイン画像 -->
-                        <img id="main-image" src="$img_src" alt="$gadget_name メイン画像">
+                        <img id="main-image" src="$main_img" alt="$gadget_name メイン画像">
                     </div>
-                    <!-- サムネイル -->
                     <div class="thumbnail-container">
+                        <img class="thumbnail" src="$main_img" alt="サムネイル" data-src="$main_img">
             HTML;
-
-            for ($i = 1; $i <= $images; $i++) {
-                $img_src = "./gadget-images/gadgets-$gadget_id" . "_$i.jpg";
+            
+            foreach ($img_src as $sub_img) {
                 echo <<< HTML
-                    <img class="thumbnail" src="$img_src" alt="サムネイル $i" data-src="$img_src">
+                    <img class="thumbnail" src="$sub_img" alt="サムネイル" data-src="$sub_img">
                 HTML;
             }
             echo <<< HTML
                     </div>
                 </div>
-                <!-- 商品情報 & アクション -->
                 <div class="product-info">
                     <div>
                         <span class="brand">$gadget_manufacturer</span>
@@ -73,31 +79,14 @@
                         <div class="price">
                             ¥$gadget_price <span>(税込)</span>
                         </div>
-                        <div class="features">
-                        <!-- 画像のタグを再現 -->
-                HTML;
-                foreach ($gadget_fruitsArray as $fruit) {
-                    echo <<< HTML
-                            <span class="feature-tag">$fruit</span>
-                    HTML;
-                }
-            echo <<< HTML
                         </div>
-                    </div>
-                    <!-- アクションボタン -->
                     <div class="actions">
-                        <form action="add_to_cart.php" method="post">
-        
-                        <input type="hidden" name="product_id" value="{$gadget_id}">
-        
-                        <input type="hidden" name="product_type" value="gadget">
-
-                        <input type="hidden" name="name" value="{$gadget_name}">
-                        <input type="hidden" name="price" value="{$gadget_price}">
-
-                        <button type="submit" class="action-button add-to-cart">カートに入れる</button>
+                        <form action="cart-input.php" method="post">
+                            <input type="hidden" name="id" value="{$gadget_id}">
+                            <input type="hidden" name="name" value="{$gadget_name}">
+                            <input type="hidden" name="price" value="{$gadget_price}">
+                            <button type="submit" class="action-button add-to-cart">カートに入れる</button>
                         </form>
-  
                         <button type="submit" class="action-button buy-now">今すぐ購入</button>
                     </div>
                 </div>

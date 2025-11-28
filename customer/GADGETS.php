@@ -24,30 +24,44 @@
                 } else {
                     $sql = $pdo->query('SELECT * FROM gg_gadget');
                 }
+
                 
                 foreach ($sql as $row) {
                     $id = h($row['gadget_id']);
                     $name = h($row['gadget_name']);
                     $manufacturer = h($row['manufacturer']);
-                    $connectivity = h($row['connectivity_type']);
                     $price_number_format = number_format(h($row['price']));
+                    $sale_status = h($row['Sales_Status']);
                     $keyword = $_GET['keyword'] ?? '';
-                    $img_src = "./gadget-images/gadgets-$id" . "_1.jpg";
-                    
+
+                    $sql = $pdo->prepare('SELECT gg_media.url,gg_media.is_primary FROM gg_media WHERE gg_media.gadget_id = ?');
+                    $sql->execute([$id]);
+
+                    $main_img = "";
+                    $img_src = [];
+                    foreach ($sql as $media) {
+                        if ($media['is_primary'] == 1) {
+                            $main_img = h($media['url']);
+                            break;
+                        } else {
+                            $img_src[] = h($media['url']);
+                        }
+                    }
+                    if ($sale_status == 1) {
                     echo <<< HTML
                     <div class="product-card">
                         <a href="./gadget-details.php?name={$name}&keyword={$keyword}&id={$id}">
-                            <img src="$img_src" alt="商品画像">
+                            <img src="{$main_img}" alt="商品画像">
                                 <div class="product-info">
                                     <p class="product-brand">{$manufacturer}</p>
                                     <h2 class="product-title">{$name}</h2>
                                     <p class="product-price">¥{$price_number_format} <span class="price-tax">(税込)</span></p>
-                                    <ul class="product-features"><li>{$connectivity}</li></ul>
                                 </div>
                         </a>
                     </div>
                     
                     HTML;
+                    }
                 }
                 ?>
             </div>
