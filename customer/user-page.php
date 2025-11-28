@@ -303,30 +303,35 @@
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                                     <div>
                                         <label class="block text-sm font-medium text-slate-400 mb-1">名前</label>
-                                        <input type="text" value="フェリックス" name="firstname" class="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-slate-100">
+                                        <input type="text" value="<?php echo $firstname; ?>" name="firstname" class="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-slate-100">
                                     </div>
                                     <div>
                                         <label class="block text-sm font-medium text-slate-400 mb-1">苗字</label>
-                                        <input type="text" value="田中" name="lastname" class="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-slate-100">
+                                        <input type="text" value="<?php echo $lastname; ?>" name="lastname" class="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-slate-100">
                                     </div>
                                     <div>
                                         <label class="block text-sm font-medium text-slate-400 mb-1">名前（カナ）</label>
-                                        <input type="text" value="フェリックス" name="firstname_kana" class="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-slate-100">
+                                        <input type="text" value="<?php echo $firstkana; ?>" name="firstname_kana" class="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-slate-100">
                                     </div>
                                     <div>
                                         <label class="block text-sm font-medium text-slate-400 mb-1">苗字（カナ）</label>
-                                        <input type="text" value="田中" name="lastname_kana" class="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-slate-100">
+                                        <input type="text" value="<?php echo $lastkana; ?>" name="lastname_kana" class="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-slate-100">
                                     </div>
                                 </div>
 
                                 <div class="mb-6">
                                     <label class="block text-sm font-medium text-slate-400 mb-1">メールアドレス</label>
-                                    <input type="email" name="mailaddress" value="felix.anderson@example.com" class="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-slate-100">
+                                    <input type="email" name="mailaddress" value="<?php echo $email; ?>" class="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-slate-100">
+                                </div>
+
+                                <div class="mb-6">
+                                    <label class="block text-sm font-medium text-slate-400 mb-1">Phone Number</label>
+                                    <input type="email" name="phone_number" value="<?php echo $phone; ?>" class="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-slate-100">
                                 </div>
 
                                 <div class="mb-6">
                                     <label class="block text-sm font-medium text-slate-400 mb-1">住所</label>
-                                    <textarea rows="3" name="address" class="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-slate-100">〒100-0001 東京都千代田区千代田1-1</textarea>
+                                    <textarea rows="3" name="address" class="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-slate-100"><?php echo $address; ?></textarea>
                                 </div>
 
                                 <div class="flex justify-end gap-3">
