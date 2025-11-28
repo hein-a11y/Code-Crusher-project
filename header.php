@@ -1,5 +1,8 @@
-<?php session_start(); ?>
-<?php require '../functions.php'; ?>
+<?php
+    if(session_status()==PHP_SESSION_NONE){
+        session_start();
+    }
+?>
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -17,7 +20,7 @@
             --text-color: #e0e0e0;      /* Light grey for readability */
             --text-secondary-color: #a0a0a0; /* Dimmer text */
         }
-
+        
         body {
             background-color: var(--background-color);
             color: var(--text-color);
@@ -37,14 +40,29 @@
             border-bottom: 1px solid #333;
             position: relative;
             z-index: 100;
-        }
+        }      
 
         .logo {
             font-size: 1.8rem;
             font-weight: bold;
             color: var(--primary-color);
             text-shadow: 0 0 5px var(--primary-color);
+            
         }
+
+        .logo2 {
+            text-decoration: none;
+            color: #00bfff; 
+            }
+
+        .logo2:hover {
+            color: #00bfff; 
+        }
+
+        .logo2:visited {
+            color: #00bfff; 
+        }
+
 
         .nav-container {
             display: flex;
@@ -67,6 +85,7 @@
             transition: color 0.3s;
         }
 
+    
         nav a:hover {
             color: var(--primary-color);
         }
@@ -76,8 +95,6 @@
             align-items: center;
             gap: 1.5rem;
         }
-        
-        /* Language Switcher Styles */
         .lang-switcher button {
             background: none;
             border: 1px solid var(--primary-color);
@@ -89,10 +106,7 @@
             transition: background-color 0.3s, color 0.3s;
         }
 
-        .lang-switcher button:hover, .lang-switcher button.active {
-            background-color: var(--primary-color);
-            color: var(--background-color);
-        }
+        
 
         .search-container {
             display: flex;
@@ -101,20 +115,9 @@
             border-radius: 3px;
         }
 
-        .search-bar {
-            width: 250px;
-            height: 45px;
-            padding: 5px 15px;
-            border: none;
-            border-radius: 3px 0 0 3px;
-            box-sizing: border-box;
-            background-color: #f2f2f2;
-            font-size: 1em;
-            outline: none;
-        }
+        
 
-        .search-bar:focus {
-        }
+       
 
         .search-button {
             display: flex;
@@ -134,6 +137,23 @@
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M18.031 16.6168L22.3137 20.8995L20.8995 22.3137L16.6168 18.031C15.0769 19.263 13.124 20 11 20C6.032 20 2 15.968 2 11C2 6.032 6.032 2 11 2C15.968 2 20 6.032 20 11C20 13.124 19.263 15.0769 18.031 16.6168ZM16.0247 15.8748C17.2475 14.6146 18 12.8956 18 11C18 7.1325 14.8675 4 11 4C7.1325 4 4 7.1325 4 11C4 14.8675 7.1325 18 11 18C12.8956 18 14.6146 17.2475 15.8748 16.0247L16.0247 15.8748Z' fill='%23fff'%3E%3C/path%3E%3C/svg%3E");
             background-repeat: no-repeat;
             content: '';
+        }
+
+        .lang-switcher button:hover, .lang-switcher button.active {
+            background-color: var(--primary-color);
+            color: var(--background-color);
+        }
+
+        .search-bar {
+            width: 250px;
+            height: 45px;
+            padding: 5px 15px;
+            border: none;
+            border-radius: 3px 0 0 3px;
+            box-sizing: border-box;
+            background-color: #f2f2f2;
+            font-size: 1em;
+            outline: none;
         }
 
         .hamburger-menu {
@@ -172,6 +192,7 @@
             .card-slider-section { padding: 0; }
         }
 
+        
         footer {
             text-align: center;
             padding: 2rem;
@@ -184,7 +205,7 @@
 <body>
 
     <header>
-        <div class="logo">GG STORE</div>
+        <div class="logo"><a class ="logo2"href="index.php">GG STORE</a></div>
         
         <div class="hamburger-menu">
             <div class="bar"></div><div class="bar"></div><div class="bar"></div>
@@ -195,7 +216,7 @@
                 <ul>
                     <li><a href="index.php" data-i18n="nav.home"></a></li>
                     <li><a href="games.php" data-i18n="nav.games"></a></li>
-                    <li><a href="gadgets.php" data-i18n="nav.gadgets"></a></li>
+                    <li><a href="GADGETS.php" data-i18n="nav.gadgets"></a></li>
                     <li><a href="review-input.php" data-i18n="nav.reviews"></a></li>
                     <li><a href="help-input.php" data-i18n="nav.help"></a></li>
                 </ul>
@@ -208,7 +229,33 @@
                     <button id="searchButton" class="search-button" aria-label="検索"></button>
                 </div>
                 
-                <script>
+
+
+            
+                <div class="lang-switcher">
+                    <button id="btn-en">EN</button>
+                    <button id="btn-ja" class="active">JA</button>
+                </div>
+                
+                
+                <?php 
+                    if(!isset($_SESSION['customer'])){
+                        echo <<< HTML
+                            <span><a href="login-input.php">🛒</a></span>
+                            <span><a href="login-input.php">👤</a></span>
+                        HTML;
+                    }else{
+                        echo <<< HTML
+                            <span><a href="cart-input.php">🛒</a></span>
+                            <span><a href="logout-input.php">👤</a></span>
+                        HTML;
+                    }
+                ?>
+                
+            </div>
+        </div>
+    </header>
+             <script>
                     async function searchUsers() {
                         const keyword = document.getElementById('searchInput').value;
                         const resultsDiv = document.getElementById('results'); // 結果表示エリア
@@ -270,16 +317,7 @@
                         }
                     });
                 </script>
-
-                <div class="lang-switcher">
-                    <button id="btn-en">EN</button>
-                    <button id="btn-ja" class="active">JA</button>
-                </div>
-                <span><a href=cart-input.php>🛒</a></span> <span><a href=login-input.php>👤</a></span> 
-            </div>
-        </div>
-    </header>
-
+                <script type="text/javascript" src="./js/home.js" defer></script>
 
     <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="https://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
@@ -289,24 +327,9 @@
     <script src="https://cdn.jsdelivr.net/npm/jquery-i18next@1.2.1/jquery-i18next.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/i18next-browser-languagedetector@6.1.3/i18nextBrowserLanguageDetector.min.js"></script>
 
-    <script type="text/javascript">
-        // --- i18next Translation Script ---
-        const resources = {
-            en: {
-                translation: {
-                    "pageTitle": "GG Store - Elden Ring",
-                    "nav": { "home": "HOME", "games": "GAMES", "gadgets": "GADGETS", "reviews": "REVIEWS", "help": "HELP" },
-                    "searchPlaceholder": "Search..."
-                }
-            },
-            ja: {
-                translation: {
-                    "pageTitle": "GG Store - エルデンリング",
-                    "nav": { "home": "ホーム", "games": "ゲーム", "gadgets": "ガジェット", "reviews": "レビュー", "help": "ヘルプ" },
-                    "searchPlaceholder": "検索..."
-                }
-            }
-        };
+
+<script type="text/javascript">
+       
 
         $(document).ready(function(){
             // --- i18next Initialization ---
@@ -360,4 +383,7 @@
             }
         });
     </script>
+
+    
     </body>
+   

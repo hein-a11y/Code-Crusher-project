@@ -1,39 +1,4 @@
 <?php
-// function getPDO() {
-//     // データベースの共通設定
-//     $dbname = 'gg_store';
-//     $id = 'crushers';
-//     $password = 'crushggs@2025';
-
-//     // ホストの設定
-//     $primaryHost = '192.168.25.128'; // 優先するIP
-//     $fallbackHost = 'localhost';      // 接続できなかった場合のローカルホスト
-
-//     // PDOオプション
-//     // ATTR_TIMEOUTを設定しないと、IPに繋がらない場合にデフォルト（通常30~60秒）の待機時間が発生してしまいます
-//     $options = [
-//         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-//         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-//         PDO::ATTR_TIMEOUT => 2, // 2秒で接続できなければ諦める設定
-//     ];
-
-//     try {
-//         // --- 1. 優先IPへの接続を試みる ---
-//         $dsn = "mysql:host={$primaryHost};dbname={$dbname};charset=utf8";
-//         return new PDO($dsn, $id, $password, $options);
-
-//     } catch (PDOException $e) {
-//         // --- 2. 失敗した場合、localhostへの接続を試みる ---
-//         try {
-//             $dsn = "mysql:host={$fallbackHost};dbname={$dbname};charset=utf8";
-//             return new PDO($dsn, $id, $password, $options);
-//         } catch (PDOException $e2) {
-//             // 両方失敗した場合は、最初のエラーか2番目のエラーを投げます（ここでは2番目）
-//             throw $e2;
-//         }
-//     }
-// }
-
 function getPDO() {
     // データベースの設定
     $host = 'localhost';
@@ -46,19 +11,47 @@ function getPDO() {
                     $id, $password);
 }
 
-function h($string) {
-    return htmlspecialchars($string);
-}
-
 function debug($data){
     echo '<pre>';
     print_r($data);
     echo '</pre>';
 }
 
-function sql_debug(){
-    echo "<pre>";
-    $sql->debugDumpParams();
-    echo "</pre>";
+function h($string){
+    return htmlspecialchars($string);
+}
+
+function isActiveMember(PDO $pdo, int $user_id): bool
+{
+    $sql = $pdo->prepare("SELECT 1 FROM gg_premium WHERE user_id = :user_id AND is_active = TRUE LIMIT 1");
+    
+    // Bind the user ID parameter
+    $sql->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+    
+    //  Execute the query
+    $sql->execute();
+    
+    // Check the result
+    // fetchColumn() returns the value of the first column ('1' in this case) if a row is found, 
+    // or FALSE if no rows are found. We cast the result to a boolean.
+    return (bool) $sql->fetchColumn();
+}
+
+function hasBought(PDO $pdo, int $user_id, int $product_id,string $type): bool
+{
+    $sql = $pdo->prepare("SELECT orders.user_id,detail.game_id,detail.gadget_id FROM gg_detail_orders as detail
+                             INNER JOIN gg_orders AS orders ON orders.order_id = detail.order_id
+                              WHERE orders.user_id = :user_id AND detail.".$type." = :product_id;");
+    
+    // Bind the user ID parameter
+    $sql->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+    $sql->bindParam(':product_id', $product_id, PDO::PARAM_INT);
+    //  Execute the query
+    $sql->execute();
+    
+    // Check the result
+    // fetchColumn() returns the value of the first column ('1' in this case) if a row is found, 
+    // or FALSE if no rows are found. We cast the result to a boolean.
+    return (bool) $sql->fetchColumn();
 }
 ?>
