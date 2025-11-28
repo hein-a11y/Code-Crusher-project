@@ -2,7 +2,7 @@
 session_start();
 require_once '../header.php';?>
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -256,7 +256,7 @@ echo <<< HTML
         <span id="grandtotal-display">¥{$display_grand_total}</span>
     </div>
 
-    <button onclick="location.href='checkout-input.php'" class="checkout-btn">レジに進む</button>
+    <button class="checkout-btn"><a href="checkout-input.php">レジに進む</a></button>
 </aside>
 
 HTML;

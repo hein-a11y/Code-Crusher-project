@@ -1,15 +1,12 @@
-<?php 
-require_once '../header.php'; 
-require '../functions.php';
-?>
-
+<?php require_once '../header.php'; ?>
 <!DOCTYPE html>
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/sign_up.css">
-    
+    <script src="./js/sign_up_address.js" defer></script>
+    <script src="./js/sign_up.js" defer></script>
     <title>新規会員登録</title>
 </head>
 <body>
@@ -28,94 +25,77 @@ require '../functions.php';
                     </ul>
                 </div>
 
-                <form id="registration-form" action="sign_up-output.php" method="post" novalidate>
+                <form id="registration-form" action="#" method="post" novalidate>
                     
                     <fieldset class="form-fieldset">
                         <legend class="fieldset-legend">会員情報</legend>
 
                         <div class="form-group">
-                            <label for="login_name">名前 <span class="required-badge">必須</span></label>
-                            <input type="text" id="login_name" name="login_name" value="山田太郎">
+                            <label for="email">メールアドレス <span class="required-badge">必須</span></label>
+                            <input type="email" id="email" name="email" required placeholder="例) tarougu@example.com">
                         </div>
 
                         <div class="form-group">
-                            <label for="firstname">苗字 <span class="required-badge">必須</span></label>
-                            <input type="text" id="firstname" name="firstname" required placeholder="姓 (例) 山田" value="山田">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="firstname_kana">苗字(フリガナ)<span class="required-badge">必須</span></label>
-                            <small id="first_katakana_error" style="color: red;"></small>
+                            <label>お名前 <span class="required-badge">必須</span></label>
                             <div class="form-group-inline">
-                                
-                                <input type="text" id="firstname_kana" name="firstname_kana" required placeholder="セイ (例) ヤマダ"  value="ヤマダ"><br>
-                                
+                                <input type="text" id="last_name" name="last_name" required placeholder="姓 (例) 山田">
+                                <input type="text" id="first_name" name="first_name" required placeholder="名 (例) 太郎">
                             </div>
-                              <small>カタカナのみで入力する必要があります</small>
                         </div>
                         
                         <div class="form-group">
-                            <label for="lastname">名 <span class="required-badge">必須</span></label>
+                            <label>フリガナ <span class="required-badge">必須</span></label>
                             <div class="form-group-inline">
-                                <input type="text" id="lastname" name="lastname" required placeholder="名 (例) 太郎" value="太郎">
+                                <input type="text" id="last_name_kana" name="last_name_kana" required placeholder="セイ (例) ヤマダ">
+                                <input type="text" id="first_name_kana" name="first_name_kana" required placeholder="メイ (例) タロウ">
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="lastname_kana">名(フリガナ)<span class="required-badge">必須</span></label>
-                            <small id="last_katakana_error" style="color: red;"></small>
-                            <div class="form-group-inline">
-                                <input type="text" id="lastname_kana" name="lastname_kana" required placeholder="メイ (例) タロウ" value="タロウ"><br>
-                            </div>
-                             <small>カタカナのみで入力する必要があります</small>
                         </div>
 
                         <div class="form-group">
                             <label for="postal-code">郵便番号</label>
-                            <input type="text" id="postal-code" name="postalcode" class="postal-code" placeholder="例: 100-0001" maxlength="7" value="5450042">
+                            <input type="text" id="postal-code" class="postal-code" placeholder="例: 1000001" maxlength="7">
                             <div id="error-message" class="message"></div>
                             <small>ハイフンなしで入力してください</small>
                         </div>
                         
                         <div class="form-group">
                             <label for="prefecture">都道府県 <span class="required-badge">必須</span></label>
-                                <input type="text" id="prefecture" name="prefecture" required placeholder="例) 〇〇県" value="大阪府">
+                                <input type="text" id="prefecture" name="prefecture" required placeholder="例) 〇〇県">
                         </div>
 
                         <div class="form-group">
                             <label for="city">市区町村 <span class="required-badge">必須</span></label>
-                            <input type="text" id="city" name="city" required placeholder="例) 〇〇区九条北" value="大阪市阿倍野区丸山通">
+                            <input type="text" id="city" name="city" required placeholder="例) 〇〇区九条北">
                         </div>
                         
                         <div class="form-group">
                             <label for="address_line1">番地 <span class="required-badge">必須</span></label>
-                            <input type="text" id="address_line1" name="address_line1" required placeholder="例) 1-13-12" value="1-6-3">
+                            <input type="text" id="address_line1" name="address_line1" required placeholder="例) 1-13-12">
                         </div>
 
                         <div class="form-group">
-                            <label for="phone_number">電話番号 <span class="required-badge">必須</span></label>
-                            <input type="tel" id="phone_number" name="phone_number" pattern="[0-9]*" required placeholder="例) 02012345678" maxlength="11" value="02012345678">
+                            <label for="address_line2">アパート・マンション名</label>
+                            <input type="text" id="address_line2" name="address_line2" placeholder="例) ジーユービル 101号室">
                         </div>
 
                         <div class="form-group">
-                            <label for="mailaddress">メール<span class="required-badge">必須</span></label>
-                            <input type="email" id="mailaddress" name="mailaddress" required placeholder="例)example@gmail.com " value="example@gmail.com">
+                            <label for="phone">電話番号 <span class="required-badge">必須</span></label>
+                            <input type="tel" id="phone" name="phone" required placeholder="例) 0312345678">
                         </div>
                         
                         <div class="form-group">
                             <label for="password">パスワード <span class="required-badge">必須</span></label>
-                            <small id="password_not_ideal" style="color: red;"></small>
                             <input type="password" id="password" name="password" required>
-                            <small>パスワードには、大文字、小文字、数字、特殊文字を組み合わせの<b style="color: red;">（8）</b>桁必要があります。</small>
+                            <small>半角英数記号8文字以上で入力してください</small>
                         </div>
 
                         <div class="form-group">
                             <label for="password_confirm">パスワード (確認入力) <span class="required-badge">必須</span></label>
-                            <small id="password_no_match" style="color: red;"></small>
                             <input type="password" id="password_confirm" name="password_confirm" required>
                         </div>
                         
                         <div class="form-group">
-                            <label for="birthday">生年月日 <span class="required-badge">必須</span></label>
+                            <label>生年月日 <span class="required-badge">必須</span></label>
                             <div class="form-group-inline date-select">
                                 <select id="birth_year" name="birth_year" required>
                                     <option value="">年</option>
@@ -139,7 +119,60 @@ require '../functions.php';
                         </div>
                     </fieldset>
 
-                    
+                    <fieldset class="form-fieldset">
+                        <legend class="fieldset-legend">支払い方法</legend>
+
+                        <div class="form-group">
+                            <label for="card_number">カード番号 <span class="required-badge">必須</span></label>
+                            <input type="text" id="card_number" name="card_number" required placeholder="半角数字のみ" pattern="[0-9]*" inputmode="numeric">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="card_company">カード会社 <span class="required-badge">必須</span></label>
+                            <select id="card_company" name="card_company" required>
+                                <option value="visa">VISA</option>
+                                <option value="mastercard">MasterCard</option>
+                                <option value="jcb">JCB</option>
+                                <option value="amex">American Express</option>
+                                <option value="diners">Diners Club</option>
+                                <option value="discover">Discover</option>
+                            </select>
+                            <div class="payment-card-logos">
+                                <span class="card-logo visa">VISA</span>
+                                <span class="card-logo mastercard">Mastercard</span>
+                                <span class="card-logo saison">SAISON</span>
+                                <span class="card-logo jcb">JCB</span>
+                                <span class="card-logo amex">AMEX</span>
+                                <span class="card-logo diners">Diners</span>
+                                <span class="card-logo discover">Discover</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>有効期限 <span class="required-badge">必須</span></label>
+                            <div class="form-group-inline expiry-date-select">
+                                <select id="expiry_month" name="expiry_month" required>
+                                    <option value="">月</option>
+                                    </select>
+                                <span>月</span>
+                                <select id="expiry_year" name="expiry_year" required>
+                                    <option value="">年</option>
+                                    </select>
+                                <span>年</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="security_code">セキュリティコード <span class="required-badge">必須</span></label>
+                            <input type="text" id="security_code" name="security_code" required placeholder="カード背面4桁もしくは3桁の番号" pattern="[0-9]*" inputmode="numeric" maxlength="4">
+                            <div class="security-code-help">
+                                <a href="#" target="_blank">
+                                    <span class="help-icon">?</span>
+                                    カード裏面の番号とは？
+                                </a>
+                            </div>
+                        </div>
+                    </fieldset>
 
                     <fieldset class="form-fieldset">
                         <legend class="fieldset-legend">メールマガジンの配信設定</legend>
@@ -219,7 +252,6 @@ require '../functions.php';
         </footer>
 
     </div>
-    <script src="./js/sign_up_address.js" defer></script>
-    <script src="./js/sign_up.js" defer></script>
+
 </body>
 </html>

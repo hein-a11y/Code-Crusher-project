@@ -1,3 +1,15 @@
+<?php
+    session_start();
+
+    $error_message = "";
+    $is_error = false;
+    if(isset($_SESSION['error_message'])){
+        $error_message = htmlspecialchars($_SESSION['error_message']);
+        $is_error = true;
+        unset($_SESSION['error_message']);
+    }
+?>
+
 <?php require_once '../header.php'; ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -12,12 +24,21 @@
 <body>
     <main>
         <div class="login-container">
-            <form id="login-form" action = "login_output.php" method="post">
+            <?php 
+                if($is_error){
+                    echo <<< HTML
+                        <div class="error-popup">
+                         {$error_message}
+                        </div> 
+                    HTML;  
+                }
+            ?>
+            <form id="login-form" action="login-output.php" method="post">
                 <h1>ログイン</h1>
 
                 <div class="input-group">
-                <label for="email">メールアドレス</label>
-                <input type="email" id="email" name="email" placeholder="email@example.com" required>
+                <label for="login">メールアドレスかログイン名</label>
+                <input type="text" class="loginInput" name="login" placeholder="Username or Email" required>
                 </div>
 
                 <div class="input-group">
@@ -41,7 +62,7 @@
         </div>
     </main>
     
-    <script src="script.js"></script>
+ 
     
 </body>
 </html>
