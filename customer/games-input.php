@@ -489,10 +489,20 @@
                                         $sql_genres = $pdo->prepare('SELECT game_gen.game_id,gen.genre_name FROM gg_game_genres AS game_gen INNER JOIN gg_genres AS gen ON game_gen.genre_id = gen.genre_id WHERE game_gen.game_id = ?');
                                         $sql_genres->execute([$id]);
 
+                                        $sql_img = $pdo->prepare('SELECT * FROM gg_media WHERE game_id = ? and is_primary = 1');
+                                        $sql_img->execute([$id]);
+                                        $image = $sql_img->fetch(PDO::FETCH_ASSOC);
+
                                         echo <<< HTML
                                         <div class="swiper-slide glass-card rounded-xl overflow-hidden shadow-lg group/card cursor-pointer">
                                             <div class="relative h-48 overflow-hidden">
-                                                <img src="../customer/photos/CP.png" class="w-full h-full object-cover transition-transform duration-500 group-hover/card:scale-110">
+                                        HTML;
+                                            if(!empty($image['url'] && $image['type'] == 'image')){
+                                                echo "<img src='{$image['url']}' class='w-full h-full object-cover transition-transform duration-500 group-hover/card:scale-110'>";
+                                            }else{
+                                                echo "<img src='' alt='{$name} image' class='w-full h-full object-cover transition-transform duration-500 group-hover/card:scale-110'>";
+                                            }
+                                        echo <<< HTML
                                                 <div class="absolute top-2 right-2 bg-black/80 text-white text-xs font-bold px-2 py-1 rounded border border-white/20">-10%</div>
                                             </div>
                                             <div class="p-6">
