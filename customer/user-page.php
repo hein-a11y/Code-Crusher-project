@@ -302,12 +302,20 @@
 
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                                     <div>
-                                        <label class="block text-sm font-medium text-slate-400 mb-1">名</label>
+                                        <label class="block text-sm font-medium text-slate-400 mb-1">名前</label>
                                         <input type="text" value="フェリックス" name="firstname" class="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-slate-100">
                                     </div>
                                     <div>
-                                        <label class="block text-sm font-medium text-slate-400 mb-1">姓</label>
+                                        <label class="block text-sm font-medium text-slate-400 mb-1">苗字</label>
                                         <input type="text" value="田中" name="lastname" class="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-slate-100">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-slate-400 mb-1">名前（カナ）</label>
+                                        <input type="text" value="フェリックス" name="firstname_kana" class="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-slate-100">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-slate-400 mb-1">苗字（カナ）</label>
+                                        <input type="text" value="田中" name="lastname_kana" class="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-slate-100">
                                     </div>
                                 </div>
 
