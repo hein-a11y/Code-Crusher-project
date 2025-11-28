@@ -17,7 +17,7 @@ session_start();
     unset($_SESSION['customer']);
     $pdo = getPDO();
     if($login_type == "email"){
-        $sql = "SELECT * FROM gg_users WHERE mailaddress=? limit 1";
+        $sql = "select * from gg_users where  mailaddress=? limit 1";
     }else{
         $sql = "SELECT * FROM gg_users WHERE login_name = ? limit 1";
     }
