@@ -8,17 +8,38 @@
     if($pdo == null){
         $pdo = getPDO();
     }
-   debug($_SESSION['customer']);
+
     if(isset($_SESSION['customer'])){
         $user_id = $_SESSION['customer']['user_id'];
         $login = $_SESSION['customer']['login'];
         $firstname = $_SESSION['customer']['firstname'];
         $lastname = $_SESSION['customer']['lastname'];
         $address = $_SESSION['customer']['address'];
+
+        $fullname = $lastname . " " . $firstname ;
+
+        $sql = "SELECT * FROM gg_users WHERE user_id = ?";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$user_id]);
+        $profile = $stmt->fetch();
+
+        $firstkana = $profile['firstname_kana'];
+        $lastkana = $profile['lastname_kana'];
+        $email = $profile['mailaddress'];
+        $phone = $profile['phone_number'];
+        $gender = $profile['gender'];
+        $birthday = datetime_to_date($profile['birthday']);
+        $created_date = datetime_to_date($profile['creation_date']);
+
+        
+
     }else{
         header("location: login-input.php");
         exit;
     }
+
+    
+    
 ?>
 
 <!DOCTYPE html>
@@ -83,8 +104,14 @@
             <div class="p-6 border-b border-slate-700 flex items-center gap-3">
                 <img src="https://api.dicebear.com/9.x/avataaars/svg?seed=Felix" alt="User" class="w-10 h-10 rounded-full bg-slate-700">
                 <div class="overflow-hidden">
-                    <h4 class="font-semibold text-sm truncate text-slate-100">田中 フェリックス</h4>
-                    <p class="text-xs text-slate-400 truncate">無料会員</p>
+                    <h4 class="font-semibold text-sm truncate text-slate-100"><?php echo $fullname; ?></h4>
+                    <?php 
+                        if(isActiveMember($pdo, $user_id)){
+                            echo "<p class='text-xs text-slate-400 truncate'>プレミアム会員</p>";
+                        }else{
+                            echo "<p class='text-xs text-slate-400 truncate'>無料会員</p>";
+                        }
+                    ?> 
                 </div>
             </div>
 
@@ -213,20 +240,6 @@
 
                     <!-- 2. MY PROFILE -->
 
-                    <?php 
-                        $sql = "SELECT * FROM gg_users WHERE user_id = ?";
-                        $stmt = $pdo->prepare($sql);
-                        $stmt->execute([$user_id]);
-                        $profile = $stmt->fetch();
-
-                        $firstkana = $profile['firstname_kana'];
-                        $lastkana = $profile['lastname_kana'];
-                        $email = $profile['mailaddress'];
-                        $phone = $profile['phone_number'];
-                        $gender = $profile['gender'];
-                        $birthday = $profile['birthday'];
-                        $fullname = $firstname . " " . $lastname;
-                    ?>
                     <section id="profile" class="tab-content">
                         <h2 class="text-2xl font-bold text-slate-100 mb-6">プロフィール</h2>
                         <div class="bg-slate-800 rounded-xl shadow-sm border border-slate-700 overflow-hidden">
@@ -239,7 +252,7 @@
                                 <div class="flex justify-between items-start mb-6">
                                     <div>
                                         <h3 class="text-xl font-bold text-slate-100"><?php echo $fullname; ?></h3>
-                                        <p class="text-slate-400">2023年3月 登録</p>
+                                        <p class="text-slate-400"><?php echo $created_date; ?></p>
                                     </div>
                                     <button onclick="switchTab('edit-profile')" class="text-blue-400 hover:text-blue-500 font-medium text-sm">
                                         プロフィール編集
@@ -249,15 +262,23 @@
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-y-6 gap-x-12">
                                     <div>
                                         <label class="text-xs font-semibold text-slate-500 uppercase tracking-wider">メールアドレス</label>
-                                        <p class="mt-1 text-slate-300 font-medium">felix.anderson@example.com</p>
+                                        <p class="mt-1 text-slate-300 font-medium"><?php echo $email; ?></p>
                                     </div>
                                     <div>
                                         <label class="text-xs font-semibold text-slate-500 uppercase tracking-wider">電話番号</label>
-                                        <p class="mt-1 text-slate-300 font-medium">090-1234-5678</p>
+                                        <p class="mt-1 text-slate-300 font-medium"><?php echo $phone; ?></p>
                                     </div>
                                     <div class="md:col-span-2">
                                         <label class="text-xs font-semibold text-slate-500 uppercase tracking-wider">お届け先住所</label>
-                                        <p class="mt-1 text-slate-300 font-medium">〒100-0001 東京都千代田区千代田1-1</p>
+                                        <p class="mt-1 text-slate-300 font-medium"><?php echo $address; ?></p>
+                                    </div>
+                                    <div>
+                                        <label class="text-xs font-semibold text-slate-500 uppercase tracking-wider">性別</label>
+                                        <p class="mt-1 text-slate-300 font-medium"><?php echo $gender; ?></p>
+                                    </div>
+                                    <div>
+                                        <label class="text-xs font-semibold text-slate-500 uppercase tracking-wider">生年月日</label>
+                                        <p class="mt-1 text-slate-300 font-medium"><?php echo $birthday; ?></p>
                                     </div>
                                 </div>
                             </div>

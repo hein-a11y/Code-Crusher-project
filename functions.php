@@ -54,4 +54,13 @@ function hasBought(PDO $pdo, int $user_id, int $product_id,string $type): bool
     // or FALSE if no rows are found. We cast the result to a boolean.
     return (bool) $sql->fetchColumn();
 }
+
+function datetime_to_date($dbDateTime){
+    $dateTimeObject = new DateTime($dbDateTime);
+
+        // Format the DateTime object to YYYY/MM/DD
+    $formattedDate = $dateTimeObject->format('Y/m/d');
+
+    return $formattedDate;
+}
 ?>
