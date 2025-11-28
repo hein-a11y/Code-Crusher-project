@@ -1,7 +1,6 @@
 <?php 
 require_once '../header.php'; 
 require '../functions.php';
-debug($_SESSION['customer']);
 ?>
 
 <!DOCTYPE html>
