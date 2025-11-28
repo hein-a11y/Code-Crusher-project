@@ -294,7 +294,7 @@
                         </div>
                         
                         <div class="bg-slate-800 rounded-xl shadow-sm border border-slate-700 p-8">
-                            <form onsubmit="event.preventDefault(); alert('実際のアプリではPHP経由でデータベースを更新します。');">
+                            <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post">
                                 <div class="flex items-center gap-6 mb-8">
                                     <img src="https://api.dicebear.com/9.x/avataaars/svg?seed=Felix" class="w-20 h-20 rounded-full bg-slate-700">
                                     <button class="px-4 py-2 border border-slate-600 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-700">アバター変更</button>
@@ -303,22 +303,22 @@
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                                     <div>
                                         <label class="block text-sm font-medium text-slate-400 mb-1">名</label>
-                                        <input type="text" value="フェリックス" class="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-slate-100">
+                                        <input type="text" value="フェリックス" name="firstname" class="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-slate-100">
                                     </div>
                                     <div>
                                         <label class="block text-sm font-medium text-slate-400 mb-1">姓</label>
-                                        <input type="text" value="田中" class="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-slate-100">
+                                        <input type="text" value="田中" name="lastname" class="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-slate-100">
                                     </div>
                                 </div>
 
                                 <div class="mb-6">
                                     <label class="block text-sm font-medium text-slate-400 mb-1">メールアドレス</label>
-                                    <input type="email" value="felix.anderson@example.com" class="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-slate-100">
+                                    <input type="email" name="mailaddress" value="felix.anderson@example.com" class="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-slate-100">
                                 </div>
 
                                 <div class="mb-6">
                                     <label class="block text-sm font-medium text-slate-400 mb-1">住所</label>
-                                    <textarea rows="3" class="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-slate-100">〒100-0001 東京都千代田区千代田1-1</textarea>
+                                    <textarea rows="3" name="address" class="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-slate-100">〒100-0001 東京都千代田区千代田1-1</textarea>
                                 </div>
 
                                 <div class="flex justify-end gap-3">
