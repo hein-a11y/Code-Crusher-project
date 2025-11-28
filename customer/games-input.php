@@ -298,29 +298,7 @@
 
     <div id="content-wrap">
         
-        <!-- Mock Header -->
-        <!-- <nav class="glass-nav fixed w-full z-50 transition-all duration-300">
-            <div class="container mx-auto px-6 py-4 flex justify-between items-center">
-                <div class="flex items-center gap-2">
-                    <i data-lucide="gamepad-2" class="text-indigo-500 w-8 h-8"></i>
-                    <span class="text-2xl font-black tracking-tighter text-white">EC<span class="text-indigo-500">GAMES</span></span>
-                </div>
-                <div class="hidden md:flex items-center space-x-8 text-sm font-medium tracking-wide">
-                    <a href="#" class="text-white hover:text-indigo-400 transition-colors">STORE</a>
-                    <a href="#" class="text-gray-400 hover:text-white transition-colors">LIBRARY</a>
-                    <a href="#" class="text-gray-400 hover:text-white transition-colors">COMMUNITY</a>
-                    <a href="#" class="text-gray-400 hover:text-white transition-colors">SUPPORT</a>
-                </div>
-                <div class="flex items-center gap-4">
-                    <button class="text-gray-300 hover:text-white"><i data-lucide="search" class="w-5 h-5"></i></button>
-                    <button class="text-gray-300 hover:text-white relative">
-                        <i data-lucide="shopping-cart" class="w-5 h-5"></i>
-                        <span class="absolute -top-2 -right-2 bg-indigo-600 text-[10px] w-4 h-4 flex items-center justify-center rounded-full">2</span>
-                    </button>
-                    <button class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-full text-xs font-bold transition-all shadow-lg shadow-indigo-500/30 hover:shadow-indigo-500/50">SIGN IN</button>
-                </div>
-            </div>
-        </nav> -->
+
 
         <main class="flex-grow">
             <!-- Hero Section -->
@@ -377,7 +355,7 @@
                                 </a>
                             </div>
                         </div>
-                    </div> 
+                    </div>
                     <!-- Custom Pagination Container -->
                     <div class="hero-pagination"></div>
                 </div>
@@ -453,6 +431,8 @@
                     </div>
                 </div>
             </section>
+
+          
 
             <section class="py-20 px-4 container mx-auto space-y-16 relative z-10">
 
