@@ -1014,6 +1014,12 @@ ALTER TABLE `gg_game_requirements`
   MODIFY `game_req_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- テーブルの AUTO_INCREMENT `gg_genres`
+--
+ALTER TABLE `gg_genres`
+  MODIFY `genre_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- テーブルの AUTO_INCREMENT `gg_media`
 --
 ALTER TABLE `gg_media`
@@ -1024,6 +1030,12 @@ ALTER TABLE `gg_media`
 --
 ALTER TABLE `gg_orders`
   MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- テーブルの AUTO_INCREMENT `gg_platforms`
+--
+ALTER TABLE `gg_platforms`
+  MODIFY `platform_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- テーブルの AUTO_INCREMENT `gg_point_transactions`

@@ -8,19 +8,37 @@ $error_detail = '';
 $registered_data = [];
 
 // フォームからの入力を取得
-$gadget_name = $_REQUEST['gadget_name'] ?? '';
-$gadget_explanation = $_REQUEST['gadget_explanation'] ?? '';
-$category_id = $_REQUEST['category_id'] ?? '';
-$new_category = $_REQUEST['new_category'] ?? '';
+$game_name = $_REQUEST['game_name'] ?? '';
+$game_explanation = $_REQUEST['game_explanation'] ?? '';
 $manufacturer = $_REQUEST['manufacturer'] ?? '';
 $price = $_REQUEST['price'] ?? '';
-$stock = $_REQUEST['stock'] ?? '';
+$game_type = $_REQUEST['game_type'] ?? ''; 
 
-// スペック情報
-$spec_names = $_REQUEST['spec_name'] ?? [];
-$spec_custom_names = $_REQUEST['spec_custom_name'] ?? [];
-$spec_values = $_REQUEST['spec_value'] ?? [];
-$spec_units = $_REQUEST['spec_unit'] ?? [];
+// 在庫数は空の場合NULLとする
+$stock = $_REQUEST['stock'] ?? '';
+if ($stock === '') {
+    $stock = null;
+}
+
+// プラットフォーム
+$platform_id = $_REQUEST['platform_id'] ?? '';
+$new_platform = $_REQUEST['new_platform'] ?? '';
+
+// ジャンル (複数)
+$genre_ids = $_REQUEST['genre_ids'] ?? [];
+$new_genre = $_REQUEST['new_genre'] ?? '';
+
+// 動作環境 (最低)
+$min_req_ids = $_REQUEST['min_req_id'] ?? [];
+$min_req_customs = $_REQUEST['min_req_custom'] ?? [];
+$min_req_vals_sel = $_REQUEST['min_req_value_select'] ?? [];
+$min_req_vals_cus = $_REQUEST['min_req_value_custom'] ?? [];
+
+// 動作環境 (推奨)
+$rec_req_ids = $_REQUEST['rec_req_id'] ?? [];
+$rec_req_customs = $_REQUEST['rec_req_custom'] ?? [];
+$rec_req_vals_sel = $_REQUEST['rec_req_value_select'] ?? [];
+$rec_req_vals_cus = $_REQUEST['rec_req_value_custom'] ?? [];
 
 try {
     $pdo = getPDO();
@@ -28,116 +46,120 @@ try {
     $pdo->beginTransaction();
 
     // -------------------------------------------------------
-    // 1. カテゴリの処理
+    // 1. プラットフォームの処理
     // -------------------------------------------------------
-    // "new" が選択された場合、または空で新規入力がある場合
-    if ($category_id === 'new' || (!empty($new_category) && empty($category_id))) {
-        if (empty($new_category)) {
-            throw new Exception('新規カテゴリー名が入力されていません。');
-        }
+    if ($platform_id === 'new' || (!empty($new_platform) && empty($platform_id))) {
+        if (empty($new_platform)) throw new Exception('新規プラットフォーム名が入力されていません。');
+        
+        $sql = $pdo->prepare("SELECT * FROM gg_platforms WHERE platform_name = ?");
+        $sql->execute([$new_platform]);
+        if ($sql->fetch()) throw new Exception('既存のプラットフォーム名と重複しています。');
+        
+        $sql = $pdo->prepare("INSERT INTO gg_platforms VALUES (NULL, ?)");
+        $sql->execute([$new_platform]);
+        $platform_id = $pdo->lastInsertId();
+    }
+    
+    if (empty($platform_id) || $platform_id === 'new') throw new Exception('プラットフォームが正しく選択されていません。');
 
-        $sql = $pdo->prepare("SELECT * FROM gg_category WHERE category_name = ?");
-        $sql->execute([$new_category]);
-        if ($sql->fetch()) {
-            throw new Exception('既存のカテゴリー名と重複しています。');
-        }
+    // -------------------------------------------------------
+    // 2. ジャンルの処理 (複数対応)
+    // -------------------------------------------------------
+    if (empty($genre_ids)) throw new Exception('ジャンルが選択されていません。');
 
-        $sql = $pdo->prepare("INSERT INTO gg_category VALUES (NULL, ?)");
-        $sql->execute([$new_category]);
-        $category_id = $pdo->lastInsertId();
+    // "その他"(new)が選択されているかチェック
+    if (in_array('new', $genre_ids)) {
+        if (empty($new_genre)) throw new Exception('新規ジャンル名が入力されていません。');
+
+        $sql = $pdo->prepare("SELECT * FROM gg_genres WHERE genre_name = ?");
+        $sql->execute([$new_genre]);
+        if ($sql->fetch()) throw new Exception('既存のジャンル名と重複しています。');
+        
+        $sql = $pdo->prepare("INSERT INTO gg_genres VALUES (NULL, ?)");
+        $sql->execute([$new_genre]);
+        $new_genre_id = $pdo->lastInsertId();
+
+        $genre_ids = array_diff($genre_ids, ['new']);
+        $genre_ids[] = $new_genre_id;
     }
 
-    if (empty($category_id) || $category_id === 'new') {
-        throw new Exception('カテゴリーが正しく選択されていません。');
+    // -------------------------------------------------------
+    // 3. ゲーム本体の登録
+    // -------------------------------------------------------
+    $sql = $pdo->prepare("INSERT INTO gg_game VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, 1, ?, NULL)");
+    $sql->execute([$game_name, $game_explanation, $platform_id, $manufacturer, $game_type, $price, $stock, date('Y-m-d H:i:s')]);
+    $game_id = $pdo->lastInsertId();
+
+    // -------------------------------------------------------
+    // 4. ゲームとジャンルの紐付け
+    // -------------------------------------------------------
+    $sql = $pdo->prepare("INSERT INTO gg_game_genres VALUES (?, ?)");
+    foreach ($genre_ids as $gid) {
+        $sql->execute([$game_id, $gid]);
     }
 
     // -------------------------------------------------------
-    // 2. ガジェット本体の登録
+    // 5. 動作環境(スペック)の登録
     // -------------------------------------------------------
-    // Sales_Status = 1 (販売中) としています
-    $sql = $pdo->prepare("INSERT INTO gg_gadget VALUES (NULL, ?, ?, ?, ?, ?, ?, 1, ?, NULL)");
-    $sql->execute([
-        $category_id,
-        $gadget_name,
-        $gadget_explanation,
-        $manufacturer,
-        $price,
-        $stock,
-        date('Y-m-d H:i:s')
-    ]);
-    $gadget_id = $pdo->lastInsertId();
+    function insertRequirements($pdo, $game_id, $ids, $customs, $val_selects, $val_customs, $type) {
+        if (!is_array($ids)) return;
+        foreach ($ids as $i => $spec_identifier) {
+            $val_select = $val_selects[$i] ?? '';
+            $val_custom = $val_customs[$i] ?? '';
+            $current_value = ($val_select === 'new' || $val_select === '') ? $val_custom : $val_select;
 
-    // -------------------------------------------------------
-    // 3. スペック情報の登録
-    // -------------------------------------------------------
-    if (is_array($spec_names)) {
-        foreach ($spec_names as $i => $spec_identifier) {
-            $target_spec_id = null;
-            $current_value = $spec_values[$i] ?? '';
-
-            // 値が空ならスキップ
             if ($current_value === '') continue;
 
-            $custom_name = $spec_custom_names[$i] ?? '';
-            $custom_unit = $spec_units[$i] ?? '';
+            $custom_name = $customs[$i] ?? '';
+            $target_spec_id = null;
 
-            // A. 「その他」が選ばれていて、新規入力がある場合
             if (!empty($custom_name)) {
-                // 重複チェック
                 $sql = $pdo->prepare("SELECT spec_id FROM gg_specifications WHERE spec_name = ?");
                 $sql->execute([$custom_name]);
                 $existing = $sql->fetch();
-                
                 if ($existing) {
                     $target_spec_id = $existing['spec_id'];
                 } else {
-                    // 新規仕様登録 (GADGETタイプ)
-                    $sql = $pdo->prepare("INSERT INTO gg_specifications VALUES (NULL, ?, ?, 'GADGET')");
-                    $sql->execute([$custom_name, $custom_unit]);
+                    $sql = $pdo->prepare("INSERT INTO gg_specifications VALUES (NULL, ?, NULL, 'GAME')");
+                    $sql->execute([$custom_name]);
                     $target_spec_id = $pdo->lastInsertId();
                 }
             } else {
-                // B. 既存の仕様が選ばれている場合
                 $target_spec_id = $spec_identifier;
             }
 
-            // スペック値の登録
             if ($target_spec_id && $target_spec_id !== 'other') {
-                $sql = $pdo->prepare("INSERT INTO gg_gadget_specs VALUES (NULL, ?, ?, ?)");
-                $sql->execute([$gadget_id, $target_spec_id, $current_value]);
+                $sql = $pdo->prepare("INSERT INTO gg_game_requirements VALUES (NULL, ?, ?, ?, ?)");
+                $sql->execute([$game_id, $target_spec_id, $current_value, $type]);
             }
         }
     }
 
-    // -------------------------------------------------------
-    // 4. 画像のアップロード処理
-    // -------------------------------------------------------
-    $upload_dir = '../customer/gadget-images/';
+    insertRequirements($pdo, $game_id, $min_req_ids, $min_req_customs, $min_req_vals_sel, $min_req_vals_cus, 'MIN');
+    insertRequirements($pdo, $game_id, $rec_req_ids, $rec_req_customs, $rec_req_vals_sel, $rec_req_vals_cus, 'REC');
 
-    if (!file_exists($upload_dir)) {
-        mkdir($upload_dir, 0777, true);
-    }
+    // -------------------------------------------------------
+    // 6. 画像のアップロード処理
+    // -------------------------------------------------------
+    $upload_dir = '../customer/game-images/';
+    if (!file_exists($upload_dir)) mkdir($upload_dir, 0777, true);
 
     $uploaded_images_count = 0;
-    if (isset($_FILES['gadget_images'])) {
-        $files = $_FILES['gadget_images'];
+    if (isset($_FILES['game_images'])) {
+        $files = $_FILES['game_images'];
         $count = count($files['name']);
-
         for ($i = 0; $i < $count; $i++) {
             if ($files['error'][$i] === UPLOAD_ERR_OK) {
-                
                 $tmp_name = $files['tmp_name'][$i];
                 $original_name = basename($files['name'][$i]);
                 $ext = pathinfo($original_name, PATHINFO_EXTENSION);
-                
-                // ファイル名: gadgets-{gadget_id}_{連番}.{拡張子}
-                $new_file_name = "gadgets-{$gadget_id}_" . ($i + 1) . ".{$ext}";
+                $new_file_name = "games-{$game_id}_" . ($i + 1) . ".{$ext}";
                 $target_path = $upload_dir . $new_file_name;
-                $db_path = "./gadget-images/" . $new_file_name;
+                $db_path = "./game-images/" . $new_file_name;
 
                 if (move_uploaded_file($tmp_name, $target_path)) {
-                    $sql = $pdo->prepare("INSERT INTO gg_media VALUES (NULL, NULL, ?, ?, 'image', ?)");
-                    $sql->execute([$gadget_id, $db_path, ($i === 0) ? 1 : 0]);
+                    $sql = $pdo->prepare("INSERT INTO gg_media VALUES (NULL, ?, NULL, ?, 'image', ?)");
+                    $sql->execute([$game_id, $db_path, ($i === 0) ? 1 : 0]);
                     $uploaded_images_count++;
                 }
             }
@@ -146,10 +168,10 @@ try {
 
     $pdo->commit();
     $status = 'success';
-    $message = 'ガジェットの登録が完了しました。';
+    $message = 'ゲームの登録が完了しました。';
     $registered_data = [
-        'ID' => $gadget_id,
-        '製品名' => $gadget_name,
+        'ID' => $game_id,
+        'タイトル' => $game_name,
         '価格' => '¥' . number_format($price),
         '画像数' => $uploaded_images_count . '枚'
     ];
@@ -274,7 +296,7 @@ try {
                         <a href="admin_products.php" class="btn btn-secondary">
                             <i class="fas fa-list"></i> 商品一覧へ
                         </a>
-                        <a href="admin_add_gadget.php" class="btn btn-primary">
+                        <a href="admin_add_game.php" class="btn btn-primary">
                             <i class="fas fa-plus"></i> 続けて登録
                         </a>
                     </div>
@@ -302,7 +324,7 @@ try {
 </div>
 
 <script>
-    // サイドバー用スクリプト
+    // サイドバー用スクリプト (admin_add_game.php等と同様)
     const sidebar = document.getElementById('sidebar');
     const sidebarToggle = document.getElementById('sidebar-toggle');
     const sidebarOverlay = document.getElementById('sidebar-overlay');

@@ -30,6 +30,7 @@
                     $name = h($row['gadget_name']);
                     $manufacturer = h($row['manufacturer']);
                     $price_number_format = number_format(h($row['price']));
+                    $sale_status = h($row['Sales_Status']);
                     $keyword = $_GET['keyword'] ?? '';
 
                     $sql = $pdo->prepare('SELECT gg_media.url,gg_media.is_primary FROM gg_media WHERE gg_media.gadget_id = ?');
@@ -45,7 +46,7 @@
                             $img_src[] = h($media['url']);
                         }
                     }
-
+                    if ($sale_status == 1) {
                     echo <<< HTML
                     <div class="product-card">
                         <a href="./gadget-details.php?name={$name}&keyword={$keyword}&id={$id}">
@@ -59,6 +60,7 @@
                     </div>
                     
                     HTML;
+                    }
                 }
                 ?>
             </div>
