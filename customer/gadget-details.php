@@ -94,7 +94,6 @@
             HTML;
             ?>
 
-
             <!-- 商品説明 -->
             <section class="product-details-section product-description">
                 <h2 class="section-title">商品説明</h2>
