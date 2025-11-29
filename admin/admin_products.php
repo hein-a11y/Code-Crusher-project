@@ -121,6 +121,7 @@ switch ($sort) {
     case 'category': $order_by = " ORDER BY type ASC, category_info ASC"; break;
     case 'manufacturer_asc': $order_by = " ORDER BY manufacturer ASC"; break;
     case 'manufacturer_desc': $order_by = " ORDER BY manufacturer DESC"; break;
+    default: $order_by = " ORDER BY created_time DESC"; break; // newest
 }
 
 $stmt = $pdo->prepare($final_sql . $order_by);
@@ -131,105 +132,7 @@ $stmt->execute();
 $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
-<style>
-    /* --- ページ固有のスタイル --- */
-    .page-header-container {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 1rem;
-        margin-bottom: 20px;
-    }
-
-    .filter-bar {
-        background-color: var(--bg-surface);
-        padding: 15px;
-        border-radius: 8px;
-        border: 1px solid var(--border-color);
-        margin-bottom: 20px;
-    }
-
-    .filter-form {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 15px;
-        align-items: center;
-    }
-
-    .filter-group {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-
-    .filter-label {
-        color: var(--text-secondary);
-        font-size: 0.85rem;
-        white-space: nowrap;
-    }
-
-    .form-select-sm {
-        padding: 6px 24px 6px 10px;
-        font-size: 0.9rem;
-        border-radius: 4px;
-        background-color: #333;
-        color: #fff;
-        border: 1px solid var(--border-color);
-        max-width: 150px; /* 幅を少し制限 */
-    }
-
-    .extra-filters {
-        display: none;
-        gap: 15px;
-        align-items: center;
-        padding-left: 15px;
-        border-left: 1px solid var(--border-color);
-        margin-left: 5px;
-    }
-
-    .product-name-cell {
-        display: flex;
-        flex-direction: column;
-    }
-    .product-manufacturer {
-        font-size: 0.8rem;
-        color: var(--text-secondary);
-        margin-top: 4px;
-    }
-    .category-badge {
-        display: inline-block;
-        padding: 4px 8px;
-        border-radius: 4px;
-        font-size: 0.75rem;
-        font-weight: 600;
-        background-color: rgba(255, 255, 255, 0.1);
-        border: 1px solid var(--border-color);
-    }
-    .badge-game { color: #facc15; border-color: rgba(250, 204, 21, 0.3); }
-    .badge-gadget { color: #22d3ee; border-color: rgba(34, 211, 238, 0.3); }
-
-    /* トグルスイッチ */
-    .switch { position: relative; display: inline-block; width: 40px; height: 20px; }
-    .switch input { opacity: 0; width: 0; height: 0; }
-    .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #4b5563; transition: .4s; border-radius: 20px; }
-    .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 2px; bottom: 2px; background-color: white; transition: .4s; border-radius: 50%; }
-    input:checked + .slider { background-color: var(--accent-blue); }
-    input:checked + .slider:before { transform: translateX(20px); }
-
-    .stock-number { font-weight: bold; color: var(--text-primary); }
-    .stock-low { color: var(--red); }
-    .stock-ok { color: var(--green); }
-
-    .btn-add { background-color: var(--accent-blue); color: #121212; padding: 8px 16px; border-radius: 6px; font-weight: bold; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; font-size: 0.9rem; transition: opacity 0.2s; }
-    .btn-add:hover { opacity: 0.9; text-decoration: none; }
-    
-    /* 処理中オーバーレイ */
-    .loading-overlay {
-        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-        background: rgba(0,0,0,0.3); z-index: 9999; display: none; cursor: wait;
-    }
-</style>
+<link rel="stylesheet" href="./css/admin_products.css">
 
 <div class="main-content">
     

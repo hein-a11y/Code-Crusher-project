@@ -18,20 +18,7 @@ $sql->execute([$gadget_id]);
 $current_specs = $sql->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
-<style>
-/* 共通スタイルは省略可能ですが、念のため記述 */
-input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-input[type=number] { -moz-appearance: textfield; }
-.custom-input-wrapper { display: none; margin-top: 10px; }
-.spec-row { display: flex; gap: 10px; margin-bottom: 10px; align-items: flex-start; }
-.spec-input-wrapper { flex: 2; display: flex; flex-direction: column; gap: 5px; }
-.spec-custom-input { display: none; }
-.remove-spec-btn { color: var(--red); width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; border-radius: 4px; background-color: rgba(248, 113, 113, 0.1); border: none; cursor: pointer; margin-top: 8px; }
-.remove-spec-btn:hover { background-color: rgba(248, 113, 113, 0.2); }
-.button-dashed { width: 100%; border-style: dashed; border-width: 1px; border-color: var(--border-color); padding: 0.5rem; }
-.button-full { width: 100%; }
-.flex-grow-2 { flex: 2; } .flex-grow-1 { flex: 1; }
-</style>
+<link rel="stylesheet" href="./css/admin_edit_gadget.css">
 
 <div class="main-content">
     <header class="header">

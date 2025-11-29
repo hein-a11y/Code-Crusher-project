@@ -6,42 +6,8 @@
     <title>GG ADMIN - ログイン</title>
     
     <link rel="stylesheet" href="./css/admin.css">
+    <link rel="stylesheet" href="./css/admin_login.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
-    
-    <style>
-        body {
-            /* ページ全体をダークに */
-            background-color: var(--bg-dark);
-            /* フォームを垂直・水平中央に配置 */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-        }
-        .login-card {
-            width: 100%;
-            max-width: 450px;
-            /* cardスタイルを流用 */
-        }
-        .login-header {
-            text-align: center;
-            color: var(--accent-blue);
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 2rem;
-        }
-        .button-full-width {
-            width: 100%;
-            padding-top: 0.75rem;
-            padding-bottom: 0.75rem;
-            font-size: 1rem;
-        }
-        .link-footer {
-            text-align: center;
-            margin-top: 1.5rem;
-            font-size: 0.875rem;
-        }
-    </style>
 </head>
 <body>
 

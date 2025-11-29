@@ -188,66 +188,7 @@ try {
 
 <?php require_once '../admin_header.php'; ?>
 
-<style>
-    /* 結果ページの独自スタイル */
-    .result-container {
-        max-width: 600px;
-        margin: 40px auto;
-        text-align: center;
-        padding: 40px 20px;
-    }
-    .result-icon {
-        font-size: 4rem;
-        margin-bottom: 20px;
-    }
-    .result-icon.success { color: var(--green); }
-    .result-icon.error { color: var(--red); }
-    
-    .result-title {
-        font-size: 1.5rem;
-        font-weight: 700;
-        margin-bottom: 1rem;
-        color: var(--text-primary);
-    }
-    
-    .result-detail {
-        background-color: rgba(255, 255, 255, 0.05);
-        border-radius: 8px;
-        padding: 20px;
-        margin: 20px 0;
-        text-align: left;
-        border: 1px solid var(--border-color);
-    }
-    .result-detail p {
-        margin-bottom: 8px;
-        color: var(--text-secondary);
-    }
-    .result-detail strong {
-        color: var(--text-primary);
-        margin-left: 8px;
-    }
-    .error-text {
-        color: var(--red);
-        background-color: rgba(248, 113, 113, 0.1);
-        padding: 15px;
-        border-radius: 4px;
-        margin-top: 10px;
-        text-align: left;
-    }
-
-    .action-buttons {
-        display: flex;
-        justify-content: center;
-        gap: 15px;
-        margin-top: 30px;
-    }
-    .btn {
-        padding: 10px 24px;
-        border-radius: 6px;
-        text-decoration: none;
-        font-weight: 600;
-        transition: background-color 0.2s;
-        display: inline-flex;
+<link rel="stylesheet" href="./css/gadget-insert.css">
         align-items: center;
     }
     .btn i { margin-right: 8px; }
