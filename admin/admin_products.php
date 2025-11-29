@@ -10,6 +10,15 @@ $platforms = $pdo->query("SELECT * FROM gg_platforms ORDER BY platform_id ASC")-
 $genres = $pdo->query("SELECT * FROM gg_genres ORDER BY genre_id ASC")->fetchAll(PDO::FETCH_ASSOC);
 $categories = $pdo->query("SELECT * FROM gg_category ORDER BY category_id ASC")->fetchAll(PDO::FETCH_ASSOC);
 
+// ▼▼▼ 追加: メーカー一覧の取得 (ゲームとガジェットの両方から取得して結合) ▼▼▼
+$sql_manufacturers = "
+    SELECT DISTINCT manufacturer FROM gg_game
+    UNION
+    SELECT DISTINCT manufacturer FROM gg_gadget
+    ORDER BY manufacturer ASC
+";
+$manufacturers = $pdo->query($sql_manufacturers)->fetchAll(PDO::FETCH_COLUMN);
+
 
 // --- パラメータの取得 ---
 $sort = $_GET['sort'] ?? 'newest';
@@ -20,86 +29,86 @@ $type_filter = $_GET['type'] ?? 'all';
 $platform_filter = !empty($_GET['platform']) ? $_GET['platform'] : null;
 $genre_filter = !empty($_GET['genre']) ? $_GET['genre'] : null;
 $category_filter = !empty($_GET['category']) ? $_GET['category'] : null;
+$manufacturer_filter = !empty($_GET['manufacturer']) ? $_GET['manufacturer'] : null; // 追加
 
 
 // --- SQLクエリ構築 ---
 
-// 1. ゲーム用クエリ
-$sql_game = "
-    SELECT 
-        'game' as type,
-        g.game_id as id,
-        g.game_name as name,
-        g.manufacturer,
-        g.price,
-        g.stock,
-        g.Sales_Status as status,
-        g.created_time,
-        p.platform_name as category_info
-    FROM gg_game g
-    JOIN gg_platforms p ON g.platform_id = p.platform_id
-    WHERE g.game_name LIKE :search
-";
+// 基本パラメータ
+$common_params = [':search' => "%$search%"];
+if ($manufacturer_filter) {
+    $common_params[':manufacturer'] = $manufacturer_filter;
+}
 
-$game_params = [];
+// 1. ゲーム用クエリ部分
+$sql_game_where = " WHERE g.game_name LIKE :search";
+if ($manufacturer_filter) {
+    $sql_game_where .= " AND g.manufacturer = :manufacturer";
+}
+
+// 2. ガジェット用クエリ部分
+$sql_gadget_where = " WHERE gd.gadget_name LIKE :search";
+if ($manufacturer_filter) {
+    $sql_gadget_where .= " AND gd.manufacturer = :manufacturer";
+}
+
+
+// --- ゲーム固有の絞り込み ---
+$game_specific_where = "";
+$game_specific_params = [];
 if ($platform_filter) {
-    $sql_game .= " AND g.platform_id = :platform_id";
-    $game_params[':platform_id'] = $platform_filter;
+    $game_specific_where .= " AND g.platform_id = :platform_id";
+    $game_specific_params[':platform_id'] = $platform_filter;
 }
 if ($genre_filter) {
-    $sql_game .= " AND EXISTS (SELECT 1 FROM gg_game_genres gg WHERE gg.game_id = g.game_id AND gg.genre_id = :genre_id)";
-    $game_params[':genre_id'] = $genre_filter;
+    $game_specific_where .= " AND EXISTS (SELECT 1 FROM gg_game_genres gg WHERE gg.game_id = g.game_id AND gg.genre_id = :genre_id)";
+    $game_specific_params[':genre_id'] = $genre_filter;
+}
+
+// --- ガジェット固有の絞り込み ---
+$gadget_specific_where = "";
+$gadget_specific_params = [];
+if ($category_filter) {
+    $gadget_specific_where .= " AND gd.category_id = :category_id";
+    $gadget_specific_params[':category_id'] = $category_filter;
 }
 
 
-// 2. ガジェット用クエリ
-$sql_gadget = "
+// --- SQLの組み立て ---
+$sql_game_full = "
     SELECT 
-        'gadget' as type,
-        gd.gadget_id as id,
-        gd.gadget_name as name,
-        gd.manufacturer,
-        gd.price,
-        gd.stock,
-        gd.Sales_Status as status,
-        gd.created_time,
-        c.category_name as category_info
-    FROM gg_gadget gd
-    JOIN gg_category c ON gd.category_id = c.category_id
-    WHERE gd.gadget_name LIKE :search
+        'game' as type, g.game_id as id, g.game_name as name, g.manufacturer, g.price, g.stock, g.Sales_Status as status, g.created_time, p.platform_name as category_info
+    FROM gg_game g
+    JOIN gg_platforms p ON g.platform_id = p.platform_id
+    $sql_game_where
 ";
 
-$gadget_params = [];
-if ($category_filter) {
-    $sql_gadget .= " AND gd.category_id = :category_id";
-    $gadget_params[':category_id'] = $category_filter;
-}
+$sql_gadget_full = "
+    SELECT 
+        'gadget' as type, gd.gadget_id as id, gd.gadget_name as name, gd.manufacturer, gd.price, gd.stock, gd.Sales_Status as status, gd.created_time, c.category_name as category_info
+    FROM gg_gadget gd
+    JOIN gg_category c ON gd.category_id = c.category_id
+    $sql_gadget_where
+";
 
 
-// --- 実行するSQLの決定 ---
 $final_sql = "";
-$final_params = [':search' => "%$search%"];
+$final_params = $common_params;
 
 if ($type_filter === 'game') {
-    $final_sql = $sql_game;
-    $final_params = array_merge($final_params, $game_params);
+    // ゲームのみ
+    $final_sql = $sql_game_full . $game_specific_where;
+    $final_params = array_merge($final_params, $game_specific_params);
 
 } elseif ($type_filter === 'gadget') {
-    $final_sql = $sql_gadget;
-    $final_params = array_merge($final_params, $gadget_params);
+    // ガジェットのみ
+    $final_sql = $sql_gadget_full . $gadget_specific_where;
+    $final_params = array_merge($final_params, $gadget_specific_params);
 
 } else {
-    // すべての場合
-    $sql_game_simple = "
-        SELECT 'game' as type, g.game_id as id, g.game_name as name, g.manufacturer, g.price, g.stock, g.Sales_Status as status, g.created_time, p.platform_name as category_info
-        FROM gg_game g JOIN gg_platforms p ON g.platform_id = p.platform_id WHERE g.game_name LIKE :search
-    ";
-    $sql_gadget_simple = "
-        SELECT 'gadget' as type, gd.gadget_id as id, gd.gadget_name as name, gd.manufacturer, gd.price, gd.stock, gd.Sales_Status as status, gd.created_time, c.category_name as category_info
-        FROM gg_gadget gd JOIN gg_category c ON gd.category_id = c.category_id WHERE gd.gadget_name LIKE :search
-    ";
-    
-    $final_sql = $sql_game_simple . " UNION ALL " . $sql_gadget_simple;
+    // すべて (固有フィルターは適用せず、共通フィルターのみで結合)
+    // ※「すべて」選択時にプラットフォーム等の指定が残っていても無視する仕様
+    $final_sql = $sql_game_full . " UNION ALL " . $sql_gadget_full;
 }
 
 
@@ -110,7 +119,8 @@ switch ($sort) {
     case 'price_asc': $order_by = " ORDER BY price ASC"; break;
     case 'stock_desc': $order_by = " ORDER BY stock DESC"; break;
     case 'category': $order_by = " ORDER BY type ASC, category_info ASC"; break;
-    case 'newest': default: $order_by = " ORDER BY created_time DESC"; break;
+    case 'manufacturer_asc': $order_by = " ORDER BY manufacturer ASC"; break;
+    case 'manufacturer_desc': $order_by = " ORDER BY manufacturer DESC"; break;
 }
 
 $stmt = $pdo->prepare($final_sql . $order_by);
@@ -166,6 +176,7 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
         background-color: #333;
         color: #fff;
         border: 1px solid var(--border-color);
+        max-width: 150px; /* 幅を少し制限 */
     }
 
     .extra-filters {
@@ -264,6 +275,17 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         </select>
                     </div>
 
+                    <div class="filter-group">
+                        <label for="manufacturerSelect" class="filter-label">メーカー:</label>
+                        <select id="manufacturerSelect" name="manufacturer" class="form-select form-select-sm">
+                            <option value="">全メーカー</option>
+                            <?php foreach($manufacturers as $man): ?>
+                                <option value="<?php echo h($man); ?>" <?php if($manufacturer_filter == $man) echo 'selected'; ?>>
+                                    <?php echo h($man); ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
                     <div id="gameFilters" class="extra-filters">
                         <div class="filter-group">
                             <label for="platformSelect" class="filter-label">PF:</label>
@@ -311,7 +333,8 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             <option value="price_desc" <?php if($sort=='price_desc') echo 'selected'; ?>>価格 (高い順)</option>
                             <option value="price_asc" <?php if($sort=='price_asc') echo 'selected'; ?>>価格 (安い順)</option>
                             <option value="stock_desc" <?php if($sort=='stock_desc') echo 'selected'; ?>>在庫数 (多い順)</option>
-                            <option value="category" <?php if($sort=='category') echo 'selected'; ?>>カテゴリ順</option>
+                            <option value="manufacturer_asc" <?php if($sort=='manufacturer_asc') echo 'selected'; ?>>メーカー (昇順)</option>
+                            <option value="manufacturer_desc" <?php if($sort=='manufacturer_desc') echo 'selected'; ?>>メーカー (降順)</option>
                         </select>
                     </div>
 
@@ -377,15 +400,10 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                             <?php 
                                             $stock = $row['stock'];
                                             if (is_null($stock)) {
-                                                echo <<<HTML
-                                                <span style="color: #6b7280; font-size:0.85rem;">- (DL版)</span>
-                                                HTML;
+                                                echo '<span style="color: #6b7280; font-size:0.85rem;">- (DL版)</span>';
                                             } else {
                                                 $stockClass = ($stock < 5) ? 'stock-low' : 'stock-ok';
-                                                $stockFormatted = number_format($stock);
-                                                echo <<<HTML
-                                                <span class='stock-number {$stockClass}'>{$stockFormatted}</span>
-                                                HTML;
+                                                echo "<span class='stock-number {$stockClass}'>" . number_format($stock) . "</span>";
                                             }
                                             ?>
                                         </td>
@@ -393,10 +411,10 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                         <td>
                                             <label class="switch">
                                                 <input type="checkbox" 
-                                                       <?php echo ($row['status'] == 1) ? 'checked' : ''; ?>
-                                                       data-id="<?php echo h($row['id']); ?>"
-                                                       data-type="<?php echo h($row['type']); ?>"
-                                                       onchange="updateStatus(this)">
+                                                        <?php echo ($row['status'] == 1) ? 'checked' : ''; ?>
+                                                        data-id="<?php echo h($row['id']); ?>"
+                                                        data-type="<?php echo h($row['type']); ?>"
+                                                        onchange="updateStatus(this)">
                                                 <span class="slider"></span>
                                             </label>
                                         </td>
@@ -429,14 +447,16 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // --- フィルターの連動表示ロジック ---
         const typeSelect = document.getElementById('typeSelect');
         const gameFilters = document.getElementById('gameFilters');
         const gadgetFilters = document.getElementById('gadgetFilters');
         
+        // 各フィルター要素（自動送信のために取得）
         const platformSelect = document.getElementById('platformSelect');
         const genreSelect = document.getElementById('genreSelect');
         const categorySelect = document.getElementById('categorySelect');
+        const manufacturerSelect = document.getElementById('manufacturerSelect');
+        const sortSelect = document.getElementById('sortSelect');
 
         function updateFilters() {
             const type = typeSelect.value;
@@ -461,6 +481,7 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
         updateFilters();
 
         typeSelect.addEventListener('change', function() {
+            // 種別変更時は詳細フィルターをリセット
             platformSelect.value = "";
             genreSelect.value = "";
             categorySelect.value = "";
@@ -469,15 +490,15 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
             document.getElementById('filterForm').submit();
         });
 
-        // ソートと追加フィルターの変更時に自動送信
-        const autoSubmitInputs = [platformSelect, genreSelect, categorySelect, document.getElementById('sortSelect')];
+        // フィルター変更時に自動送信
+        const autoSubmitInputs = [platformSelect, genreSelect, categorySelect, manufacturerSelect, sortSelect];
         autoSubmitInputs.forEach(input => {
             if(input) {
                 input.addEventListener('change', () => document.getElementById('filterForm').submit());
             }
         });
 
-        // --- サイドバー用スクリプト ---
+        // サイドバー用
         const sidebar = document.getElementById('sidebar');
         const sidebarToggle = document.getElementById('sidebar-toggle');
         const sidebarOverlay = document.getElementById('sidebar-overlay');
@@ -493,12 +514,11 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
         if(sidebarClose) sidebarClose.addEventListener('click', toggleSidebar);
     });
 
-    // --- ステータス更新用関数 ---
+    // ステータス更新
     function updateStatus(checkbox) {
         const id = checkbox.getAttribute('data-id');
         const type = checkbox.getAttribute('data-type');
         const status = checkbox.checked ? 1 : 0;
-        const loadingOverlay = document.getElementById('loadingOverlay');
 
         fetch('update_product_status.php', {
             method: 'POST',
@@ -519,7 +539,7 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
         });
     }
 
-    // --- 商品削除用関数 ---
+    // 商品削除
     function deleteProduct(id, type, name) {
         if (!confirm(`本当に「${name}」を削除してもよろしいですか？\nこの操作は取り消せません。`)) {
             return;
