@@ -55,7 +55,7 @@ try {
     // 2. ガジェット本体の登録
     // -------------------------------------------------------
     // Sales_Status = 1 (販売中) としています
-    $sql = $pdo->prepare("INSERT INTO gg_gadget VALUES (NULL, ?, ?, ?, ?, ?, ?, 1, ?, NULL)");
+    $sql = $pdo->prepare("INSERT INTO gg_gadget VALUES (NULL, ?, ?, ?, ?, ?, ?, 0, ?, NULL)");
     $sql->execute([
         $category_id,
         $gadget_name,
