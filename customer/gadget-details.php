@@ -98,8 +98,7 @@
             <!-- 商品説明 -->
             <section class="product-details-section product-description">
                 <h2 class="section-title">商品説明</h2>
-                <p>プロレベルのパフォーマンスと快適性を追求した、G PRO X 2 LIGHTSPEEDワイヤレスゲーミングヘッドセット。革新的なPRO-G 50mmドライバーが、かつてないクリアさと定位感を実現します。LIGHTSPEEDワイヤレス技術により、遅延のない安定した接続を提供し、長時間のバッテリー寿命で集中力を途切れさせません。</p>
-                <p>Blue VO!CEマイクテクノロジー（ソフトウェア経由）を搭載し、スタジオ品質のクリアな音声チャットが可能。取り外し可能なマイクブームと、DTS Headphone:X 2.0 7.1chサラウンドサウンドが、没入感あふれるゲーミング体験を約束します。</p>
+                <p><?php echo nl2br($gadget_explanation); ?></p>
             </section>
 
             <!-- 製品仕様 -->
@@ -107,29 +106,41 @@
                 <h2 class="section-title">製品仕様</h2>
                 <table>
                     <tbody>
-                        <tr>
-                            <th>接続タイプ</th>
-                            <td>LIGHTSPEEDワイヤレス, Bluetooth, 3.5mm有線</td>
-                        </tr>
-                        <tr>
-                            <th>ドライバー</th>
-                            <td>PRO-G 50mm グラフェン</td>
-                        </tr>
-                        <tr>
-                            <th>マイク</th>
-                            <td>着脱式6mm（Blue VO!CE対応）</td>
-                        </tr>
-                        <tr>
-                            <th>バッテリー持続時間</th>
-                            <td>最大50時間</td>
-                        </tr>
-                        <tr>
-                            <th>重量</th>
-                            <td>345g</td>
-                        </tr>
-                        <tr>
-                            <th>サラウンドサウンド</th>
-                            <td>DTS Headphone:X 2.0</td>
+                        <?php
+                        // ここに製品仕様の各項目を追加してください
+                        $sql = $pdo->prepare('SELECT 
+                                                gg_gadget.gadget_id, 
+                                                gg_specifications.spec_id, 
+                                                gg_specifications.spec_name, 
+                                                gg_gadget_specs.spec_value,
+                                                gg_specifications.unit,
+                                                gg_gadget.stock
+                                            FROM
+                                                gg_gadget
+                                            INNER JOIN
+                                                gg_gadget_specs
+                                            ON
+                                                gg_gadget.gadget_id = gg_gadget_specs.gadget_id
+                                            INNER JOIN
+                                                gg_specifications
+                                            ON
+                                                gg_gadget_specs.spec_id = gg_specifications.spec_id
+                                            WHERE
+                                                gg_gadget.gadget_id = ?'
+                                            );
+                        $sql->execute([$gadget_id]);
+                        foreach ($sql as $spec) {
+                            $spec_name = h($spec['spec_name']);
+                            $spec_value = h($spec['spec_value']);
+                            $unit = h($spec['unit']);
+                            echo <<< HTML
+                            <tr>
+                                <th>{$spec_name}</th>
+                                <td>{$spec_value} {$unit}</td>
+                            </tr>
+                            HTML;
+                        }
+                        ?>
                         </tr>
                     </tbody>
                 </table>

@@ -1,0 +1,153 @@
+/*
+* ========================================
+* GG STORE ADMIN - ダッシュボード専用スタイル (dashboard.css)
+* ========================================
+*/
+
+/* --- 統計カードグリッド (KPI) --- */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    justify-content: space-between;
+    transition: transform 0.2s, box-shadow 0.2s;
+    margin-bottom: 0; /* grid内で使うためリセット */
+    padding: 1.25rem;
+}
+
+.stat-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 191, 255, 0.1);
+}
+
+.stat-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 10px;
+}
+
+.stat-label {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.stat-value {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    line-height: 1.2;
+}
+
+.stat-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 10px;
+    background-color: var(--bg-icon-container);
+    color: var(--accent-blue);
+    font-size: 1.2rem;
+}
+
+.stat-footer {
+    font-size: 0.75rem;
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.stat-footer.positive { color: var(--green); }
+.stat-footer.negative { color: var(--red); }
+.stat-footer.neutral { color: var(--text-secondary); }
+
+
+/* --- ダッシュボードグリッドレイアウト --- */
+/* グラフエリア用 (2カラム: 左広め) */
+.dashboard-grid-2 {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+/* ウィジェットエリア用 (3カラム均等) */
+.dashboard-grid-3 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+/* グラフコンテナ */
+.chart-wrapper {
+    position: relative;
+    height: 300px;
+    width: 100%;
+}
+
+/* --- リストウィジェット (在庫アラート、レビューなど) --- */
+.widget-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    overflow-y: auto;
+    max-height: 300px; /* 長くなったらスクロール */
+}
+
+.widget-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--border-color);
+}
+.widget-item:last-child {
+    border-bottom: none;
+}
+
+.widget-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.widget-main-text {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.widget-sub-text {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+.widget-value {
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-align: right;
+}
+
+/* 文字色ユーティリティ (dashboard専用) */
+.text-red { color: var(--red); }
+.text-green { color: var(--green); }
+.text-yellow { color: var(--yellow); }
+
+/* --- レスポンシブ調整 --- */
+@media (max-width: 1023px) {
+    .dashboard-grid-2, .dashboard-grid-3 {
+        grid-template-columns: 1fr;
+    }
+}
+@media (max-width: 768px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+}

@@ -161,8 +161,8 @@ a {
 
 /* --- アクションボタン --- */
 .actions {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: 16px;
     margin-top: auto; /* 下部に固定 */
 }
@@ -176,6 +176,7 @@ a {
     cursor: pointer;
     transition: all 0.3s ease;
     text-align: center;
+    width: 100%;
 }
 
 .add-to-cart {

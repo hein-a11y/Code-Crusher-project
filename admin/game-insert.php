@@ -189,26 +189,6 @@ try {
 <?php require_once '../admin_header.php'; ?>
 
 <link rel="stylesheet" href="./css/gadget-insert.css">
-        align-items: center;
-    }
-    .btn i { margin-right: 8px; }
-    
-    .btn-primary {
-        background-color: var(--accent-blue);
-        color: var(--bg-dark);
-    }
-    .btn-primary:hover { background-color: var(--accent-hover); }
-    
-    .btn-secondary {
-        background-color: transparent;
-        border: 1px solid var(--border-color);
-        color: var(--text-secondary);
-    }
-    .btn-secondary:hover {
-        background-color: rgba(255, 255, 255, 0.1);
-        color: var(--text-primary);
-    }
-</style>
 
 <div class="main-content">
     <header class="header">
